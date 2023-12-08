@@ -205,12 +205,6 @@ class ImageEstablishment(models.Model):
         return self.name
 
 
-
-
-
-
-
-
 class Favorite(models.Model):
     """Избранное"""
 
