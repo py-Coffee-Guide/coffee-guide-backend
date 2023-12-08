@@ -1,7 +1,9 @@
 from rest_framework import serializers
-
+from cafe.models import Establishment
 
 class CafeSerializer(serializers.ModelSerializer):
     """Сериализация данных: Заведение"""
 
-    pass
+    class Meta:
+        model = Establishment
+        fields = '__all__'

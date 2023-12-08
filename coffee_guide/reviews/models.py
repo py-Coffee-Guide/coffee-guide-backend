@@ -1,6 +1,5 @@
 from django.db import models
-# from django.core.validators import MaxValueValidator, MinValueValidator
-from cafe.models import Establishment
+from cafe.models import Cafe
 
 
 
@@ -8,14 +7,14 @@ class Review(models.Model):
     """Отзывы"""
 
     establishment = models.ForeignKey(
-        Establishment,
+        Cafe,
         on_delete=models.CASCADE,
         related_name="review",
     )
-    # author = models.ForeignKey(
-    #     User,
-    #     on_delete=models.CASCADE,
-    # )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
     text = models.TextField(
         verbose_name="Текст отзыва",
         max_length=500,

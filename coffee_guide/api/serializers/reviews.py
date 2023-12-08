@@ -8,10 +8,7 @@ class SmallUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "first_name",
-            "last_name",
-        ]
+        fields = '__all__'
 
 
 class ReviewSerializer(serializers.ModelSerializer):
