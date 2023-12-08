@@ -2,12 +2,12 @@ from django.contrib import admin
 # from django.utils.safestring import mark_safe
 
 from .models import (
-    Establishment,
+    Cafe,
 )
 
 
-@admin.register(Establishment)
-class EstablishmentAdmin(admin.ModelAdmin):
+@admin.register(Cafe)
+class CafeAdmin(admin.ModelAdmin):
     """Админка: заведение"""
 
     list_display = (
