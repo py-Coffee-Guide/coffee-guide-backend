@@ -15,12 +15,15 @@ class CustomUser(AbstractUser):
         blank=True,
         null=False,
     )
-    phone = models.CharField(max_length=11)
+    phone = models.CharField(max_length=11, null=True)
     password = models.CharField(
         "Пароль",
         max_length=50,
         blank=False,
         null=False,
+    )
+    email = models.EmailField(
+        unique=True, max_length=254, verbose_name="email", null=True
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
