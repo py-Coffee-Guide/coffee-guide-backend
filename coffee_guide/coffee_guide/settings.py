@@ -1,7 +1,5 @@
-"""
-Django settings for coffee_guide project.
-"""
 import os
+from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
 
@@ -10,23 +8,18 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
 
-DEBUG = os.getenv("DEBUG", default=False)
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='127.0.0.1').split()
+DEBUG = os.getenv("DEBUG", True)
 
-
-if DEBUG:
-    ALLOWED_HOSTS.append("127.0.0.1")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split()
 
 
 INSTALLED_APPS = [
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,7 +29,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "api.apps.ApiConfig",
-    "cafe.apps.CoffeeConfig",
+    "cafe.apps.CafeConfig",
     "ratings.apps.RatingsConfig",
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
@@ -69,7 +62,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-
             ],
         },
     },
@@ -84,7 +76,6 @@ if DEBUG:
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
-
         }
     }
 else:
@@ -142,7 +133,7 @@ DJOSER = {
     },
 }
 
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "Europe/Moscow"
 
