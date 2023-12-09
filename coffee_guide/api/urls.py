@@ -10,27 +10,29 @@ from api.views.cafe import (
     ScheduleViewSet,
     StopFactorViewSet,
 )
-from api.views.reviews import ReciewViewSet
+from api.views.reviews import ReviewViewSet
+from users.views import CustomUserViewSet
 
 app_name = "api"
 
 router = DefaultRouter()
 
+router.register("cafe", CafeViewSet, basename="cafe")
+router.register("attributes", StopFactorViewSet, basename="attributes")
+router.register("contacts", ContactViewSet, basename="contacts")
+router.register("points", PointViewSet, basename="points")
+router.register("city", CityViewSet, basename="city")
+router.register("district", DistrictViewSet, basename="district")
+router.register("schedule", ScheduleViewSet, basename="schedule")
 router.register(
-    "cafe",
-    CafeViewSet,
-    basename="cafe",
+    r"cafe/(?P<cafe_id>\d+)/reviews",
+    ReviewViewSet,
+    basename="reviews",
 )
-router.register("attributs", StopFactorViewSet)
-router.register("contacts", ContactViewSet)
-router.register("points", PointViewSet)
-router.register("city", CityViewSet)
-router.register("district", DistrictViewSet)
-router.register("schedule", ScheduleViewSet)
-router.register("reviews", ReciewViewSet)
-router.register("city", CityViewSet)
+router.register("users", CustomUserViewSet, basename="users")
 
 
 urlpatterns = [
+    path("auth/", include("djoser.urls.authtoken")),
     path("v1/", include(router.urls)),
 ]

@@ -70,7 +70,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "coffee_guide.wsgi.application"
 
 
-# TODO: Переделать по человечески.
 if DEBUG:
     DATABASES = {
         "default": {

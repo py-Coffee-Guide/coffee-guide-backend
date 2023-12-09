@@ -15,7 +15,7 @@ from .models import (
 
 @admin.register(Cafe)
 class CafeAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Заведение"""
 
     list_display = [field.name for field in Cafe._meta.get_fields()]
 
@@ -50,41 +50,41 @@ class CafeAdmin(admin.ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Город"""
 
     list_display = [field.name for field in City._meta.get_fields()]
 
 
 @admin.register(StopFactor)
 class StopFactorAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Атрибуты"""
 
     list_display = [field.name for field in StopFactor._meta.get_fields()]
 
 
 @admin.register(Schedule)
 class ScheduleAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Время работы"""
 
     list_display = [field.name for field in Schedule._meta.get_fields()]
 
 
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Район"""
 
     list_display = [field.name for field in District._meta.get_fields()]
 
 
 @admin.register(Point)
 class PointAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Координаты"""
 
     list_display = [field.name for field in Point._meta.get_fields()]
 
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
-    """Админка: заведение"""
+    """Админка: Контакты"""
 
     list_display = [field.name for field in Contact._meta.get_fields()]
