@@ -6,6 +6,7 @@ from api.views.cafe import (
     CityViewSet,
     ContactViewSet,
     DistrictViewSet,
+    MetroViewSet,
     PointViewSet,
     ScheduleViewSet,
     StopFactorViewSet,
@@ -29,6 +30,7 @@ router.register(
     ReviewViewSet,
     basename="reviews",
 )
+router.register(r"metro", MetroViewSet, basename="metro")
 router.register("users", CustomUserViewSet, basename="users")
 
 

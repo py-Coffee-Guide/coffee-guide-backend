@@ -1,8 +1,11 @@
+from turtle import color
+
 from django.db import models
 from django.core.files import File
 from urllib.request import urlopen
 from tempfile import NamedTemporaryFile
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 from users.models import CustomUser
 
@@ -103,6 +106,47 @@ class District(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Metro(models.Model):
+    """Метро"""
+
+    color = models.CharField(
+        verbose_name="Цвет ветки метро",
+        max_length=7,
+        validators=[
+            RegexValidator(
+                regex='^#[0-9a-fA-F]{6}$',
+                message='Цвет должен быть в формате #123456',
+            )
+        ]
+    )
+    comment = models.CharField(
+        verbose_name="Название ветки метро",
+        max_length=200,
+    )
+    distance = models.DecimalField(
+        verbose_name="Расстояние до станции",
+        max_digits=6,
+        decimal_places=2
+    )
+    name = models.CharField(
+        verbose_name="Название станции метро",
+        max_length=100,
+    )
+    slug = models.SlugField(
+        verbose_name="Ссылка на метро",
+        max_length=200,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = "Станция"
+        verbose_name_plural = "Станции"
+
+    def __str__(self):
+        return self.name
+
 
 
 class Schedule(models.Model):
@@ -248,11 +292,13 @@ class Cafe(models.Model):
     #     max_length=120,
     #     choices=CHECK_CHOICES,
     # )
-    # metro = models.CharField(
-    #     verbose_name=" ",
-    #     max_length=,
-    #     choices=CHECK_CHOICES,
-    # )
+    metro = models.ForeignKey(
+        Metro,
+        verbose_name="Метро",
+        related_name="cafe",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     # latitude = models.FloatField(
     #     verbose_name="Широта",
     #     max_length=200,

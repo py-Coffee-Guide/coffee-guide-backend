@@ -7,7 +7,7 @@ from .models import (
     City,
     Contact,
     District,
-    Point,
+    Metro, Point,
     Schedule,
     StopFactor,
 )
@@ -17,8 +17,8 @@ from .models import (
 class CafeAdmin(admin.ModelAdmin):
     """Админка: Заведение"""
 
-    list_display = [field.name for field in Cafe._meta.get_fields()]
-
+    # list_display = [field.name for field in Cafe._meta.get_fields()]
+    list_display = [field.name for field in Cafe._meta.fields]
     # list_display = (
     #     "name",
     #     "id",
@@ -52,7 +52,7 @@ class CafeAdmin(admin.ModelAdmin):
 class CityAdmin(admin.ModelAdmin):
     """Админка: Город"""
 
-    list_display = [field.name for field in City._meta.get_fields()]
+    list_display = [field.name for field in City._meta.fields]
 
 
 @admin.register(StopFactor)
@@ -74,6 +74,12 @@ class DistrictAdmin(admin.ModelAdmin):
     """Админка: Район"""
 
     list_display = [field.name for field in District._meta.get_fields()]
+
+@admin.register(Metro)
+class MetroAdmin(admin.ModelAdmin):
+    """Админка: Метро"""
+
+    list_display = [field.name for field in Metro._meta.fields]
 
 
 @admin.register(Point)
