@@ -1,14 +1,16 @@
+import io
+import requests
+import os
+
 from django.db import models
-from django.core.files import File
-from urllib.request import urlopen
-from tempfile import NamedTemporaryFile
 from django.core.exceptions import ValidationError
+from pathlib import Path
+from PIL import Image
 
 from users.models import CustomUser
 
-# from phonenumber_field.modelfields import PhoneNumberField
-# from core.choices import DAY_CHOICES, TIME_CHOICES, CHECK_CHOICES
-# from ratings.models import Rating
+BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 class StopFactor(models.Model):
@@ -17,7 +19,7 @@ class StopFactor(models.Model):
     name = models.CharField(
         max_length=200, unique=True, verbose_name="Название"
     )
-    tag = models.SlugField(
+    slug = models.SlugField(
         max_length=200,
         unique=True,
         # validators=(validate_slug,),
@@ -43,8 +45,10 @@ class Contact(models.Model):
         verbose_name = "Контакты"
         verbose_name_plural = "Контакты"
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return (f"Номер телефона кофейни - {self.phone}"
+                f"E-mail кофейни - {self.email}"
+                f"Сайт кофейни - {self.website}")
 
 
 class Point(models.Model):
@@ -61,8 +65,8 @@ class Point(models.Model):
         verbose_name = "Координаты"
         verbose_name_plural = "Координаты"
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return f"{self.lat}, {self.lon}"
 
 
 class City(models.Model):
@@ -107,6 +111,7 @@ class District(models.Model):
 
 class Schedule(models.Model):
     """Время работы"""
+    # Разделить по подобию ингредиентов
 
     cafe = models.ForeignKey(
         "Cafe",
@@ -178,7 +183,6 @@ class Cafe(models.Model):
     )
     rating = models.DecimalField(
         verbose_name="Рейтинг 2Gis",
-        # on_delete=models.SET_NULL,
         max_digits=5,
         decimal_places=2,
         null=True,
@@ -201,19 +205,17 @@ class Cafe(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-    district = models.ForeignKey(
+    district = models.ManyToManyField(
         District,
         verbose_name="Район",
         related_name="cafe",
-        on_delete=models.SET_NULL,
-        null=True,
+        blank=True,
     )
-    point = models.ForeignKey(
+    point = models.ManyToManyField(
         Point,
         verbose_name="Координаты",
         related_name="cafe",
-        on_delete=models.CASCADE,
-        null=False,
+        blank=True,
     )
     contact = models.ForeignKey(
         Contact,
@@ -222,12 +224,11 @@ class Cafe(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-    stop_factors = models.ForeignKey(
+    stop_factors = models.ManyToManyField(
         StopFactor,
         verbose_name="Доп. свойства",
-        related_name="cafe",
-        on_delete=models.SET_NULL,
-        null=True,
+        related_name="cafes",
+        blank=True,
     )
     # schedule = models.ForeignKey(
     #     Schedule,
@@ -253,29 +254,10 @@ class Cafe(models.Model):
     #     max_length=,
     #     choices=CHECK_CHOICES,
     # )
-    # latitude = models.FloatField(
-    #     verbose_name="Широта",
-    #     max_length=200,
-    #     blank=True,
-    #     null=True,
-    # )
-    # longitude = models.FloatField(
-    #     verbose_name="Долгота",
-    #     max_length=200,
-    #     blank=True,
-    #     null=True,
-    # )
-    # email = models.EmailField(
-    #     verbose_name="Почта",
-    #     max_length=254,
-    #     unique=True,
-    # )
-    # telephone = PhoneNumberField(
-    #     unique=True,
-    #     verbose_name="Номер телефона",
-    # )
 
     class Meta:
+        ordering = ('name',)
+
         verbose_name = "Кофейня"
         verbose_name_plural = "Кофейни"
 
@@ -288,16 +270,18 @@ class Cafe(models.Model):
 
 
 class ImageCafe(models.Model):
-    image_file = models.ImageField(upload_to="images")
-    image_url = models.URLField()
+    image_file = models.ImageField(upload_to="images", blank=True)
+    image_url = models.URLField(blank=True)
 
     def save(self, *args, **kwargs):
         if self.image_url and not self.image_file:
-            img_temp = NamedTemporaryFile(delete=True)
-            img_temp.write(urlopen(self.image_url).read())
-            img_temp.flush()
-            self.image_file.save(f"image_{self.pk}", File(img_temp))
-        super(ImageCafe, self).save(*args, **kwargs)
+            response = requests.get(self.image_url, stream=True)
+            img = Image.open(io.BytesIO(response.content))
+            img_name = f"{self.image_url.split('/')[-1]}"
+            img_path = os.path.join(MEDIA_ROOT, img_name)
+            img.save(img_path)
+            self.image_file = os.path.join(img_name)
+        super().save(*args, **kwargs)
 
 
 # class ImageEstablishment(models.Model):
