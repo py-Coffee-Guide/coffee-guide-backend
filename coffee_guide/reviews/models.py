@@ -4,9 +4,24 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from cafe.models import Cafe
 from users.models import CustomUser
 
-
 class Review(models.Model):
     """Отзывы"""
+
+    POSITIVE_CHOICES = (
+        (5, 'Отлично - 5 звезд'),
+        (4, 'Хорошо - 4 звезды'),
+        (3, 'Удовлетворительно - 3 звезды'),
+        (2, 'Неплохо - 2 звезды'),
+        (1, 'Сойдет - 1 звезда'),
+    )
+
+    NEGATIVE_CHOICES = (
+        (1, 'Плохо - 1 звезда'),
+        (2, 'Неудовлетворительно - 2 звезды'),
+        (3, 'Посредственно - 3 звезды'),
+        (4, 'Слабо - 4 звезды'),
+        (5, 'Ужасно - 5 звезд'),
+    )
 
     cafe = models.ForeignKey(
         Cafe,
@@ -17,11 +32,8 @@ class Review(models.Model):
         CustomUser,
         on_delete=models.CASCADE,
     )
-    text = models.TextField(
-        verbose_name="Текст отзыва",
-        max_length=500,
-    )
     score = models.IntegerField(
+        choices=POSITIVE_CHOICES + NEGATIVE_CHOICES,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         verbose_name="Оценка",
     )
@@ -41,4 +53,4 @@ class Review(models.Model):
         ordering = ["-pub_date"]
 
     def __str__(self):
-        return self.text
+        return f"Review {self.id} by {self.author}"

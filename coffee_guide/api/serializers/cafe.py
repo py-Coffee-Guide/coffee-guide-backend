@@ -4,7 +4,7 @@ from cafe.models import (
     City,
     Contact,
     District,
-    Point,
+    Metro, Point,
     Schedule,
     StopFactor,
 )
@@ -64,6 +64,14 @@ class DistrictSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
         fields = "__all__"
+
+
+class MetroSerializer(serializers.ModelSerializer):
+    """Сериализация данных: Метро"""
+
+    class Meta:
+        model = Metro
+        fields = '__all__'
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
