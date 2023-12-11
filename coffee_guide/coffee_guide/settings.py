@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -80,9 +79,7 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": os.getenv(
-                "DB_ENGINE", default="django.db.backends.postgresql"
-            ),
+            "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
