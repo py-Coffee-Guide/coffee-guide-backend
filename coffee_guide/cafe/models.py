@@ -9,6 +9,12 @@ from PIL import Image
 
 from users.models import CustomUser
 
+from django.core.exceptions import ValidationError
+from django.core.files import File
+from django.core.validators import RegexValidator
+from django.db import models
+from users.models import CustomUser
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
@@ -54,12 +60,8 @@ class Contact(models.Model):
 class Point(models.Model):
     """Координаты"""
 
-    lat = models.DecimalField(
-        max_digits=9, decimal_places=6, verbose_name="Ширина"
-    )
-    lon = models.DecimalField(
-        max_digits=9, decimal_places=6, verbose_name="Долгота"
-    )
+    lat = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Ширина")
+    lon = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Долгота")
 
     class Meta:
         verbose_name = "Координаты"
@@ -104,6 +106,42 @@ class District(models.Model):
     class Meta:
         verbose_name = "Район"
         verbose_name_plural = "Районы"
+
+    def __str__(self):
+        return self.name
+
+
+class Metro(models.Model):
+    """Метро"""
+
+    color = models.CharField(
+        verbose_name="Цвет ветки метро",
+        max_length=7,
+        validators=[
+            RegexValidator(
+                regex="^#[0-9a-fA-F]{6}$",
+                message="Цвет должен быть в формате #123456",
+            )
+        ],
+    )
+    comment = models.CharField(
+        verbose_name="Название ветки метро",
+        max_length=200,
+    )
+    distance = models.DecimalField(verbose_name="Расстояние до станции", max_digits=6, decimal_places=2)
+    name = models.CharField(
+        verbose_name="Название станции метро",
+        max_length=100,
+    )
+    slug = models.SlugField(
+        verbose_name="Ссылка на метро",
+        max_length=200,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = "Станция"
+        verbose_name_plural = "Станции"
 
     def __str__(self):
         return self.name
@@ -158,9 +196,7 @@ class Schedule(models.Model):
         if self.start and self.end is not None:
             if self.start >= self.end:
                 raise ValidationError(
-                    {
-                        "end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"
-                    }
+                    {"end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"}
                 )
 
     def __str__(self):
@@ -249,15 +285,37 @@ class Cafe(models.Model):
     #     max_length=120,
     #     choices=CHECK_CHOICES,
     # )
-    # metro = models.CharField(
-    #     verbose_name=" ",
-    #     max_length=,
-    #     choices=CHECK_CHOICES,
+    metro = models.ForeignKey(
+        Metro,
+        verbose_name="Метро",
+        related_name="cafe",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    # latitude = models.FloatField(
+    #     verbose_name="Широта",
+    #     max_length=200,
+    #     blank=True,
+    #     null=True,
+    # )
+    # longitude = models.FloatField(
+    #     verbose_name="Долгота",
+    #     max_length=200,
+    #     blank=True,
+    #     null=True,
+    # )
+    # email = models.EmailField(
+    #     verbose_name="Почта",
+    #     max_length=254,
+    #     unique=True,
+    # )
+    # telephone = PhoneNumberField(
+    #     unique=True,
+    #     verbose_name="Номер телефона",
     # )
 
     class Meta:
         ordering = ('name',)
-
         verbose_name = "Кофейня"
         verbose_name_plural = "Кофейни"
 
@@ -329,7 +387,5 @@ class Favorite(models.Model):
         verbose_name_plural = "Избранное"
         ordering = ["id"]
         constraints = [
-            models.UniqueConstraint(
-                fields=["user", "cafe"], name="uniquefavorite"
-            ),
+            models.UniqueConstraint(fields=["user", "cafe"], name="uniquefavorite"),
         ]

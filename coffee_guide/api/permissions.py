@@ -11,6 +11,7 @@ class IsAnonymous(permissions.BasePermission):
 class ReadOnly(permissions.BasePermission):
     """
     Возвращает результат проверки методов HTTP запросов
+
     True если 'GET', 'HEAD', 'OPTIONS'.
     """
 
@@ -22,9 +23,7 @@ class ReadOnly(permissions.BasePermission):
 
 
 class IsAuthor(permissions.BasePermission):
-    """
-    Разрешение для редактирования если пользователь является автором отзыва.
-    """
+    """Разрешение для редактирования если пользователь является автором отзыва."""
 
     def has_permission(self, request, view):
         if request.user.is_authenticated:
@@ -36,9 +35,7 @@ class IsAuthor(permissions.BasePermission):
 
 
 class IsAdministrator(permissions.BasePermission):
-    """
-    Возвращает True если пользователь является администратором.
-    """
+    """Возвращает True если пользователь является администратором."""
 
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.is_administrator

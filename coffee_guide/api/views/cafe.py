@@ -3,22 +3,23 @@
 #     extend_schema_view,
 #     OpenApiParameter,
 # )
-from rest_framework.response import Response
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from api.serializers.cafe import MetroSerializer
 from api.utils import add_to, delete_from
-
 from cafe.models import (
     Cafe,
     City,
     Contact,
     District,
     Favorite,
+    Metro,
     Point,
     Schedule,
     StopFactor,
 )
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 
 # @extend_schema(
@@ -91,6 +92,13 @@ class DistrictViewSet(viewsets.ReadOnlyModelViewSet):
     """Вьюсет: Районов"""
 
     queryset = District.objects.all()
+
+
+class MetroViewSet(viewsets.ModelViewSet):
+    """Вьюсет: Метро"""
+
+    queryset = Metro.objects.all()
+    serializer_class = MetroSerializer
 
 
 class ScheduleViewSet(viewsets.ReadOnlyModelViewSet):

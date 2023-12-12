@@ -1,16 +1,16 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
 from api.views.cafe import (
     CafeViewSet,
     CityViewSet,
     ContactViewSet,
     DistrictViewSet,
+    MetroViewSet,
     PointViewSet,
     ScheduleViewSet,
     StopFactorViewSet,
 )
 from api.views.reviews import ReviewViewSet
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 from users.views import CustomUserViewSet
 
 app_name = "api"
@@ -29,6 +29,7 @@ router.register(
     ReviewViewSet,
     basename="reviews",
 )
+router.register(r"metro", MetroViewSet, basename="metro")
 router.register("users", CustomUserViewSet, basename="users")
 
 

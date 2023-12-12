@@ -3,17 +3,19 @@ from django.forms import CheckboxSelectMultiple
 from django.db import models
 from django.utils.html import format_html
 
-
 from .models import (
     Cafe,
     City,
     Contact,
     District,
+    Metro,
     Point,
     Schedule,
     StopFactor,
     ImageCafe
 )
+
+# from django.utils.safestring import mark_safe
 
 
 @admin.register(Cafe)
@@ -139,6 +141,13 @@ class DistrictAdmin(admin.ModelAdmin):
 
     list_display = ("name",)
     list_filter = ("name",)
+
+
+@admin.register(Metro)
+class MetroAdmin(admin.ModelAdmin):
+    """Админка: Метро"""
+
+    list_display = [field.name for field in Metro._meta.fields]
 
 
 @admin.register(Point)
