@@ -1,6 +1,3 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
 from api.views.cafe import (
     CafeViewSet,
     CityViewSet,
@@ -11,6 +8,9 @@ from api.views.cafe import (
     StopFactorViewSet,
 )
 from api.views.reviews import ReciewViewSet
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from users.views import CustomUserViewSet
 
 app_name = "api"
 
@@ -29,6 +29,7 @@ router.register("district", DistrictViewSet)
 router.register("schedule", ScheduleViewSet)
 router.register("reviews", ReciewViewSet)
 router.register("city", CityViewSet)
+router.register("users", CustomUserViewSet)
 
 
 urlpatterns = [

@@ -9,13 +9,19 @@ class CustomUser(AbstractUser):
 
     username = models.CharField(
         "Юзернейм",
-        max_length=50,
         unique=True,
+        max_length=50,
         default="Кофейный Сомелье",
         blank=True,
-        null=False,
+        null=True,
     )
-    phone = models.CharField(max_length=11, null=True)
+    phone = models.CharField(
+        "Номер телефона",
+        unique=True,
+        max_length=11,
+        blank=True,
+        null=True,
+    )
     password = models.CharField(
         "Пароль",
         max_length=50,
@@ -23,8 +29,16 @@ class CustomUser(AbstractUser):
         null=False,
     )
     email = models.EmailField(
-        unique=True, max_length=254, verbose_name="email", null=True
+        "Почта",
+        unique=True,
+        max_length=254,
+        blank=True,
+        null=True,
     )
+    confirmation_code = models.CharField(
+        "Код активации", max_length=6, null=True, blank=True
+    )
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
