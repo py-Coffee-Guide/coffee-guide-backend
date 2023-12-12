@@ -1,12 +1,11 @@
-from turtle import color
-
-from django.db import models
-from django.core.files import File
-from urllib.request import urlopen
 from tempfile import NamedTemporaryFile
-from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from turtle import color
+from urllib.request import urlopen
 
+from django.core.exceptions import ValidationError
+from django.core.files import File
+from django.core.validators import RegexValidator
+from django.db import models
 from users.models import CustomUser
 
 # from phonenumber_field.modelfields import PhoneNumberField
@@ -17,9 +16,7 @@ from users.models import CustomUser
 class StopFactor(models.Model):
     """Атрибуты."""
 
-    name = models.CharField(
-        max_length=200, unique=True, verbose_name="Название"
-    )
+    name = models.CharField(max_length=200, unique=True, verbose_name="Название")
     tag = models.SlugField(
         max_length=200,
         unique=True,
@@ -53,12 +50,8 @@ class Contact(models.Model):
 class Point(models.Model):
     """Координаты"""
 
-    lat = models.DecimalField(
-        max_digits=9, decimal_places=6, verbose_name="Ширина"
-    )
-    lon = models.DecimalField(
-        max_digits=9, decimal_places=6, verbose_name="Долгота"
-    )
+    lat = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Ширина")
+    lon = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Долгота")
 
     class Meta:
         verbose_name = "Координаты"
@@ -116,20 +109,16 @@ class Metro(models.Model):
         max_length=7,
         validators=[
             RegexValidator(
-                regex='^#[0-9a-fA-F]{6}$',
-                message='Цвет должен быть в формате #123456',
+                regex="^#[0-9a-fA-F]{6}$",
+                message="Цвет должен быть в формате #123456",
             )
-        ]
+        ],
     )
     comment = models.CharField(
         verbose_name="Название ветки метро",
         max_length=200,
     )
-    distance = models.DecimalField(
-        verbose_name="Расстояние до станции",
-        max_digits=6,
-        decimal_places=2
-    )
+    distance = models.DecimalField(verbose_name="Расстояние до станции", max_digits=6, decimal_places=2)
     name = models.CharField(
         verbose_name="Название станции метро",
         max_length=100,
@@ -146,7 +135,6 @@ class Metro(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class Schedule(models.Model):
@@ -197,9 +185,7 @@ class Schedule(models.Model):
         if self.start and self.end is not None:
             if self.start >= self.end:
                 raise ValidationError(
-                    {
-                        "end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"
-                    }
+                    {"end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"}
                 )
 
     def __str__(self):
@@ -391,7 +377,5 @@ class Favorite(models.Model):
         verbose_name_plural = "Избранное"
         ordering = ["id"]
         constraints = [
-            models.UniqueConstraint(
-                fields=["user", "cafe"], name="uniquefavorite"
-            ),
+            models.UniqueConstraint(fields=["user", "cafe"], name="uniquefavorite"),
         ]

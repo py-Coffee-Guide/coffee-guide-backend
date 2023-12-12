@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from reviews.models import Review
+
 # from users.models import CustomUser
 
 # TODO: Протестить, потом удалить коменты
@@ -10,6 +11,7 @@ from reviews.models import Review
 #         model = CustomUser
 #         fields = '__all__'
 #
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализация данных: Отзывы"""
@@ -22,8 +24,8 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'cafe', 'author', 'score', 'pub_date')
-        read_only_fields = ('pub_date',)
+        fields = ("id", "cafe", "author", "score", "pub_date")
+        read_only_fields = ("pub_date",)
 
     # cafe = serializers.SlugRelatedField(
     #     slug_field="name",

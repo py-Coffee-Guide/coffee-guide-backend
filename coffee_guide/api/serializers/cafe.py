@@ -1,13 +1,14 @@
-from rest_framework import serializers
 from cafe.models import (
     Cafe,
     City,
     Contact,
     District,
-    Metro, Point,
+    Metro,
+    Point,
     Schedule,
     StopFactor,
 )
+from rest_framework import serializers
 
 
 class CafeSerializer(serializers.ModelSerializer):
@@ -71,7 +72,7 @@ class MetroSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Metro
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ScheduleSerializer(serializers.ModelSerializer):

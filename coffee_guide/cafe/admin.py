@@ -1,16 +1,17 @@
 from django.contrib import admin
 
-# from django.utils.safestring import mark_safe
-
 from .models import (
     Cafe,
     City,
     Contact,
     District,
-    Metro, Point,
+    Metro,
+    Point,
     Schedule,
     StopFactor,
 )
+
+# from django.utils.safestring import mark_safe
 
 
 @admin.register(Cafe)
@@ -74,6 +75,7 @@ class DistrictAdmin(admin.ModelAdmin):
     """Админка: Район"""
 
     list_display = [field.name for field in District._meta.get_fields()]
+
 
 @admin.register(Metro)
 class MetroAdmin(admin.ModelAdmin):

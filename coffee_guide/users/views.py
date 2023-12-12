@@ -2,7 +2,10 @@ from djoser.views import UserViewSet
 
 
 class CustomUserViewSet(UserViewSet):
-    """Вьюсет для:
+    """
+    Вьюсет для:
+
     - изменения пароля;
     - изменения username;
-    - регистрации нового пользователя;"""
+    - регистрации нового пользователя;
+    """
