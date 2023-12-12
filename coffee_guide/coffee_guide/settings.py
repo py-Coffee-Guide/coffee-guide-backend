@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
     "djoser",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 MIDDLEWARE = [
@@ -114,6 +116,17 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
     "SEARCH_PARAM": "name",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Coffee_guide",
+    "DESCRIPTION": "Coffee Guide for human",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
 }
 
 DJOSER = {
