@@ -130,9 +130,10 @@ SPECTACULAR_SETTINGS = {
 }
 
 DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
-    "SEND_ACTIVATION_EMAIL": False,
-    "LOGIN_FIELD": "phone",
+    "SEND_ACTIVATION_EMAIL": True,
+    "ACTIVATION_URL": "auth/verefy/{uid}/{token}/"
     "SERIALIZERS": {
         "user_create": "users.serializers.CustomUserCreateSerializer",
     },
@@ -141,6 +142,14 @@ DJOSER = {
         "user_list": ["rest_framework.permissions.AllowAny"],
     },
 }
+
+# smtp
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLC = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "coffee.guide.help@gmail.com"
+EMAIL_HOST_PASSWORD = "MakeCoffeeGuideGreateAgain"
 
 LANGUAGE_CODE = "ru-RU"
 
