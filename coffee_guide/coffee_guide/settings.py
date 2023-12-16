@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -34,6 +33,8 @@ INSTALLED_APPS = [
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
     "djoser",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 MIDDLEWARE = [
@@ -70,7 +71,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "coffee_guide.wsgi.application"
 
 
-# TODO: Переделать по человечески.
 if DEBUG:
     DATABASES = {
         "default": {
@@ -81,9 +81,7 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": os.getenv(
-                "DB_ENGINE", default="django.db.backends.postgresql"
-            ),
+            "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
@@ -118,6 +116,17 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
     "SEARCH_PARAM": "name",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Coffee_guide",
+    "DESCRIPTION": "Coffee Guide for human",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
 }
 
 DJOSER = {

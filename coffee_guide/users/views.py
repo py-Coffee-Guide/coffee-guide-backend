@@ -1,3 +1,4 @@
+
 from django.contrib.auth import authenticate, login
 from django.utils.crypto import get_random_string
 from djoser import utils
@@ -117,3 +118,20 @@ user = authenticate(request, email=email, password=password)) и аналоги�
             if user is not None:
                 login_user(request, user)
                 return Response(serializer.data, status=status.HTTP_200_OK)."""
+
+@extend_schema(tags=["Users"], description="Администратор")
+@extend_schema_view(
+    list=extend_schema(summary="Список пользователей", methods=["GET"]),
+    # retrieve=extend_schema(
+    #     summary="Детальная информация о пользователе (id=номер телефона)",
+    #     methods=["GET"],
+    # ),
+)
+class CustomUserViewSet(UserViewSet):
+    """
+    Вьюсет для:
+
+    - изменения пароля;
+    - изменения username;
+    - регистрации нового пользователя;
+    """

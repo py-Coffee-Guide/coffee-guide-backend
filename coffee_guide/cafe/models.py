@@ -1,14 +1,22 @@
+import io
+import requests
+import os
+
 from django.db import models
-from django.core.files import File
-from urllib.request import urlopen
-from tempfile import NamedTemporaryFile
 from django.core.exceptions import ValidationError
+from pathlib import Path
+from PIL import Image
 
 from users.models import CustomUser
 
-# from phonenumber_field.modelfields import PhoneNumberField
-# from core.choices import DAY_CHOICES, TIME_CHOICES, CHECK_CHOICES
-# from ratings.models import Rating
+from django.core.exceptions import ValidationError
+from django.core.files import File
+from django.core.validators import RegexValidator
+from django.db import models
+from users.models import CustomUser
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 class StopFactor(models.Model):
@@ -17,7 +25,7 @@ class StopFactor(models.Model):
     name = models.CharField(
         max_length=200, unique=True, verbose_name="Название"
     )
-    tag = models.SlugField(
+    slug = models.SlugField(
         max_length=200,
         unique=True,
         # validators=(validate_slug,),
@@ -43,26 +51,24 @@ class Contact(models.Model):
         verbose_name = "Контакты"
         verbose_name_plural = "Контакты"
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return (f"Номер телефона кофейни - {self.phone}"
+                f"E-mail кофейни - {self.email}"
+                f"Сайт кофейни - {self.website}")
 
 
 class Point(models.Model):
     """Координаты"""
 
-    lat = models.DecimalField(
-        max_digits=9, decimal_places=6, verbose_name="Ширина"
-    )
-    lon = models.DecimalField(
-        max_digits=9, decimal_places=6, verbose_name="Долгота"
-    )
+    lat = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Ширина")
+    lon = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Долгота")
 
     class Meta:
         verbose_name = "Координаты"
         verbose_name_plural = "Координаты"
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return f"{self.lat}, {self.lon}"
 
 
 class City(models.Model):
@@ -105,8 +111,45 @@ class District(models.Model):
         return self.name
 
 
+class Metro(models.Model):
+    """Метро"""
+
+    color = models.CharField(
+        verbose_name="Цвет ветки метро",
+        max_length=7,
+        validators=[
+            RegexValidator(
+                regex="^#[0-9a-fA-F]{6}$",
+                message="Цвет должен быть в формате #123456",
+            )
+        ],
+    )
+    comment = models.CharField(
+        verbose_name="Название ветки метро",
+        max_length=200,
+    )
+    distance = models.DecimalField(verbose_name="Расстояние до станции", max_digits=6, decimal_places=2)
+    name = models.CharField(
+        verbose_name="Название станции метро",
+        max_length=100,
+    )
+    slug = models.SlugField(
+        verbose_name="Ссылка на метро",
+        max_length=200,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = "Станция"
+        verbose_name_plural = "Станции"
+
+    def __str__(self):
+        return self.name
+
+
 class Schedule(models.Model):
     """Время работы"""
+    # Разделить по подобию ингредиентов
 
     cafe = models.ForeignKey(
         "Cafe",
@@ -153,9 +196,7 @@ class Schedule(models.Model):
         if self.start and self.end is not None:
             if self.start >= self.end:
                 raise ValidationError(
-                    {
-                        "end": "Укажите корректоное время окончания. Оно не может быть меньше времени начала"
-                    }
+                    {"end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"}
                 )
 
     def __str__(self):
@@ -178,7 +219,6 @@ class Cafe(models.Model):
     )
     rating = models.DecimalField(
         verbose_name="Рейтинг 2Gis",
-        # on_delete=models.SET_NULL,
         max_digits=5,
         decimal_places=2,
         null=True,
@@ -201,19 +241,17 @@ class Cafe(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-    district = models.ForeignKey(
+    district = models.ManyToManyField(
         District,
         verbose_name="Район",
         related_name="cafe",
-        on_delete=models.SET_NULL,
-        null=True,
+        blank=True,
     )
-    point = models.ForeignKey(
+    point = models.ManyToManyField(
         Point,
         verbose_name="Координаты",
         related_name="cafe",
-        on_delete=models.CASCADE,
-        null=False,
+        blank=True,
     )
     contact = models.ForeignKey(
         Contact,
@@ -222,12 +260,11 @@ class Cafe(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-    stop_factors = models.ForeignKey(
+    stop_factors = models.ManyToManyField(
         StopFactor,
         verbose_name="Доп. свойства",
-        related_name="cafe",
-        on_delete=models.SET_NULL,
-        null=True,
+        related_name="cafes",
+        blank=True,
     )
     # schedule = models.ForeignKey(
     #     Schedule,
@@ -248,11 +285,13 @@ class Cafe(models.Model):
     #     max_length=120,
     #     choices=CHECK_CHOICES,
     # )
-    # metro = models.CharField(
-    #     verbose_name=" ",
-    #     max_length=,
-    #     choices=CHECK_CHOICES,
-    # )
+    metro = models.ForeignKey(
+        Metro,
+        verbose_name="Метро",
+        related_name="cafe",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     # latitude = models.FloatField(
     #     verbose_name="Широта",
     #     max_length=200,
@@ -276,6 +315,7 @@ class Cafe(models.Model):
     # )
 
     class Meta:
+        ordering = ('name',)
         verbose_name = "Кофейня"
         verbose_name_plural = "Кофейни"
 
@@ -288,16 +328,18 @@ class Cafe(models.Model):
 
 
 class ImageCafe(models.Model):
-    image_file = models.ImageField(upload_to="images")
-    image_url = models.URLField()
+    image_file = models.ImageField(upload_to="images", blank=True)
+    image_url = models.URLField(blank=True)
 
     def save(self, *args, **kwargs):
         if self.image_url and not self.image_file:
-            img_temp = NamedTemporaryFile(delete=True)
-            img_temp.write(urlopen(self.image_url).read())
-            img_temp.flush()
-            self.image_file.save(f"image_{self.pk}", File(img_temp))
-        super(ImageCafe, self).save(*args, **kwargs)
+            response = requests.get(self.image_url, stream=True)
+            img = Image.open(io.BytesIO(response.content))
+            img_name = f"{self.image_url.split('/')[-1]}"
+            img_path = os.path.join(MEDIA_ROOT, img_name)
+            img.save(img_path)
+            self.image_file = os.path.join(img_name)
+        super().save(*args, **kwargs)
 
 
 # class ImageEstablishment(models.Model):
@@ -345,7 +387,5 @@ class Favorite(models.Model):
         verbose_name_plural = "Избранное"
         ordering = ["id"]
         constraints = [
-            models.UniqueConstraint(
-                fields=["user", "cafe"], name="uniquefavorite"
-            ),
+            models.UniqueConstraint(fields=["user", "cafe"], name="uniquefavorite"),
         ]
