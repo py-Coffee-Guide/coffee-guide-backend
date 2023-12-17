@@ -34,6 +34,6 @@ router.register("users", CustomUserViewSet, basename="users")
 
 
 urlpatterns = [
-    path("auth/", include("djoser.urls.authtoken")),
+    path("v1/auth/", include("djoser.urls.authtoken")),
     path("v1/", include(router.urls)),
 ]
