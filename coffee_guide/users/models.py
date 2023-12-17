@@ -1,17 +1,17 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 
 from .user_managers import CustomUserManager
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractBaseUser):
     """Модель Пользователя."""
 
     username = models.CharField(
         "Юзернейм",
         unique=True,
         max_length=50,
-        default="Кофейный Сомелье",
+        default="Гость",
         blank=True,
         null=True,
     )

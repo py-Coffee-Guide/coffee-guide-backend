@@ -133,7 +133,7 @@ DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
     "SEND_ACTIVATION_EMAIL": True,
-    "ACTIVATION_URL": "auth/verefy/{uid}/{token}/"
+    "ACTIVATION_URL": "auth/verefy/{uid}/{token}/",
     "SERIALIZERS": {
         "user_create": "users.serializers.CustomUserCreateSerializer",
     },

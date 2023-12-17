@@ -5,6 +5,8 @@ class CustomUserManager(BaseUserManager):
     """Менеджер модели пользователя, определяющий
     вид регистрации с дефолтным значением username."""
 
+    use_in_migrations = True
+
     def register_user_by_email(
         self, email, password, username="Кофейный Сомелье"
     ):

@@ -2,6 +2,7 @@
 from django.contrib.auth import authenticate, login
 from django.utils.crypto import get_random_string
 from djoser import utils
+from djoser.views import UserViewSet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -23,9 +24,9 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     permission_classes = (AllowAny,)
 
-    @action(
-        methods=["post"],
-    )
+    # @action(
+    #     methods=["post"],
+    # )
     def create_user(self, request, *args, **kwargs):
         """Комментарий."""
         registration_type = request.data.get("registration_type")
@@ -71,9 +72,9 @@ class CustomUserViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-    @action(
-        methods=["post"],
-    )
+    # @action(
+    #     methods=["post"],
+    # )
     def confirm_create_user(self, request, *args, **kwargs):
         """Подтверждение регистрации с использованием confirmation_code."""
         # Пользователь делает ещё один POST запрос с кодом
@@ -119,14 +120,14 @@ user = authenticate(request, email=email, password=password)) и аналоги�
                 login_user(request, user)
                 return Response(serializer.data, status=status.HTTP_200_OK)."""
 
-@extend_schema(tags=["Users"], description="Администратор")
-@extend_schema_view(
-    list=extend_schema(summary="Список пользователей", methods=["GET"]),
+# @extend_schema(tags=["Users"], description="Администратор")
+# @extend_schema_view(
+#     list=extend_schema(summary="Список пользователей", methods=["GET"]),
     # retrieve=extend_schema(
     #     summary="Детальная информация о пользователе (id=номер телефона)",
     #     methods=["GET"],
     # ),
-)
+# )
 class CustomUserViewSet(UserViewSet):
     """
     Вьюсет для:
