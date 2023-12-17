@@ -21,7 +21,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 class StopFactor(models.Model):
     """Атрибуты."""
-
+    id = models.CharField(primary_key=True, max_length=255)
     name = models.CharField(
         max_length=200, unique=True, verbose_name="Название"
     )
@@ -205,7 +205,6 @@ class Schedule(models.Model):
 
 class Cafe(models.Model):
     """Заведение"""
-
     name = models.CharField(
         verbose_name="Название кофейни",
         max_length=150,

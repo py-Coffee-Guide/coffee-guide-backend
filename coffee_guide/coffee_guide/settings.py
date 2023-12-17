@@ -32,7 +32,10 @@ INSTALLED_APPS = [
     "ratings.apps.RatingsConfig",
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
+
     "djoser",
+    'social_django',
+
     "drf_spectacular",
     "drf_spectacular_sidecar",
 ]
@@ -108,12 +111,17 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "users.CustomUser"
 
+# SOCIAL_AUTH_USER_MODEL = "users.CustomUser"
+# SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        # 'social_core.backends.vk.VKOAuth2',
+        # 'django.contrib.auth.backends.ModelBackend',
     ],
     "SEARCH_PARAM": "name",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -141,6 +149,36 @@ DJOSER = {
         "user_list": ["rest_framework.permissions.AllowAny"],
     },
 }
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    'django.contrib.auth.backends.ModelBackend',
+    # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51814626'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'jaxoNQgoU2BPn58SfmWh'
+
+SOCIAL_AUTH_GITHUB_KEY = "Iv1.de0e9327a12e1c62"
+SOCIAL_AUTH_GITHUB_SECRET = "8370cc6cf8f426021bdc65f1491d60032669860c"
+
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'users.pipelines.save_user_github',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details'
+)
+
+LOGIN_REDIRECT_URL = "/api/v1/cafe/"
 
 LANGUAGE_CODE = "ru-RU"
 

@@ -1,4 +1,4 @@
-from api.serializers.cafe import MetroSerializer
+from api.serializers.cafe import CafeSerializer, MetroSerializer
 from api.utils import add_to, delete_from
 from cafe.models import (
     Cafe,
@@ -39,6 +39,7 @@ class CafeViewSet(viewsets.ReadOnlyModelViewSet):
     """Вьюсет: Кофейня"""
 
     queryset = Cafe.objects.all()
+    serializer_class = CafeSerializer
 
     @action(
         detail=True,

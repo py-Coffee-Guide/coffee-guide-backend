@@ -2,12 +2,16 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from users.views import auth
+
+app_name = 'social'
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -23,6 +27,8 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    re_path('', include('social_django.urls', namespace='social')),
+    path("auth/", auth),
 ]
 
 if settings.DEBUG:

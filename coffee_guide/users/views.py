@@ -1,10 +1,20 @@
+from django.shortcuts import render
 from djoser.views import UserViewSet
+from django.contrib.auth import login
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
     OpenApiParameter,
     extend_schema,
     extend_schema_view,
 )
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from social_django.utils import psa
+
+
+def auth(request):
+    print(request)
+    return render(request, "auth.html")
 
 
 @extend_schema(tags=["Users"], description="Администратор")
