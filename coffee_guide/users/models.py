@@ -1,19 +1,20 @@
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from coffee_guide.settings import DEFAULT_USER_NAME
 
 from .user_managers import CustomUserManager
 
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractUser):
     """Модель Пользователя."""
 
     username = models.CharField(
         "Юзернейм",
         unique=True,
         max_length=50,
-        default="Гость",
         blank=True,
-        null=True,
+        null=False,
     )
     phone = models.CharField(
         "Номер телефона",
@@ -22,12 +23,6 @@ class CustomUser(AbstractBaseUser):
         blank=True,
         null=True,
     )
-    password = models.CharField(
-        "Пароль",
-        max_length=50,
-        blank=False,
-        null=False,
-    )
     email = models.EmailField(
         "Почта",
         unique=True,
@@ -35,8 +30,21 @@ class CustomUser(AbstractBaseUser):
         blank=True,
         null=True,
     )
-    confirmation_code = models.CharField(
-        "Код активации", max_length=6, null=True, blank=True
+    first_name = models.CharField(
+        'Имя',
+        max_length=150,
+        default=DEFAULT_USER_NAME,
+        blank=True,
+        null=False,
+    )
+    password = models.CharField(
+        "Пароль",
+        max_length=128,
+        blank=False,
+        null=False,
+    )
+    is_verified = models.BooleanField(
+        "Проверка верификации", default=False
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -44,10 +52,14 @@ class CustomUser(AbstractBaseUser):
 
     objects = CustomUserManager()
 
+    USERNAME_FIELD = 'username'
+    # REQUIRED_FIELDS = ['email', 'phone']
+
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+        unique_together = ('username', 'email', 'phone')
         ordering = ("username",)
 
     def __str__(self):
-        return f"{self.username}"
+        return f"{self.first_name} ({self.username})"
