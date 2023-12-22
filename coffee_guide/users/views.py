@@ -1,30 +1,10 @@
-from django.shortcuts import render
 from djoser.views import UserViewSet
-from django.contrib.auth import login
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (
-    OpenApiParameter,
-    extend_schema,
-    extend_schema_view,
-)
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from social_django.utils import psa
+from rest_framework.decorators import action
+
+from .backends import get_cofirmation_code, get_phone_data
 
 
-def auth(request):
-    print(request)
-    return render(request, "auth.html")
-
-
-@extend_schema(tags=["Users"], description="Администратор")
-@extend_schema_view(
-    list=extend_schema(summary="Список пользователей", methods=["GET"]),
-    # retrieve=extend_schema(
-    #     summary="Детальная информация о пользователе (id=номер телефона)",
-    #     methods=["GET"],
-    # ),
-)
 class CustomUserViewSet(UserViewSet):
     """
     Вьюсет для:
@@ -33,3 +13,17 @@ class CustomUserViewSet(UserViewSet):
     - изменения username;
     - регистрации нового пользователя;
     """
+
+    @action(
+        detail=False,
+        methods=("GET", "POST"),
+        url_path="phone_registration",
+    )
+    def phone_registration(self, request) -> Response:
+        """
+        Функция для регистрации по номеру телефона.
+        """
+        if request.method == "POST":
+            return get_cofirmation_code(self, request)
+        else:
+            return get_phone_data(self, request)

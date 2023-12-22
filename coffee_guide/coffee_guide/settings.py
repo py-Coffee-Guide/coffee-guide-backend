@@ -110,6 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "users.CustomUser"
+TOKEN_MODEL = "users.CustomUser"
+AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 
 # SOCIAL_AUTH_USER_MODEL = "users.CustomUser"
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
@@ -121,9 +123,13 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication"
     ],
-    "SEARCH_PARAM": "name",
+    # "SEARCH_PARAM": "name",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# SIMPLE_JWT = {
+#     'AUTH_HEADER_TYPES': ('JWT',),
+# }
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Coffee_guide",
@@ -136,11 +142,17 @@ SPECTACULAR_SETTINGS = {
 }
 
 DJOSER = {
+    "SEND_ACTIVATION_EMAIL": True,
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    # "TOKEN_MODEL": None,
+    "ACTIVATION_URL": "api/v1/users/activation/{uid}/{token}/",
     "HIDE_USERS": False,
-    "SEND_ACTIVATION_EMAIL": False,
-    "LOGIN_FIELD": "phone",
+    "LOGIN_FIELD": 'username',
     "SERIALIZERS": {
         "user_create": "users.serializers.CustomUserCreateSerializer",
+        'user': 'users.serializers.CustomUserSerializer',
+        'current_user': 'users.serializers.CustomUserSerializer',
     },
     "PERMISSIONS": {
         "user": ["rest_framework.permissions.AllowAny"],
@@ -176,6 +188,14 @@ SOCIAL_AUTH_PIPELINE = (
 
 LOGIN_REDIRECT_URL = "/api/v1/cafe/"
 
+# smtp
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "coffeegyd@gmail.com"
+EMAIL_HOST_PASSWORD = "whip ramt iide mmxm"
+
 LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "Europe/Moscow"
@@ -192,3 +212,4 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_USER_NAME = "Гость"
