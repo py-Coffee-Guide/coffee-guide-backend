@@ -42,6 +42,7 @@ class CafeAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Основная информация",
             {"fields": (
+                # "id",
                 "name",
                 "description",
                 "rating",
