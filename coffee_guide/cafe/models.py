@@ -1,27 +1,20 @@
 import io
-import requests
 import os
-
-from django.db import models
-from django.core.exceptions import ValidationError
 from pathlib import Path
+
+import requests
+from django.db import models
 from PIL import Image
 
-from users.models import CustomUser
+from coffee_guide.settings import BASE_DIR, MEDIA_ROOT
 
-from django.core.exceptions import ValidationError
-from django.core.files import File
-from django.core.validators import RegexValidator
-from django.db import models
-from users.models import CustomUser
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
-class StopFactor(models.Model):
-    """Атрибуты."""
-    id = models.CharField(primary_key=True, max_length=255)
+class Tags(models.Model):
+    """Теги."""
+
     name = models.CharField(
         max_length=200, unique=True, verbose_name="Название"
     )
@@ -29,39 +22,102 @@ class StopFactor(models.Model):
         max_length=200,
         unique=True,
         # validators=(validate_slug,),
-        verbose_name="Уникальный Тег",
+        verbose_name="Уникальный Слаг",
     )
 
     class Meta:
-        verbose_name = "Доп. свойство"
-        verbose_name_plural = "Доп. свойства"
+        verbose_name = "Теги"
+        verbose_name_plural = "Теги"
 
     def __str__(self):
         return self.name
 
 
-class Contact(models.Model):
-    """Контакты."""
+class Cups(models.Model):
+    """Напитки"""
 
-    phone = models.CharField(max_length=11, verbose_name="Номер телефона")
-    website = models.URLField(max_length=200, verbose_name="Вебсайт")
-    email = models.EmailField(max_length=254, verbose_name="Почта")
+    name = models.CharField(
+        max_length=200, unique=True, verbose_name="Название"
+    )
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        verbose_name="Уникальный Слаг",
+    )
 
     class Meta:
-        verbose_name = "Контакты"
-        verbose_name_plural = "Контакты"
+        verbose_name = "Напиток"
+        verbose_name_plural = "Напитки"
 
     def __str__(self):
-        return (f"Номер телефона кофейни - {self.phone}"
-                f"E-mail кофейни - {self.email}"
-                f"Сайт кофейни - {self.website}")
+        return self.name
+
+
+class Milk(models.Model):
+    """Молоко"""
+
+    name = models.CharField(
+        max_length=200, unique=True, verbose_name="Название"
+    )
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        verbose_name="Уникальный Слаг",
+    )
+
+
+class Roasters(models.Model):
+    """Обжарщики"""
+
+    name = models.CharField(
+        max_length=200, unique=True, verbose_name="Название"
+    )
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        verbose_name="Уникальный Слаг",
+    )
+
+
+class Extra(models.Model):
+    """Дополнительно"""
+
+    name = models.CharField(
+        max_length=200, unique=True, verbose_name="Название"
+    )
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        verbose_name="Уникальный Слаг",
+    )
+
+
+# class Contact(models.Model):
+#     """Контакты."""
+
+#     phone = models.CharField(max_length=11, verbose_name="Номер телефона")
+#     website = models.URLField(max_length=200, verbose_name="Вебсайт")
+#     email = models.EmailField(max_length=254, verbose_name="Почта")
+
+#     class Meta:
+#         verbose_name = "Контакты"
+#         verbose_name_plural = "Контакты"
+
+#     def __str__(self):
+#         return (f"Номер телефона кофейни - {self.phone}"
+#                 f"E-mail кофейни - {self.email}"
+#                 f"Сайт кофейни - {self.website}")
 
 
 class Point(models.Model):
     """Координаты"""
 
-    lat = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Ширина")
-    lon = models.DecimalField(max_digits=9, decimal_places=6, verbose_name="Долгота")
+    lat = models.DecimalField(
+        max_digits=9, decimal_places=6, verbose_name="Ширина"
+    )
+    lon = models.DecimalField(
+        max_digits=9, decimal_places=6, verbose_name="Долгота"
+    )
 
     class Meta:
         verbose_name = "Координаты"
@@ -91,64 +147,65 @@ class City(models.Model):
         return self.name
 
 
-class District(models.Model):
-    """Район"""
+# class District(models.Model):
+#     """Район"""
 
-    name = models.CharField(
-        verbose_name="Название района",
-        max_length=200,
-    )
-    slug = models.SlugField(
-        verbose_name="Ссылка на район",
-        max_length=200,
-    )
+#     name = models.CharField(
+#         verbose_name="Название района",
+#         max_length=200,
+#     )
+#     slug = models.SlugField(
+#         verbose_name="Ссылка на район",
+#         max_length=200,
+#     )
 
-    class Meta:
-        verbose_name = "Район"
-        verbose_name_plural = "Районы"
+#     class Meta:
+#         verbose_name = "Район"
+#         verbose_name_plural = "Районы"
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
-class Metro(models.Model):
-    """Метро"""
+# class Metro(models.Model):
+#     """Метро"""
 
-    color = models.CharField(
-        verbose_name="Цвет ветки метро",
-        max_length=7,
-        validators=[
-            RegexValidator(
-                regex="^#[0-9a-fA-F]{6}$",
-                message="Цвет должен быть в формате #123456",
-            )
-        ],
-    )
-    comment = models.CharField(
-        verbose_name="Название ветки метро",
-        max_length=200,
-    )
-    distance = models.DecimalField(verbose_name="Расстояние до станции", max_digits=6, decimal_places=2)
-    name = models.CharField(
-        verbose_name="Название станции метро",
-        max_length=100,
-    )
-    slug = models.SlugField(
-        verbose_name="Ссылка на метро",
-        max_length=200,
-        unique=True,
-    )
+#     color = models.CharField(
+#         verbose_name="Цвет ветки метро",
+#         max_length=7,
+#         validators=[
+#             RegexValidator(
+#                 regex="^#[0-9a-fA-F]{6}$",
+#                 message="Цвет должен быть в формате #123456",
+#             )
+#         ],
+#     )
+#     comment = models.CharField(
+#         verbose_name="Название ветки метро",
+#         max_length=200,
+#     )
+#     distance = models.DecimalField(verbose_name="Расстояние до станции", max_digits=6, decimal_places=2)
+#     name = models.CharField(
+#         verbose_name="Название станции метро",
+#         max_length=100,
+#     )
+#     slug = models.SlugField(
+#         verbose_name="Ссылка на метро",
+#         max_length=200,
+#         unique=True,
+#     )
 
-    class Meta:
-        verbose_name = "Станция"
-        verbose_name_plural = "Станции"
+# class Meta:
+#     verbose_name = "Станция"
+#     verbose_name_plural = "Станции"
 
-    def __str__(self):
-        return self.name
+# def __str__(self):
+#     return self.name
 
 
 class Schedule(models.Model):
     """Время работы"""
+
     # Разделить по подобию ингредиентов
 
     cafe = models.ForeignKey(
@@ -157,29 +214,28 @@ class Schedule(models.Model):
         null=True,
         related_name="worked",
     )
-    day = models.CharField(
-        verbose_name="День недели",
+    weekday = models.CharField(
+        verbose_name="Будние дни",
         max_length=100,
-        # choices=DAY_CHOICES,
     )
-    day_off = models.BooleanField(
-        verbose_name="Выходной",
-        default=False,
+    weekend = models.CharField(
+        verbose_name="Выходные дни",
+        max_length=100,
     )
-    start = models.CharField(
-        verbose_name="Начало работы",
-        # choices=TIME_CHOICES,
-        max_length=145,
-        null=True,
-        blank=True,
-    )
-    end = models.CharField(
-        verbose_name="Конец работы",
-        # choices=TIME_CHOICES,
-        max_length=145,
-        null=True,
-        blank=True,
-    )
+    # start = models.CharField(
+    #     verbose_name="Начало работы",
+    #     # choices=TIME_CHOICES,
+    #     max_length=145,
+    #     null=True,
+    #     blank=True,
+    # )
+    # end = models.CharField(
+    #     verbose_name="Конец работы",
+    #     # choices=TIME_CHOICES,
+    #     max_length=145,
+    #     null=True,
+    #     blank=True,
+    # )
 
     class Meta:
         verbose_name = "Время работы"
@@ -192,15 +248,15 @@ class Schedule(models.Model):
         #     ),
         # ]
 
-    def clean(self):
-        if self.start and self.end is not None:
-            if self.start >= self.end:
-                raise ValidationError(
-                    {"end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"}
-                )
+    # def clean(self):
+    #     if self.start and self.end is not None:
+    #         if self.start >= self.end:
+    #             raise ValidationError(
+    #                 {"end": "Укажите корректное время окончания. Оно не может быть меньше времени начала"}
+    #             )
 
     def __str__(self):
-        return self.day
+        return f"{self.weekday}  {self.weekend}"
 
 
 class Cafe(models.Model):
@@ -233,18 +289,10 @@ class Cafe(models.Model):
         null=True,
         default="",
     )
-    cities = models.ForeignKey(
-        City,
+    cities = models.CharField(
         verbose_name="Город",
-        related_name="cafe",
-        on_delete=models.SET_NULL,
+        max_length=100,
         null=True,
-    )
-    district = models.ManyToManyField(
-        District,
-        verbose_name="Район",
-        related_name="cafe",
-        blank=True,
     )
     point = models.ManyToManyField(
         Point,
@@ -252,19 +300,59 @@ class Cafe(models.Model):
         related_name="cafe",
         blank=True,
     )
-    contact = models.ForeignKey(
-        Contact,
-        verbose_name="Контакты",
-        related_name="cafe",
-        on_delete=models.SET_NULL,
-        null=True,
+    tags = models.ManyToManyField(
+        Tags,
+        related_name="tags",
+        verbose_name="Список тегов",
     )
-    stop_factors = models.ManyToManyField(
-        StopFactor,
-        verbose_name="Доп. свойства",
-        related_name="cafes",
-        blank=True,
+    cups = models.ManyToManyField(
+        Cups,
+        through="CupInCafe",
+        related_name="cups",
+        verbose_name="Список напитков",
     )
+    milk = models.ManyToManyField(
+        Milk,
+        related_name="milk",
+        verbose_name="Список молока",
+    )
+    roasters = models.ManyToManyField(
+        Roasters,
+        related_name="roasters",
+        verbose_name="Список обжарщиков",
+    )
+    extra = models.ManyToManyField(
+        Extra,
+        related_name="extra",
+        verbose_name="Список дополнительного",
+    )
+
+    # cities = models.ForeignKey(
+    #     City,
+    #     verbose_name="Город",
+    #     related_name="cafe",
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    # )
+    # district = models.ManyToManyField(
+    #     District,
+    #     verbose_name="Район",
+    #     related_name="cafe",
+    #     blank=True,
+    # )
+    # contact = models.ForeignKey(
+    #     Contact,
+    #     verbose_name="Контакты",
+    #     related_name="cafe",
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    # )
+    # stop_factors = models.ManyToManyField(
+    #     StopFactor,
+    #     verbose_name="Доп. свойства",
+    #     related_name="cafes",
+    #     blank=True,
+    # )
     # schedule = models.ForeignKey(
     #     Schedule,
     #     verbose_name="График работы",
@@ -284,13 +372,13 @@ class Cafe(models.Model):
     #     max_length=120,
     #     choices=CHECK_CHOICES,
     # )
-    metro = models.ForeignKey(
-        Metro,
-        verbose_name="Метро",
-        related_name="cafe",
-        on_delete=models.SET_NULL,
-        null=True,
-    )
+    # metro = models.ForeignKey(
+    #     Metro,
+    #     verbose_name="Метро",
+    #     related_name="cafe",
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    # )
     # latitude = models.FloatField(
     #     verbose_name="Широта",
     #     max_length=200,
@@ -314,7 +402,7 @@ class Cafe(models.Model):
     # )
 
     class Meta:
-        ordering = ('name',)
+        ordering = ("name",)
         verbose_name = "Кофейня"
         verbose_name_plural = "Кофейни"
 
@@ -326,7 +414,39 @@ class Cafe(models.Model):
         super().save(*args, **kwargs)
 
 
+class CupInCafe(models.Model):
+    """Модель для связи Напитка и Кофейни"""
+
+    cafe = models.ForeignKey(
+        Cafe,
+        on_delete=models.CASCADE,
+        related_name="cup_list",
+        verbose_name="Кофейня",
+    )
+    cup = models.ForeignKey(
+        Cups,
+        on_delete=models.CASCADE,
+        verbose_name="Напиток",
+    )
+    cost = models.IntegerField(
+        "Цена",
+    )
+
+    class Meta:
+        verbose_name: str = "Напитки в кофейне"
+        verbose_name_plural: str = "Напитки в кофейнях"
+
+    def __str__(self) -> str:
+        return f"{self.cup.name} {self.cost}"
+
+
 class ImageCafe(models.Model):
+    cafe = models.ForeignKey(
+        Cafe,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="image",
+    )
     image_file = models.ImageField(upload_to="images", blank=True)
     image_url = models.URLField(blank=True)
 
@@ -365,26 +485,3 @@ class ImageCafe(models.Model):
 
 #     def __str__(self):
 #         return self.name
-
-
-class Favorite(models.Model):
-    """Избранное"""
-
-    user = models.ForeignKey(
-        CustomUser,
-        related_name="favorite",
-        on_delete=models.CASCADE,
-    )
-    cafe = models.ForeignKey(
-        Cafe,
-        related_name="favorite",
-        on_delete=models.CASCADE,
-    )
-
-    class Meta:
-        verbose_name = "Избранное"
-        verbose_name_plural = "Избранное"
-        ordering = ["id"]
-        constraints = [
-            models.UniqueConstraint(fields=["user", "cafe"], name="uniquefavorite"),
-        ]
