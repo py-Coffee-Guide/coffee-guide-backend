@@ -38,6 +38,7 @@ class CustomUserManager(BaseUserManager):
         first_name=DEFAULT_USER_NAME,
         **extra_fields,
     ):
+        extra_fields.setdefault("is_active", True)
         user = self.model(
             username=username,
             password=password,
