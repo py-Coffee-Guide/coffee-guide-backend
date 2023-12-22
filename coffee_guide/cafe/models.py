@@ -261,7 +261,6 @@ class Schedule(models.Model):
 
 class Cafe(models.Model):
     """Заведение"""
-
     name = models.CharField(
         verbose_name="Название кофейни",
         max_length=150,
