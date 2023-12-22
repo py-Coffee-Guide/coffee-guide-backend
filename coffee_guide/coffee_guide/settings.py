@@ -119,9 +119,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-        # 'social_core.backends.vk.VKOAuth2',
-        # 'django.contrib.auth.backends.ModelBackend',
+        "rest_framework.authentication.TokenAuthentication"
     ],
     "SEARCH_PARAM": "name",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -153,9 +151,7 @@ DJOSER = {
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'social_core.backends.github.GithubOAuth2',
-    # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    'django.contrib.auth.backends.ModelBackend',
-    # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    'django.contrib.auth.backends.ModelBackend'
 )
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '51814626'
