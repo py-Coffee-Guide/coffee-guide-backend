@@ -8,7 +8,7 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from users.views import auth
+# from users.views import auth
 
 app_name = 'social'
 
@@ -28,7 +28,7 @@ urlpatterns = [
         name="redoc",
     ),
     re_path('', include('social_django.urls', namespace='social')),
-    path("auth/", auth),
+    # path("auth/", auth),
 ]
 
 if settings.DEBUG:

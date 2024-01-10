@@ -1,12 +1,12 @@
 from cafe.models import (
     Cafe,
-    City,
-    Contact,
-    District,
-    Metro,
-    Point,
+    # City,
+    # Contact,
+    # District,
+    # Metro,
+    # Point,
     Schedule,
-    StopFactor,
+    # StopFactor,
 )
 from rest_framework import serializers
 
@@ -27,52 +27,52 @@ class CafeUserSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "address", "poster")
 
 
-class StopFactorSerializer(serializers.ModelSerializer):
-    """Сериализация данных: Доп. свойства"""
+# class StopFactorSerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Доп. свойства"""
 
-    class Meta:
-        model = StopFactor
-        fields = "__all__"
-
-
-class ContactSerializer(serializers.ModelSerializer):
-    """Сериализация данных: Контакты"""
-
-    class Meta:
-        model = Contact
-        fields = "__all__"
+#     class Meta:
+#         model = StopFactor
+#         fields = "__all__"
 
 
-class PointSerializer(serializers.ModelSerializer):
-    """Сериализация данных: Координаты"""
+# class ContactSerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Контакты"""
 
-    class Meta:
-        model = Point
-        fields = "__all__"
-
-
-class CitySerializer(serializers.ModelSerializer):
-    """Сериализация данных: Город"""
-
-    class Meta:
-        model = City
-        fields = "__all__"
+#     class Meta:
+#         model = Contact
+#         fields = "__all__"
 
 
-class DistrictSerializer(serializers.ModelSerializer):
-    """Сериализация данных: Район"""
+# class PointSerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Координаты"""
 
-    class Meta:
-        model = District
-        fields = "__all__"
+#     class Meta:
+#         model = Point
+#         fields = "__all__"
 
 
-class MetroSerializer(serializers.ModelSerializer):
-    """Сериализация данных: Метро"""
+# class CitySerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Город"""
 
-    class Meta:
-        model = Metro
-        fields = "__all__"
+#     class Meta:
+#         model = City
+#         fields = "__all__"
+
+
+# class DistrictSerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Район"""
+
+#     class Meta:
+#         model = District
+#         fields = "__all__"
+
+
+# class MetroSerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Метро"""
+
+#     class Meta:
+#         model = Metro
+#         fields = "__all__"
 
 
 class ScheduleSerializer(serializers.ModelSerializer):

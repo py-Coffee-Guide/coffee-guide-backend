@@ -5,17 +5,16 @@ from django.utils.html import format_html
 
 from .models import (
     Cafe,
-    City,
-    Contact,
-    District,
-    Metro,
-    Point,
+    Filter,
     Schedule,
-    StopFactor,
+    Alternative,
+    Roaster,
+    Tag,
+    Drink,
     ImageCafe
 )
 
-# from django.utils.safestring import mark_safe
+# # from django.utils.safestring import mark_safe
 
 
 @admin.register(Cafe)
@@ -28,34 +27,33 @@ class CafeAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
-        "name",
-        "rating",
-        "address"
+        "description",
+        "district",
+        "address",
+        "latitude",
+        "longitude"
     )
     list_filter = (
         "name",
-        "rating",
         "address",
-        "stop_factors"
+        # "stop_factors"
     )
 
     fieldsets = (
         ("Основная информация",
             {"fields": (
                 # "id",
-                "name",
                 "description",
-                "rating",
-                "stop_factors",
-                # "poster"
+                "district",
+                "poster"
             )}),
         (
             "Контакты и адреса",
             {"fields": (
                 "address",
-                "contact",
-                "cities",
-                "point")},
+                # "contact",
+                "latitude",
+                "longitude")},
         ),
     )
     # list_filter = ("name",)
@@ -74,101 +72,73 @@ class CafeAdmin(admin.ModelAdmin):
     # preview.short_description = "Превью"
 
 
-@admin.register(ImageCafe)
-class ImageCafeAdmin(admin.ModelAdmin):
-    list_display = (
-        "image_tag",
-        "image_file",
-        "image_url"
-    )
-    readonly_fields = ("image_tag",)
-
-    def image_tag(self, obj):
-        return format_html(
-            '<img src="{}" width="100" height="100" />'.format
-            (obj.image_file.url)
-        )
-
-    image_tag.short_description = "Картинка"
-    image_tag.allow_tags = True
+@admin.register(Filter)
+class FilterAdmin(admin.ModelAdmin):
+    list_display = ("name", )
 
 
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    """Админка: Город"""
-
-    list_display = (
-        "id",
-        "name"
-    )
-    list_filter = ("name",)
+@admin.register(Alternative)
+class AlternativeAdmin(admin.ModelAdmin):
+    list_display = ("name", )
 
 
-@admin.register(StopFactor)
-class StopFactorAdmin(admin.ModelAdmin):
-    """Админка: Атрибуты"""
+@admin.register(Roaster)
+class RoasterAdmin(admin.ModelAdmin):
+    list_display = ("name", )
 
-    list_display = (
-        "id",
-        "name",
-        "slug"
-    )
-    list_filter = ("name",)
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ("name", )
+
+
+@admin.register(Drink)
+class DrinkAdmin(admin.ModelAdmin):
+    list_display = ("name", )
 
 
 @admin.register(Schedule)
-class ScheduleAdmin(admin.ModelAdmin):
-    """Админка: Время работы"""
-
-    list_display = (
-        "cafe",
-        "day",
-        "day_off",
-        "start",
-        "end"
-    )
-    # list_filter = (
-    #     "cafe",
-    #     "day",
-    #     "day_off",
-    #     "start",
-    #     "end"
-    # )
+class Schedule(admin.ModelAdmin):
+    list_display = ("text", )
 
 
-@admin.register(District)
-class DistrictAdmin(admin.ModelAdmin):
-    """Админка: Район"""
+# @admin.register(ImageCafe)
+# class ImageCafeAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "image_tag",
+#         "image_file",
+#         "image_url"
+#     )
+#     readonly_fields = ("image_tag",)
 
-    list_display = ("name",)
-    list_filter = ("name",)
+#     def image_tag(self, obj):
+#         return format_html(
+#             '<img src="{}" width="100" height="100" />'.format
+#             (obj.image_file.url)
+#         )
 
-
-@admin.register(Metro)
-class MetroAdmin(admin.ModelAdmin):
-    """Админка: Метро"""
-
-    list_display = [field.name for field in Metro._meta.fields]
-
-
-@admin.register(Point)
-class PointAdmin(admin.ModelAdmin):
-    """Админка: Координаты"""
-
-    list_display = (
-        "lat",
-        "lon"
-    )
+#     image_tag.short_description = "Картинка"
+#     image_tag.allow_tags = True
 
 
-@admin.register(Contact)
-class ContactAdmin(admin.ModelAdmin):
-    """Админка: Контакты"""
+# @admin.register(Point)
+# class PointAdmin(admin.ModelAdmin):
+#     """Админка: Координаты"""
 
-    list_display = (
-        "id",
-        "phone",
-        "website",
-        "email"
-        )
-    list_filter = ("website",)
+#     list_display = (
+#         "lat",
+#         "lon"
+#     )
+
+
+# @admin.register(Contact)
+# class ContactAdmin(admin.ModelAdmin):
+#     """Админка: Контакты"""
+
+#     list_display = (
+#         "id",
+#         "phone",
+#         "website",
+#         "email"
+#         )
+#     list_filter = ("website",)
