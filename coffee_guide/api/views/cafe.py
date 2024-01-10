@@ -1,18 +1,18 @@
-from api.serializers.cafe import CafeSerializer, MetroSerializer
-from api.utils import add_to, delete_from
+from api.serializers.cafe import CafeSerializer
+# from api.utils import add_to, delete_from
 from cafe.models import (
     Cafe,
-    City,
-    Contact,
-    District,
-    Favorite,
-    Metro,
-    Point,
-    Schedule,
-    StopFactor,
+    # City,
+    # Contact,
+    # District,
+    # Favorite,
+    # Metro,
+    # Point,
+    # Schedule,
+    # StopFactor,
 )
 from drf_spectacular.utils import (
-    OpenApiParameter,
+    # OpenApiParameter,
     extend_schema,
     extend_schema_view,
 )
@@ -41,17 +41,17 @@ class CafeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Cafe.objects.all()
     serializer_class = CafeSerializer
 
-    @action(
-        detail=True,
-        methods=["POST", "DELETE"],
-        permission_classes=(IsAuthenticated,),
-    )
-    def favorite(self, request, pk) -> Response:
-        """Работа с избранным добавить/удалить"""
-        if request.method == "POST":
-            return add_to(self, Favorite, request.user, pk)
-        else:
-            return delete_from(self, Favorite, request.user, pk)
+    # @action(
+    #     detail=True,
+    #     methods=["POST", "DELETE"],
+    #     permission_classes=(IsAuthenticated,),
+    # )
+    # def favorite(self, request, pk) -> Response:
+    #     """Работа с избранным добавить/удалить"""
+    #     if request.method == "POST":
+    #         return add_to(self, Favorite, request.user, pk)
+    #     else:
+    #         return delete_from(self, Favorite, request.user, pk)
 
     # queryset = Cafe.objects.filter(is_verified=True)
     # # filterset_class = CafeFilter
@@ -65,157 +65,157 @@ class CafeViewSet(viewsets.ReadOnlyModelViewSet):
     # http_method_names = ["get"]
 
 
-@extend_schema(
-    tags=["Кофейня"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Стоп фактор",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о заведении",
-    ),
-)
-class StopFactorViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет: Доп. свойство"""
+# @extend_schema(
+#     tags=["Кофейня"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Стоп фактор",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о заведении",
+#     ),
+# )
+# class StopFactorViewSet(viewsets.ReadOnlyModelViewSet):
+#     """Вьюсет: Доп. свойство"""
 
-    queryset = StopFactor.objects.all()
-
-
-@extend_schema(
-    tags=["Кофейня"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Контакты",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о заведении",
-    ),
-)
-class ContactViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет: Контактов"""
-
-    queryset = Contact.objects.all()
+#     queryset = StopFactor.objects.all()
 
 
-@extend_schema(
-    tags=["Кофейня"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Координаты",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о заведении",
-    ),
-)
-class PointViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет: Координатов"""
+# @extend_schema(
+#     tags=["Кофейня"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Контакты",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о заведении",
+#     ),
+# )
+# class ContactViewSet(viewsets.ReadOnlyModelViewSet):
+#     """Вьюсет: Контактов"""
 
-    queryset = Point.objects.all()
-
-
-@extend_schema(
-    tags=["Адрес"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Город",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о городе",
-    ),
-)
-class CityViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет: Городов"""
-
-    queryset = City.objects.all()
+#     queryset = Contact.objects.all()
 
 
-@extend_schema(
-    tags=["Адрес"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Район",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о районе",
-    ),
-)
-class DistrictViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет: Районов"""
+# @extend_schema(
+#     tags=["Кофейня"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Координаты",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о заведении",
+#     ),
+# )
+# class PointViewSet(viewsets.ReadOnlyModelViewSet):
+#     """Вьюсет: Координатов"""
 
-    queryset = District.objects.all()
-
-
-@extend_schema(
-    tags=["Адрес"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Метро",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о метро",
-    ),
-)
-class MetroViewSet(viewsets.ModelViewSet):
-    """Вьюсет: Метро"""
-
-    queryset = Metro.objects.all()
-    serializer_class = MetroSerializer
+#     queryset = Point.objects.all()
 
 
-@extend_schema(
-    tags=["Кофейня"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Время работы",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о времени работы",
-    ),
-)
-class ScheduleViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет: Времени работы"""
+# @extend_schema(
+#     tags=["Адрес"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Город",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о городе",
+#     ),
+# )
+# class CityViewSet(viewsets.ReadOnlyModelViewSet):
+#     """Вьюсет: Городов"""
 
-    queryset = Schedule.objects.all()
+#     queryset = City.objects.all()
 
 
-@extend_schema(
-    tags=["Отзывы"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Отзывы",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация об отзыве",
-    ),
-)
-class EventUsersViewSet(viewsets.ModelViewSet):
-    """Вьюсет: Отзывы(пользователь)"""
+# @extend_schema(
+#     tags=["Адрес"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Район",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о районе",
+#     ),
+# )
+# class DistrictViewSet(viewsets.ReadOnlyModelViewSet):
+#     """Вьюсет: Районов"""
 
-    pass
+#     queryset = District.objects.all()
+
+
+# @extend_schema(
+#     tags=["Адрес"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Метро",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о метро",
+#     ),
+# )
+# class MetroViewSet(viewsets.ModelViewSet):
+#     """Вьюсет: Метро"""
+
+#     queryset = Metro.objects.all()
+#     serializer_class = MetroSerializer
+
+
+# @extend_schema(
+#     tags=["Кофейня"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Время работы",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о времени работы",
+#     ),
+# )
+# class ScheduleViewSet(viewsets.ReadOnlyModelViewSet):
+#     """Вьюсет: Времени работы"""
+
+#     queryset = Schedule.objects.all()
+
+
+# @extend_schema(
+#     tags=["Отзывы"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Отзывы",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация об отзыве",
+#     ),
+# )
+# class EventUsersViewSet(viewsets.ModelViewSet):
+#     """Вьюсет: Отзывы(пользователь)"""
+
+#     pass
 
     # serializer_class = EventSerializer
     # http_method_names = ["get"]
