@@ -1,3 +1,7 @@
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+from api.filters import CafeFilter
 from api.serializers.cafe import CafeSerializer
 # from api.utils import add_to, delete_from
 from cafe.models import (
@@ -40,6 +44,10 @@ class CafeViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Cafe.objects.all()
     serializer_class = CafeSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'address']
+    filterset_class = CafeFilter
+    ordering_fields = ['district'] #  /api/cafe/?ordering=district
 
     # @action(
     #     detail=True,
