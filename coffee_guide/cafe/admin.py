@@ -27,6 +27,7 @@ class CafeAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
+        "name",
         "description",
         "district",
         "address",
@@ -39,10 +40,13 @@ class CafeAdmin(admin.ModelAdmin):
         # "stop_factors"
     )
 
+    search_fields = ['name', 'address']
+
     fieldsets = (
         ("Основная информация",
             {"fields": (
                 # "id",
+                "name",
                 "description",
                 "district",
                 "poster"
@@ -98,7 +102,7 @@ class DrinkAdmin(admin.ModelAdmin):
 
 
 @admin.register(Schedule)
-class Schedule(admin.ModelAdmin):
+class ScheduleAdmin(admin.ModelAdmin):
     list_display = ("text", )
 
 
