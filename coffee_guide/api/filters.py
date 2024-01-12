@@ -20,11 +20,10 @@ class CafeFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(field_name='address', lookup_expr='icontains')
     alternative = django_filters.CharFilter(
         field_name='alternative__name', lookup_expr='icontains'
-        )
+    )
     roaster = django_filters.CharFilter(
         field_name='roaster__name', lookup_expr='icontains'
-        )
-
+    )
 
     class Meta:
         model = Cafe

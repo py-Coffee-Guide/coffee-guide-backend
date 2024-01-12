@@ -197,7 +197,10 @@ class ImageCafe(models.Model):
         related_name="image",
     )
     image_file = models.ImageField(upload_to="images", blank=True)
-    image_url = models.URLField(blank=True)
+    image_url = models.CharField(
+        max_length=300,
+        blank=True
+    )
 
     def save(self, *args, **kwargs):
         if self.image_url and not self.image_file:

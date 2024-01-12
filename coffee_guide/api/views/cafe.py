@@ -47,7 +47,7 @@ class CafeViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['name', 'address']
     filterset_class = CafeFilter
-    ordering_fields = ['district'] #  /api/cafe/?ordering=district
+    ordering_fields = ['district']  # /api/cafe/?ordering=district
 
     # @action(
     #     detail=True,

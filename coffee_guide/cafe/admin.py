@@ -76,6 +76,11 @@ class CafeAdmin(admin.ModelAdmin):
     # preview.short_description = "Превью"
 
 
+@admin.register(ImageCafe)
+class ImageCafeAdmin(admin.ModelAdmin):
+    list_display = ("cafe", "image_file", "image_url")
+
+
 @admin.register(Filter)
 class FilterAdmin(admin.ModelAdmin):
     list_display = ("name", )
