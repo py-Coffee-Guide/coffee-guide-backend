@@ -83,7 +83,6 @@ class Address(models.Model):
     name = models.CharField(
         verbose_name="Адрес кофейни",
         max_length=150,
-        unique=True,
     )
     lan = models.FloatField(
         verbose_name="Широта",
