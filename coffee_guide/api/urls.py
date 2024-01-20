@@ -1,13 +1,13 @@
-from api.views.cafe import (
-    CafeViewSet,
-    # CityViewSet,
-    # ContactViewSet,
-    # DistrictViewSet,
-    # MetroViewSet,
-    # PointViewSet,
-    # ScheduleViewSet,
-    # StopFactorViewSet,
-)
+# from api.views.cafe import (
+#     # CafeViewSet,
+#     # CityViewSet,
+#     # ContactViewSet,
+#     # DistrictViewSet,
+#     # MetroViewSet,
+#     # PointViewSet,
+#     # ScheduleViewSet,
+#     # StopFactorViewSet,
+# )
 from api.views.reviews import ReviewViewSet
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
@@ -17,7 +17,7 @@ app_name = "api"
 
 router = DefaultRouter()
 
-router.register("cafe", CafeViewSet, basename="cafe")
+# router.register("cafe", CafeViewSet, basename="cafe")
 # router.register("attributes", StopFactorViewSet, basename="attributes")
 # router.register("contacts", ContactViewSet, basename="contacts")
 # router.register("points", PointViewSet, basename="points")

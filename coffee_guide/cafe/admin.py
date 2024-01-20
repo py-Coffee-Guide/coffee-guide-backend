@@ -1,16 +1,18 @@
 from django.contrib import admin
 from django.forms import CheckboxSelectMultiple
 from django.db import models
-from django.utils.html import format_html
+# from django.utils.html import format_html
 
 from .models import (
+    Address,
+    Additional,
     Cafe,
-    Filter,
     Schedule,
-    Alternative,
+    ScheduleInCafe,
     Roaster,
     Tag,
     Drink,
+    DrinkInCafe,
     ImageCafe
 )
 
@@ -21,26 +23,29 @@ from .models import (
 class CafeAdmin(admin.ModelAdmin):
     """Админка: Заведение"""
 
-    formfield_overrides = {
-        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
-    }
+    # formfield_overrides = {
+    #     models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+    # }
 
     list_display = (
         "id",
         "name",
         "description",
-        "district",
-        "address",
-        "latitude",
-        "longitude"
+        "organization"
     )
     list_filter = (
         "name",
-        "address",
-        # "stop_factors"
+        "organization",
+    )
+    filter_horizontal = (
+        "schedulesincafe",
+        "additionals",
+        "roasters",
+        "tags",
+        "drinks"
     )
 
-    search_fields = ['name', 'address']
+    search_fields = ['name',]
 
     fieldsets = (
         ("Основная информация",
@@ -48,17 +53,13 @@ class CafeAdmin(admin.ModelAdmin):
                 # "id",
                 "name",
                 "description",
-                "district",
-                "poster"
+                "organization"
             )}),
-        (
-            "Контакты и адреса",
-            {"fields": (
-                "address",
-                # "contact",
-                "latitude",
-                "longitude")},
-        ),
+        # (
+        #     "Контакты и адреса",
+        #     {"fields": (
+        #         "address")},
+        # ),
     )
     # list_filter = ("name",)
     # empty_value_display = "-пусто-"
@@ -81,16 +82,6 @@ class ImageCafeAdmin(admin.ModelAdmin):
     list_display = ("cafe", "image_file", "image_url")
 
 
-@admin.register(Filter)
-class FilterAdmin(admin.ModelAdmin):
-    list_display = ("name", )
-
-
-@admin.register(Alternative)
-class AlternativeAdmin(admin.ModelAdmin):
-    list_display = ("name", )
-
-
 @admin.register(Roaster)
 class RoasterAdmin(admin.ModelAdmin):
     list_display = ("name", )
@@ -103,51 +94,29 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Drink)
 class DrinkAdmin(admin.ModelAdmin):
-    list_display = ("name", )
+    list_display = ("id", "cafe", "drink", "cost")
 
 
 @admin.register(Schedule)
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ("text", )
+    list_display = ("id", "name", "slug")
 
 
-# @admin.register(ImageCafe)
-# class ImageCafeAdmin(admin.ModelAdmin):
-#     list_display = (
-#         "image_tag",
-#         "image_file",
-#         "image_url"
-#     )
-#     readonly_fields = ("image_tag",)
-
-#     def image_tag(self, obj):
-#         return format_html(
-#             '<img src="{}" width="100" height="100" />'.format
-#             (obj.image_file.url)
-#         )
-
-#     image_tag.short_description = "Картинка"
-#     image_tag.allow_tags = True
+@admin.register(Address)
+class Address(admin.ModelAdmin):
+    list_display = ("cafe", "name", "lan", "lon")
 
 
-# @admin.register(Point)
-# class PointAdmin(admin.ModelAdmin):
-#     """Админка: Координаты"""
-
-#     list_display = (
-#         "lat",
-#         "lon"
-#     )
+@admin.register(Additional)
+class Additional(admin.ModelAdmin):
+    list_display = ("name", "slug")
 
 
-# @admin.register(Contact)
-# class ContactAdmin(admin.ModelAdmin):
-#     """Админка: Контакты"""
+@admin.register(ScheduleInCafe)
+class ScheduleInCafeAdmin(admin.ModelAdmin):
+    list_display = ("id", "cafe")
 
-#     list_display = (
-#         "id",
-#         "phone",
-#         "website",
-#         "email"
-#         )
-#     list_filter = ("website",)
+
+@admin.register(DrinkInCafe)
+class DrinkInCafeAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "slug",)

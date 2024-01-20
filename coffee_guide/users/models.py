@@ -3,7 +3,7 @@ from django.db import models
 
 from coffee_guide.settings import DEFAULT_USER_NAME
 
-from cafe.models import Cafe
+# from cafe.models import Cafe
 from .user_managers import CustomUserManager
 
 
@@ -64,26 +64,26 @@ class CustomUser(AbstractUser):
         return f"{self.first_name} ({self.username})"
 
 
-class Favorite(models.Model):
-    """Избранное"""
+# class Favorite(models.Model):
+#     """Избранное"""
 
-    user = models.ForeignKey(
-        CustomUser,
-        related_name="favorite",
-        on_delete=models.CASCADE,
-    )
-    cafe = models.ForeignKey(
-        Cafe,
-        related_name="favorite",
-        on_delete=models.CASCADE,
-    )
+#     user = models.ForeignKey(
+#         CustomUser,
+#         related_name="favorite",
+#         on_delete=models.CASCADE,
+#     )
+#     cafe = models.ForeignKey(
+#         Cafe,
+#         related_name="favorite",
+#         on_delete=models.CASCADE,
+#     )
 
-    class Meta:
-        verbose_name = "Избранное"
-        verbose_name_plural = "Избранное"
-        ordering = ["id"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "cafe"], name="uniquefavorite"
-            ),
-        ]
+#     class Meta:
+#         verbose_name = "Избранное"
+#         verbose_name_plural = "Избранное"
+#         ordering = ["id"]
+#         constraints = [
+#             models.UniqueConstraint(
+#                 fields=["user", "cafe"], name="uniquefavorite"
+#             ),
+#         ]
