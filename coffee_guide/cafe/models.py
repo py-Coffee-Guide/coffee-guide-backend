@@ -24,28 +24,28 @@ class Cafe(models.Model):
         blank=True,
         null=True,
     )
-    scheduleincafe = models.ManyToManyField(
+    schedulesincafe = models.ManyToManyField(
         "ScheduleInCafe",
         verbose_name="Время работы",
         max_length=100,
         related_name="cafes"
     )
-    additional = models.ManyToManyField(
+    additionals = models.ManyToManyField(
         "Additional",
         verbose_name="Дополнения",
         max_length=100,
     )
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         "Tag",
         verbose_name="Тэг",
         max_length=100
     )
-    roaster = models.ManyToManyField(
+    roasters = models.ManyToManyField(
         "Roaster",
         verbose_name="Обжарщик кофе",
         max_length=100
     )
-    drink = models.ManyToManyField(
+    drinks = models.ManyToManyField(
         "Drink",
         verbose_name="Напиток",
         max_length=100,
@@ -180,13 +180,13 @@ class Drink(models.Model):
         "Cafe",
         on_delete=models.CASCADE,
         null=True,
-        related_name="drinks",
+        related_name="drink_in_cafe",
     )
-    drinks = models.ForeignKey(
+    drink = models.ForeignKey(
         "DrinkInCafe",
         on_delete=models.CASCADE,
         null=True,
-        related_name="drink_in_cafe",
+        related_name="drinks_in_cafe",
     )
     cost = models.IntegerField(
         verbose_name="Стоимость",
@@ -243,7 +243,7 @@ class Schedule(models.Model):
 
 class ScheduleInCafe(models.Model):
     """Расписание в заведении"""
-    schedule = models.ManyToManyField(
+    schedules = models.ManyToManyField(
         "Schedule",
         verbose_name="Время работы",
         max_length=100

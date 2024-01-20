@@ -37,7 +37,13 @@ class CafeAdmin(admin.ModelAdmin):
         "name",
         "organization",
     )
-    filter_horizontal = ("scheduleincafe", "additional", "roaster", "tag", "drink")
+    filter_horizontal = (
+        "schedulesincafe",
+        "additionals",
+        "roasters",
+        "tags",
+        "drinks"
+    )
 
     search_fields = ['name',]
 
@@ -48,9 +54,6 @@ class CafeAdmin(admin.ModelAdmin):
                 "name",
                 "description",
                 "organization"
-                # "district",
-                # "address",
-
             )}),
         # (
         #     "Контакты и адреса",
@@ -91,7 +94,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Drink)
 class DrinkAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe", "drinks", "cost")
+    list_display = ("id", "cafe", "drink", "cost")
 
 
 @admin.register(Schedule)
