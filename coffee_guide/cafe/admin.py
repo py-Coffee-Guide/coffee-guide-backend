@@ -31,19 +31,21 @@ class CafeAdmin(admin.ModelAdmin):
         "id",
         "name",
         "description",
-        "organization"
+        "address",
+        "organization",
+        "image"
     )
     list_filter = (
         "name",
         "organization",
     )
-    filter_horizontal = (
-        "schedulesincafe",
-        "additionals",
-        "roasters",
-        "tags",
-        "drinks"
-    )
+    # filter_horizontal = (
+    #     "schedulesincafe",
+    #     "additionals",
+    #     "roasters",
+    #     "tags",
+        # "drinks"
+    # )
 
     search_fields = ['name',]
 
@@ -53,7 +55,9 @@ class CafeAdmin(admin.ModelAdmin):
                 # "id",
                 "name",
                 "description",
-                "organization"
+                "organization",
+                "address",
+                "image",
             )}),
         # (
         #     "Контакты и адреса",
@@ -79,7 +83,7 @@ class CafeAdmin(admin.ModelAdmin):
 
 @admin.register(ImageCafe)
 class ImageCafeAdmin(admin.ModelAdmin):
-    list_display = ("cafe", "image_file", "image_url")
+    list_display = ("image_file", "image_url")
 
 
 @admin.register(Roaster)
@@ -94,7 +98,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Drink)
 class DrinkAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe", "drink", "cost")
+    list_display = ("id", "name", "slug")
 
 
 @admin.register(Schedule)
@@ -104,7 +108,7 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class Address(admin.ModelAdmin):
-    list_display = ("cafe", "name", "lan", "lon")
+    list_display = ("id", "name", "lan", "lon")
 
 
 @admin.register(Additional)
@@ -114,9 +118,9 @@ class Additional(admin.ModelAdmin):
 
 @admin.register(ScheduleInCafe)
 class ScheduleInCafeAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe")
+    list_display = ("id", "cafe", "schedules", "start", "end")
 
 
 @admin.register(DrinkInCafe)
 class DrinkInCafeAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "slug",)
+    list_display = ("id", "cafe", "drink", "cost")

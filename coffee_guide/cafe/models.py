@@ -1,5 +1,6 @@
 import io
 import os
+
 # from pathlib import Path
 
 import requests
@@ -13,6 +14,7 @@ from users.models import CustomUser
 
 class Cafe(models.Model):
     """Заведение"""
+
     name = models.CharField(
         verbose_name="Название кофейни",
         max_length=150,
@@ -24,32 +26,37 @@ class Cafe(models.Model):
         blank=True,
         null=True,
     )
-    schedulesincafe = models.ManyToManyField(
-        "ScheduleInCafe",
+    address = models.ForeignKey(
+        "Address",
+        on_delete=models.CASCADE,
+        null=True,
+        verbose_name="Адрес кофейни",
+        related_name="cafe",
+    )
+    schedules = models.ManyToManyField(
+        "Schedule",
+        through="ScheduleInCafe",
         verbose_name="Время работы",
         max_length=100,
-        related_name="cafes"
+        related_name="cafes",
     )
     additionals = models.ManyToManyField(
         "Additional",
-        verbose_name="Дополнения",
+        verbose_name="Дополнительные опции",
         max_length=100,
     )
     tags = models.ManyToManyField(
-        "Tag",
-        verbose_name="Тэг",
-        max_length=100
+        "Tag", verbose_name="Доступные опции", max_length=100
     )
     roasters = models.ManyToManyField(
-        "Roaster",
-        verbose_name="Обжарщик кофе",
-        max_length=100
+        "Roaster", verbose_name="Обжарщик кофе", max_length=100
     )
     drinks = models.ManyToManyField(
         "Drink",
+        through="DrinkInCafe",
         verbose_name="Напиток",
         max_length=100,
-        related_name="cafes"
+        related_name="cafes",
     )
     organization = models.ForeignKey(
         CustomUser,
@@ -57,6 +64,13 @@ class Cafe(models.Model):
         null=True,
         verbose_name="Организация",
         related_name="organization",
+    )
+    image = models.ForeignKey(
+        "ImageCafe",
+        on_delete=models.CASCADE,
+        null=True,
+        verbose_name="Фото кофейни",
+        related_name="image",
     )
 
     class Meta:
@@ -74,12 +88,7 @@ class Cafe(models.Model):
 
 class Address(models.Model):
     """Адрес кофейни"""
-    cafe = models.ForeignKey(
-        "Cafe",
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="address",
-    )
+
     name = models.CharField(
         verbose_name="Адрес кофейни",
         max_length=150,
@@ -109,16 +118,13 @@ class Address(models.Model):
 
 class Additional(models.Model):
     """Дополнение"""
+
     name = models.CharField(
         verbose_name="Дополнение",
         max_length=100,
         unique=True,
     )
-    slug = models.SlugField(
-        unique=True,
-        max_length=50,
-        verbose_name="slug"
-    )
+    slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
 
     class Meta:
         ordering = ("name",)
@@ -131,16 +137,9 @@ class Additional(models.Model):
 
 class Tag(models.Model):
     """Тэг"""
-    name = models.CharField(
-        verbose_name="Тэг",
-        max_length=100,
-        unique=True
-    )
-    slug = models.SlugField(
-        unique=True,
-        max_length=50,
-        verbose_name="slug"
-    )
+
+    name = models.CharField(verbose_name="Тэг", max_length=100, unique=True)
+    slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
 
     class Meta:
         ordering = ("name",)
@@ -153,16 +152,11 @@ class Tag(models.Model):
 
 class Roaster(models.Model):
     """Обжарщик кофе"""
+
     name = models.CharField(
-        verbose_name="Обэарщик кофе",
-        max_length=100,
-        unique=True
+        verbose_name="Обэарщик кофе", max_length=100, unique=True
     )
-    slug = models.SlugField(
-        unique=True,
-        max_length=50,
-        verbose_name="slug"
-    )
+    slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
 
     class Meta:
         ordering = ("name",)
@@ -175,46 +169,37 @@ class Roaster(models.Model):
 
 class Drink(models.Model):
     """Напиток"""
-    cafe = models.ForeignKey(
-        "Cafe",
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="drink_in_cafe",
-    )
-    drink = models.ForeignKey(
-        "DrinkInCafe",
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="drinks_in_cafe",
-    )
-    cost = models.IntegerField(
-        verbose_name="Стоимость",
-        blank=True,
-        null=True
-    )
 
-    class Meta:
-        ordering = ("cafe",)
-        verbose_name = "Стоимость напитка"
-        verbose_name_plural = "Стоимость напитка"
-
-
-class DrinkInCafe(models.Model):
-    """Напиток в заведении"""
-    name = models.CharField(
-        verbose_name="Напиток",
-        max_length=100
-    )
-    slug = models.SlugField(
-        unique=True,
-        max_length=50,
-        verbose_name="slug"
-    )
+    name = models.CharField(verbose_name="Напиток", max_length=100)
+    slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
 
     class Meta:
         ordering = ("name",)
         verbose_name = "Напиток"
         verbose_name_plural = "Напитки"
+
+
+class DrinkInCafe(models.Model):
+    """Напиток в заведении"""
+
+    cafe = models.ForeignKey(
+        "Cafe",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="drink",
+    )
+    drink = models.ForeignKey(
+        "Drink",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="drink",
+    )
+    cost = models.IntegerField(verbose_name="Стоимость", blank=True, null=True)
+
+    class Meta:
+        ordering = ("cafe",)
+        verbose_name = "Стоимость напитка в кофейне"
+        verbose_name_plural = "Стоимость напитка в кофейне"
 
     def __str__(self):
         return self.name
@@ -222,15 +207,9 @@ class DrinkInCafe(models.Model):
 
 class Schedule(models.Model):
     """Дни недели"""
-    name = models.CharField(
-        verbose_name="День недели",
-        max_length=100
-    )
-    slug = models.SlugField(
-        verbose_name="slug",
-        max_length=50,
-        unique=True
-    )
+
+    name = models.CharField(verbose_name="День недели", max_length=100)
+    slug = models.SlugField(verbose_name="slug", max_length=50, unique=True)
 
     class Meta:
         verbose_name: str = "День недели"
@@ -242,10 +221,12 @@ class Schedule(models.Model):
 
 class ScheduleInCafe(models.Model):
     """Расписание в заведении"""
-    schedules = models.ManyToManyField(
+
+    schedules = models.ForeignKey(
         "Schedule",
-        verbose_name="Время работы",
-        max_length=100
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="schedule_in_cafe",
     )
     cafe = models.ForeignKey(
         "Cafe",
@@ -266,17 +247,15 @@ class ScheduleInCafe(models.Model):
 
 class ImageCafe(models.Model):
     """Изображение заведения"""
-    cafe = models.ForeignKey(
-        Cafe,
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="image",
-    )
+
+    # cafe = models.ForeignKey(
+    #     Cafe,
+    #     on_delete=models.CASCADE,
+    #     null=True,
+    #     related_name="image",
+    # )
     image_file = models.ImageField(upload_to="images", blank=True)
-    image_url = models.CharField(
-        max_length=300,
-        blank=True
-    )
+    image_url = models.CharField(max_length=300, blank=True)
 
     class Meta:
         verbose_name = "Фото заведения"
@@ -288,6 +267,7 @@ class ImageCafe(models.Model):
     def save(self, *args, **kwargs):
         if self.image_url and not self.image_file:
             response = requests.get(self.image_url, stream=True)
+            print(response.content)
             img = Image.open(io.BytesIO(response.content))
             img_name = f"{self.image_url.split('/')[-1]}"
             img_path = os.path.join(MEDIA_ROOT, img_name)
