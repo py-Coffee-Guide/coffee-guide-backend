@@ -22,7 +22,7 @@ from drf_spectacular.utils import (
 )
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.response import Response
 
 
@@ -42,15 +42,23 @@ from rest_framework.response import Response
 class CafeViewSet(viewsets.ModelViewSet):
     """Вьюсет: Кофейня"""
     queryset = Cafe.objects.all()
-    # filter_backends = [SearchFilter, DjangoFilterBackend]
-    # search_fields = ['name', 'address']
-    # filterset_class = CafeFilter
- # /api/cafe/?ordering=district
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'address']
+    filterset_class = CafeFilter
     
     def get_serializer_class(self):
-        if self.action in ("list", "retrieve"):
+        if self.request.method in SAFE_METHODS:
             return CafeGetSerializer
         return CafeCreateSerializer
+    
+    def dispatch(self, request, *args, **kwargs):
+        print(request)
+        res = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        for q in connection.queries:
+            print('>>>>', q['sql'])
+        print(f'Количество запросов в БД: {len(connection.queries)}')
+        return res
 
 
     # @action(

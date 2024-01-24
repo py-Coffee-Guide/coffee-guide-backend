@@ -65,12 +65,11 @@ class Cafe(models.Model):
         verbose_name="Организация",
         related_name="cafes",
     )
-    image = models.ImageField(
-        blank=True,
-        null=True,
-        verbose_name="Фото кофейни",
-        upload_to="images"
-    )
+    # image = models.ImageField(
+    #     blank=True,
+    #     null=True,
+    #     verbose_name="Фото кофейни",
+    #     upload_to="images"
     # image = models.ForeignKey(
     #     "ImageCafe",
     #     on_delete=models.CASCADE,
@@ -229,13 +228,13 @@ class ScheduleInCafe(models.Model):
     """Расписание в заведении"""
 
     schedules = models.ForeignKey(
-        Schedule,
+        "Schedule",
         on_delete=models.CASCADE,
         null=True,
         related_name="schedule_in_cafe",
     )
     cafe = models.ForeignKey(
-        Cafe,
+        "Cafe",
         on_delete=models.CASCADE,
         null=True,
         related_name="schedule_in_cafe",
@@ -251,32 +250,32 @@ class ScheduleInCafe(models.Model):
         return f"{self.start} {self.end}"
 
 
-# class ImageCafe(models.Model):
-#     """Изображение заведения"""
+class ImageCafe(models.Model):
+    """Изображение заведения"""
 
-#     # cafe = models.ForeignKey(
-#     #     Cafe,
-#     #     on_delete=models.CASCADE,
-#     #     null=True,
-#     #     related_name="image",
-#     # )
-#     image_file = models.ImageField(upload_to="images", blank=True)
-#     image_url = models.CharField(max_length=300, blank=True)
+    cafe = models.ForeignKey(
+        "Cafe",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="image",
+    )
+    image_file = models.ImageField(upload_to="images", blank=True)
+    image_url = models.CharField(max_length=300, blank=True, null=True,)
 
-#     class Meta:
-#         verbose_name = "Фото заведения"
-#         verbose_name_plural = "Фото заведений"
+    class Meta:
+        verbose_name = "Фото заведения"
+        verbose_name_plural = "Фото заведений"
 
-#     def __str__(self):
-#         return self.cafe
+    def __str__(self):
+        return f'Фото кофейни {self.cafe.name}'
 
-#     def save(self, *args, **kwargs):
-#         if self.image_url and not self.image_file:
-#             response = requests.get(self.image_url, stream=True)
-#             print(response.content)
-#             img = Image.open(io.BytesIO(response.content))
-#             img_name = f"{self.image_url.split('/')[-1]}"
-#             img_path = os.path.join(MEDIA_ROOT, img_name)
-#             img.save(img_path)
-#             self.image_file = os.path.join(img_name)
-#         super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.image_url and not self.image_file:
+            response = requests.get(self.image_url, stream=True)
+            print(response.content)
+            img = Image.open(io.BytesIO(response.content))
+            img_name = f"{self.image_url.split('/')[-1]}"
+            img_path = os.path.join(MEDIA_ROOT, img_name)
+            img.save(img_path)
+            self.image_file = os.path.join(img_name)
+        super().save(*args, **kwargs)
