@@ -1,10 +1,10 @@
-from django.shortcuts import get_object_or_404
-
+from api.utils import Base64ImageField, create_drinks, create_image, create_schedules
 from users.serializers import CustomUserSerializer
 
 from cafe.models import (
     Cafe,
     DrinkInCafe,
+    ImageCafe,
     Schedule,
     Roaster,
     ScheduleInCafe,
@@ -75,10 +75,12 @@ class DrinkInCafeGetSerializer(serializers.ModelSerializer):
 
 class DrinkInCafeCreateSerializer(serializers.ModelSerializer):
     """Сериализация данных: Напитки в кофейне post."""
-    id = serializers.PrimaryKeyRelatedField(
-        source="drink",
-        queryset=Drink.objects.all()
-    )
+
+    id = serializers.IntegerField(write_only=True)
+    # id = serializers.PrimaryKeyRelatedField(
+    #     source="drink",
+    #     queryset=Drink.objects.all()
+    # )
     class Meta:
         model = DrinkInCafe
         fields = ("id", "cost")
@@ -96,19 +98,20 @@ class ScheduleInCafeGetSerializer(serializers.ModelSerializer):
 class ScheduleInCafeCreateSerializer(serializers.ModelSerializer):
     """Сериализация данных: Расписание в кофейне post."""
     id = serializers.PrimaryKeyRelatedField(
-        source="shedules",
+        source="schedules",
         queryset=Schedule.objects.all()
     )
     class Meta:
-        model = DrinkInCafe
+        model = ScheduleInCafe
         fields = ("id", "start", "end")
 
-# class ImageCafeSerializer(serializers.ModelSerializer):
-#     """Сериализация данных: Картинок."""
+class ImageCafeSerializer(serializers.ModelSerializer):
+    """Сериализация данных: Картинок."""
+    image_file = Base64ImageField()
 
-#     class Meta:
-#         model = ImageCafe
-#         fields = ("image_url", )
+    class Meta:
+        model = ImageCafe
+        fields = ('image_file',)
 
 class CafeGetSerializer(serializers.ModelSerializer):
     "Гет сериализатор кофеен"
@@ -119,9 +122,8 @@ class CafeGetSerializer(serializers.ModelSerializer):
     drinks = DrinkInCafeGetSerializer(many=True, read_only=True, source="drink")
     organization = CustomUserSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
-    # image = serializers.SerializerMethodField()
+    image_file = serializers.SerializerMethodField(read_only=True)
 
-        
     class Meta:
         model = Cafe
         fields = (
@@ -134,19 +136,25 @@ class CafeGetSerializer(serializers.ModelSerializer):
             "roasters",
             "tags",
             "drinks",
-            "image",
+            "image_file",
             "organization"
         )
 
-
+    def get_image_file(self, obj):
+        images = obj.image.all()
+        serializer = ImageCafeSerializer(
+            images, many=True, read_only=True
+        )
+        return serializer.data
+    
 
 class CafeCreateSerializer(serializers.ModelSerializer):
     """Пост сериализатор кофеен"""
     schedules = ScheduleInCafeCreateSerializer(many=True)
     drinks = DrinkInCafeCreateSerializer(many=True)
-    address = AddressSerializer()
-    roasters = RoasterSerializer(many=True)
-    # image = serializers.SerializerMethodField()
+    # address = AddressSerializer()
+    # roasters = RoasterSerializer(many=True)
+    image = ImageCafeSerializer()
 
     class Meta:
         model = Cafe
@@ -163,58 +171,28 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             "image",
             "organization"
         )
-    def create_drinks(
-            self,
-            drinks,
-            instance,
-    ):
-        DrinkInCafe.objects.bulk_create(
-            [
-                DrinkInCafe(
-                    cafe=instance,
-                    drink = get_object_or_404(
-                        Drink, id=drink_data["id"]
-                    ),
-                    cost=drink_data["cost"]
-                )
-                for drink_data in drinks
-            ]
-        )
-    def create_schedules(
-            self,
-            schedules,
-            instance,
-    ):
-        ScheduleInCafe.objects.bulk_create(
-            [
-                ScheduleInCafe(
-                    cafe=instance,
-                    schedule = get_object_or_404(
-                        Schedule, id=schedules_data["id"]
-                    ),
-                    start=schedules_data["start"],
-                    end=schedules_data["end"]
-                )
-                for schedules_data in schedules
-            ]
-        )
 
     def create(self, validated_data):
         schedules = validated_data.pop("schedules")
         drinks = validated_data.pop("drinks")
+        image = validated_data.pop("image")
         instance = super().create(validated_data)
-        self.create_schedules(schedules, instance)
-        self.create_drinks(drinks, instance)
+        create_schedules(schedules, instance)
+        create_drinks(drinks, instance)
+        create_image(image, instance)
+        
         return instance
 
     def update(self, instance, validated_data):
         schedules = validated_data.pop("schedules")
         drinks = validated_data.pop("drinks")
+        image = validated_data.pop("image")
         instance.schedules.clear()
         instance.drinks.clear()
         super().update(instance, validated_data)
-        self.create_schedules(schedules, instance)
-        self.create_drinks(drinks, instance)
+        create_schedules(schedules, instance)
+        create_drinks(drinks, instance)
+        create_image(image, instance)
         instance.save()
         return instance
 
