@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.core.files.base import ContentFile
 
 
-from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
+from cafe.models import Drink, DrinkInCafe, ImageCafe, Schedule, ScheduleInCafe
 
 # from rest_framework import status
 # from rest_framework.response import Response
@@ -59,6 +59,7 @@ from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 #     return Response({"errors": "Заведение не найдено для удаления!"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith("data:image"):
@@ -66,6 +67,7 @@ class Base64ImageField(serializers.ImageField):
             ext = format.split("/")[-1]
             data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
         return super().to_internal_value(data)
+
 
 def create_drinks(
         drinks,
@@ -83,6 +85,8 @@ def create_drinks(
             for drink_data in drinks
         ]
     )
+
+
 def create_schedules(
         schedules,
         instance,
@@ -91,8 +95,8 @@ def create_schedules(
         [
             ScheduleInCafe(
                 cafe=instance,
-                schedule = get_object_or_404(
-                    Schedule, id=schedules_data["id"]
+                schedules = get_object_or_404(
+                    Schedule, id=schedules_data["schedules"].id
                 ),
                 start=schedules_data["start"],
                 end=schedules_data["end"]
@@ -100,3 +104,11 @@ def create_schedules(
             for schedules_data in schedules
         ]
     )
+
+
+def create_image(
+        image,
+        instance,
+):
+    print(image)
+    ImageCafe.objects.create(cafe=instance, image_file=image["image_file"])

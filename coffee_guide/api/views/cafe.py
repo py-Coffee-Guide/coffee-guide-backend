@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -42,15 +43,18 @@ from rest_framework.response import Response
 class CafeViewSet(viewsets.ModelViewSet):
     """Вьюсет: Кофейня"""
     queryset = Cafe.objects.all()
-    filter_backends = [SearchFilter, DjangoFilterBackend]
+    # filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['name', 'address']
-    filterset_class = CafeFilter
+    # filterset_class = CafeFilter
     
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
             return CafeGetSerializer
         return CafeCreateSerializer
     
+    # def perform_create(self, serializer):
+    #     serializer.save(organization=self.request.user)
+
     def dispatch(self, request, *args, **kwargs):
         print(request)
         res = super().dispatch(request, *args, **kwargs)

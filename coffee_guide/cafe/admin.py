@@ -100,4 +100,3 @@ class DrinkInCafeAdmin(admin.ModelAdmin):
 @admin.register(ImageCafe)
 class ImageAdmin(admin.ModelAdmin):
     list_display = ("id", "image_file", "image_url")
-

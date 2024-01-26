@@ -1,4 +1,4 @@
-from api.utils import Base64ImageField, create_drinks, create_schedules
+from api.utils import Base64ImageField, create_drinks, create_image, create_schedules
 from users.serializers import CustomUserSerializer
 
 from cafe.models import (
@@ -75,10 +75,12 @@ class DrinkInCafeGetSerializer(serializers.ModelSerializer):
 
 class DrinkInCafeCreateSerializer(serializers.ModelSerializer):
     """Сериализация данных: Напитки в кофейне post."""
-    id = serializers.PrimaryKeyRelatedField(
-        source="drink",
-        queryset=Drink.objects.all()
-    )
+
+    id = serializers.IntegerField(write_only=True)
+    # id = serializers.PrimaryKeyRelatedField(
+    #     source="drink",
+    #     queryset=Drink.objects.all()
+    # )
     class Meta:
         model = DrinkInCafe
         fields = ("id", "cost")
@@ -96,11 +98,11 @@ class ScheduleInCafeGetSerializer(serializers.ModelSerializer):
 class ScheduleInCafeCreateSerializer(serializers.ModelSerializer):
     """Сериализация данных: Расписание в кофейне post."""
     id = serializers.PrimaryKeyRelatedField(
-        source="shedules",
+        source="schedules",
         queryset=Schedule.objects.all()
     )
     class Meta:
-        model = DrinkInCafe
+        model = ScheduleInCafe
         fields = ("id", "start", "end")
 
 class ImageCafeSerializer(serializers.ModelSerializer):
@@ -150,8 +152,8 @@ class CafeCreateSerializer(serializers.ModelSerializer):
     """Пост сериализатор кофеен"""
     schedules = ScheduleInCafeCreateSerializer(many=True)
     drinks = DrinkInCafeCreateSerializer(many=True)
-    address = AddressSerializer()
-    roasters = RoasterSerializer(many=True)
+    # address = AddressSerializer()
+    # roasters = RoasterSerializer(many=True)
     image = ImageCafeSerializer()
 
     class Meta:
@@ -173,19 +175,24 @@ class CafeCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         schedules = validated_data.pop("schedules")
         drinks = validated_data.pop("drinks")
+        image = validated_data.pop("image")
         instance = super().create(validated_data)
         create_schedules(schedules, instance)
         create_drinks(drinks, instance)
+        create_image(image, instance)
+        
         return instance
 
     def update(self, instance, validated_data):
         schedules = validated_data.pop("schedules")
         drinks = validated_data.pop("drinks")
+        image = validated_data.pop("image")
         instance.schedules.clear()
         instance.drinks.clear()
         super().update(instance, validated_data)
         create_schedules(schedules, instance)
         create_drinks(drinks, instance)
+        create_image(image, instance)
         instance.save()
         return instance
 

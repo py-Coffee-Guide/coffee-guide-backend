@@ -14,22 +14,22 @@ from rest_framework.routers import DefaultRouter
 from api.views.cafe import CafeViewSet
 from users.views import CustomUserViewSet
 
-# app_name = "api"
+app_name = "api"
 
 router = DefaultRouter()
 
-router.register(r"cafe", CafeViewSet, basename="cafes")
+router.register(r"cafes", CafeViewSet, basename="cafes")
 # router.register("attributes", StopFactorViewSet, basename="attributes")
 # router.register("contacts", ContactViewSet, basename="contacts")
 # router.register("points", PointViewSet, basename="points")
 # router.register("city", CityViewSet, basename="city")
 # router.register("district", DistrictViewSet, basename="district")
 # router.register("schedule", ScheduleViewSet, basename="schedule")
-router.register(
-    r"cafe/(?P<cafe_id>\d+)/reviews",
-    ReviewViewSet,
-    basename="reviews",
-)
+# router.register(
+#     r"cafe/(?P<cafe_id>\d+)/reviews",
+#     ReviewViewSet,
+#     basename="reviews",
+# )
 # router.register(r"metro", MetroViewSet, basename="metro")
 router.register("users", CustomUserViewSet, basename="users")
 
