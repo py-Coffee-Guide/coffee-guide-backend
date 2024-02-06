@@ -1,0 +1,28 @@
+[
+    {
+        "id": "1",
+        "name": "Декаф",
+        "slug": "decaf"
+    },
+    {
+        "id": "2",
+        "name": "Продажа зерна",
+        "slug": "selling_grain"
+    },
+    {
+        "id": "3",
+        "name": "Можно с животными",
+        "slug": "dog_friendly"
+    },
+    {
+        "id": "4",
+        "name": "Безлактозное",
+        "slug": "lactose-free"
+    },
+    {
+        "id": "5",
+        "name": "La Marzocco",
+        "slug": "La_Marzocco"
+    }
+
+]

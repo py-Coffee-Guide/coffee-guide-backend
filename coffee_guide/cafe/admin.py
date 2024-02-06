@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.forms import CheckboxSelectMultiple
-from django.db import models
-# from django.utils.html import format_html
+# from django.forms import CheckboxSelectMultiple
 
 from .models import (
     Address,
-    Additional,
+    # Additional,
     Cafe,
     Schedule,
     ScheduleInCafe,
@@ -13,58 +11,29 @@ from .models import (
     Tag,
     Drink,
     DrinkInCafe,
-    ImageCafe
 )
 
-# # from django.utils.safestring import mark_safe
+
+class ScheduleInCafeInline(admin.TabularInline):
+    model = ScheduleInCafe
+    extra = 1
+
+
+class DrinkInCafeInline(admin.TabularInline):
+    model = DrinkInCafe
+    extra = 1
 
 
 @admin.register(Cafe)
 class CafeAdmin(admin.ModelAdmin):
-    """Админка: Заведение"""
-
-    # formfield_overrides = {
-    #     models.ManyToManyField: {'widget': CheckboxSelectMultiple},
-    # }
-
-    list_display = (
-        "id",
-        "name",
-        "description",
-        "address",
-        "organization",
-        "image"
-    )
-    list_filter = (
-        "name",
-        "organization",
-    )
-    # filter_horizontal = (
-    #     "schedulesincafe",
-    #     "additionals",
-    #     "roasters",
-    #     "tags",
-        # "drinks"
-    # )
-
-    search_fields = ['name',]
-
-    fieldsets = (
-        ("Основная информация",
-            {"fields": (
-                # "id",
-                "name",
-                "description",
-                "organization",
-                "address",
-                "image",
-            )}),
+    list_display = ('id', 'name', 'description', 'address', 'organization',)
+    search_fields = ('name', 'organization__username')
+    inlines = [ScheduleInCafeInline, DrinkInCafeInline]
         # (
         #     "Контакты и адреса",
         #     {"fields": (
         #         "address")},
         # ),
-    )
     # list_filter = ("name",)
     # empty_value_display = "-пусто-"
     # autocomplete_fields = ["cities"]
@@ -81,9 +50,9 @@ class CafeAdmin(admin.ModelAdmin):
     # preview.short_description = "Превью"
 
 
-@admin.register(ImageCafe)
-class ImageCafeAdmin(admin.ModelAdmin):
-    list_display = ("image_file", "image_url")
+# @admin.register(ImageCafe)
+# class ImageCafeAdmin(admin.ModelAdmin):
+#     list_display = ("image_file", "image_url")
 
 
 @admin.register(Roaster)
@@ -111,16 +80,21 @@ class Address(admin.ModelAdmin):
     list_display = ("id", "name", "lan", "lon")
 
 
-@admin.register(Additional)
-class Additional(admin.ModelAdmin):
-    list_display = ("name", "slug")
+# @admin.register(Additional)
+# class Additional(admin.ModelAdmin):
+#     list_display = ("name", "slug")
 
 
 @admin.register(ScheduleInCafe)
 class ScheduleInCafeAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe", "schedules", "start", "end")
+    list_display = ("cafe", "schedules", "start", "end")
 
 
 @admin.register(DrinkInCafe)
 class DrinkInCafeAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe", "drink", "cost")
+
+
+# @admin.register(ImageCafe)
+# class ImageAdmin(admin.ModelAdmin):
+#     list_display = ("id", "image_file", "image_url")

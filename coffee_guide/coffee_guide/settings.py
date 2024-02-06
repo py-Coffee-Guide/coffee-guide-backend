@@ -29,8 +29,6 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "api.apps.ApiConfig",
     "cafe.apps.CafeConfig",
-    "ratings.apps.RatingsConfig",
-    "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
     "djoser",
     "social_django",
