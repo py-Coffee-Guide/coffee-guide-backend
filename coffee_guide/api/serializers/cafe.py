@@ -1,11 +1,4 @@
-from ...cafe.models import (
-    Cafe,
-    Schedule,
-    Roaster,
-    Tag,
-    Drink,
-    ImageCafe
-)
+from cafe.models import Cafe, Drink, ImageCafe, Roaster, Schedule, Tag
 from rest_framework import serializers
 
 
@@ -46,11 +39,12 @@ class ImageCafeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImageCafe
-        fields = ("image_url", )
+        fields = ("image_url",)
 
 
 class CafeSerializer(serializers.ModelSerializer):
     """Сериализация данных: Кофейня"""
+
     schedule = ScheduleSerializer(many=True, read_only=True)
     roaster = RoasterSerializer(many=True, read_only=True)
     tag = TagSerializer(many=True, read_only=True)
@@ -81,7 +75,7 @@ class CafeSerializer(serializers.ModelSerializer):
             "roaster",
             "tag",
             "drink",
-            "image"
+            "image",
         )
 
 

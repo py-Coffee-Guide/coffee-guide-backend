@@ -32,10 +32,8 @@ INSTALLED_APPS = [
     "ratings.apps.RatingsConfig",
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
-
     "djoser",
-    'social_django',
-
+    "social_django",
     "drf_spectacular",
     "drf_spectacular_sidecar",
 ]
@@ -84,7 +82,9 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
+            "ENGINE": os.getenv(
+                "DB_ENGINE", default="django.db.backends.postgresql"
+            ),
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "users.CustomUser"
 TOKEN_MODEL = "users.CustomUser"
-AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
+AUTHENTICATION_BACKENDS = ("users.backends.AuthBackend",)
 
 # SOCIAL_AUTH_USER_MODEL = "users.CustomUser"
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
@@ -148,42 +148,46 @@ DJOSER = {
     # "TOKEN_MODEL": None,
     "ACTIVATION_URL": "api/v1/users/activation/{uid}/{token}/",
     "HIDE_USERS": False,
-    "LOGIN_FIELD": 'username',
+    "LOGIN_FIELD": "username",
     "SERIALIZERS": {
-        "user_create": "users.serializers.CustomUserCreateSerializer",
-        'user': 'users.serializers.CustomUserSerializer',
-        'current_user': 'users.serializers.CustomUserSerializer',
+        "user_create": "users.serializers.OnlyInnCreateUserSerializer",
+        "user": "users.serializers.CustomUserSerializer",
+        "current_user": "users.serializers.CustomUserSerializer",
     },
     "PERMISSIONS": {
         "user": ["rest_framework.permissions.AllowAny"],
         "user_list": ["rest_framework.permissions.AllowAny"],
     },
+    "EMAIL": {
+        "activation": "users.views.ActivationEmail",
+        "password_reset": "users.views.PasswordResetEmail"
+    },
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
-    'social_core.backends.github.GithubOAuth2',
-    'django.contrib.auth.backends.ModelBackend'
+    "social_core.backends.vk.VKOAuth2",
+    "social_core.backends.github.GithubOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
 )
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = '51814626'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'jaxoNQgoU2BPn58SfmWh'
+SOCIAL_AUTH_VK_OAUTH2_KEY = "51814626"
+SOCIAL_AUTH_VK_OAUTH2_SECRET = "jaxoNQgoU2BPn58SfmWh"
 
 SOCIAL_AUTH_GITHUB_KEY = "Iv1.de0e9327a12e1c62"
 SOCIAL_AUTH_GITHUB_SECRET = "8370cc6cf8f426021bdc65f1491d60032669860c"
 
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'users.pipelines.save_user_github',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details'
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "users.pipelines.save_user_github",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
 )
 
 LOGIN_REDIRECT_URL = "/api/v1/cafe/"
@@ -213,3 +217,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_USER_NAME = "Гость"
+
+
+TOKEN = os.getenv("DADATA_TOKEN_KEY")
+SECRET = os.getenv("DADATA_SECRET_KEY")
+
+
+CHARS = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"

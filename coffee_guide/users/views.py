@@ -1,8 +1,16 @@
+from api.utils import password_generation
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 from djoser.views import UserViewSet
-from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from .backends import get_cofirmation_code, get_phone_data
+from coffee_guide.settings import EMAIL_HOST_USER
+
+# from .backends import get_cofirmation_code, get_inn_data
+from .models import CustomUser
+from .serializers import ResetPasswordSerializer
 
 
 class CustomUserViewSet(UserViewSet):
@@ -10,20 +18,41 @@ class CustomUserViewSet(UserViewSet):
     Вьюсет для:
 
     - изменения пароля;
-    - изменения username;
     - регистрации нового пользователя;
     """
 
-    @action(
-        detail=False,
-        methods=("GET", "POST"),
-        url_path="phone_registration",
-    )
-    def phone_registration(self, request) -> Response:
-        """
-        Функция для регистрации по номеру телефона.
-        """
-        if request.method == "POST":
-            return get_cofirmation_code(self, request)
-        else:
-            return get_phone_data(self, request)
+    def perform_create(self, serializer, *args, **kwargs):
+        """Отправка пароля на почту при регистрации."""
+        user = serializer.save()
+
+        password = password_generation()
+        user.set_password(make_password(password))
+        user.save()
+
+        send_mail(
+            "Пароль",
+            f"Ваш пароль: {password}",
+            EMAIL_HOST_USER,
+            [user.email],
+            fail_silently=False,
+        )
+
+    @action(["post"], detail=False)
+    def reset_password(self, request, *args, **kwargs):
+        """Отправка пароля на почту при изменении пароля."""
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = CustomUser.objects.get(email=serializer.data["email"])
+        new_password = password_generation()
+        user.password = make_password(new_password)
+        user.save()
+
+        send_mail(
+            "Новый пароль",
+            f"Ваш новый пароль: {new_password}",
+            EMAIL_HOST_USER,
+            [user.email],
+            fail_silently=False,
+        )
+        return Response(status=status.HTTP_204_NO_CONTENT)

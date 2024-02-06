@@ -1,8 +1,15 @@
+import random
+
 from api.serializers.cafe import CafeUserSerializer
+from dadata import Dadata
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
+from users.models import CustomUser
+
+from coffee_guide.settings import CHARS, SECRET, TOKEN
 
 
 # def add_to(self, model, user, pk) -> Response:
@@ -49,4 +56,25 @@ def delete_from(self, model, user, pk) -> Response:
     if obj:
         obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    return Response({"errors": "Заведение не найдено для удаления!"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(
+        {"errors": "Заведение не найдено для удаления!"},
+        status=status.HTTP_400_BAD_REQUEST,
+    )
+
+
+def check_inn(organization_inn):
+    """Проверка ИНН с помощью сервиса DaData."""
+    dadata = Dadata(TOKEN, SECRET)
+    result = dadata.find_by_id(name="party", query=organization_inn)
+    if not result:
+        raise ValidationError("ИНН не существует.")
+
+
+def password_generation():
+    """Генерация пароля."""
+
+    password = ""
+    for i in range(9):
+        password += random.choice(CHARS)
+
+    return password
