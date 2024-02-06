@@ -77,7 +77,7 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class Address(admin.ModelAdmin):
-    list_display = ("id", "name", "lan", "lon")
+    list_display = ("id", "name", "lat", "lon")
 
 
 # @admin.register(Additional)
