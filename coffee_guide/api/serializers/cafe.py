@@ -1,17 +1,17 @@
-from api.utils import Base64ImageField, create_drinks, create_image, create_schedules
+from api.utils import Base64ImageField, create_drinks, create_schedules
 from users.serializers import CustomUserSerializer
 
 from cafe.models import (
     Cafe,
     DrinkInCafe,
-    ImageCafe,
+    # ImageCafe,
     Schedule,
     Roaster,
     ScheduleInCafe,
     Tag,
     Drink,
     Address,
-    Additional
+    Alternative
 )
 from rest_framework import serializers
 
@@ -48,10 +48,10 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class AdditionalSerializer(serializers.ModelSerializer):
+class AlternativeSerializer(serializers.ModelSerializer):
     """Сериализация данных: Доп.опции."""
     class Meta:
-        model = Additional
+        model = Alternative
         fields = "__all__"
 
 
@@ -105,24 +105,24 @@ class ScheduleInCafeCreateSerializer(serializers.ModelSerializer):
         model = ScheduleInCafe
         fields = ("id", "start", "end")
 
-class ImageCafeSerializer(serializers.ModelSerializer):
-    """Сериализация данных: Картинок."""
-    image_file = Base64ImageField()
+# class ImageCafeSerializer(serializers.ModelSerializer):
+#     """Сериализация данных: Картинок."""
+#     image_file = Base64ImageField()
 
-    class Meta:
-        model = ImageCafe
-        fields = ('image_file',)
+#     class Meta:
+#         model = ImageCafe
+#         fields = ('image_file',)
 
 class CafeGetSerializer(serializers.ModelSerializer):
     "Гет сериализатор кофеен"
     schedules = ScheduleInCafeGetSerializer(many=True, read_only=True, source="schedule_in_cafe")
-    additionals = AdditionalSerializer(many=True, read_only=True)
+    alternatives = AlternativeSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     roasters = RoasterSerializer(many=True, read_only=True)
     drinks = DrinkInCafeGetSerializer(many=True, read_only=True, source="drink")
     organization = CustomUserSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
-    image_file = serializers.SerializerMethodField(read_only=True)
+    image = Base64ImageField()
 
     class Meta:
         model = Cafe
@@ -131,21 +131,21 @@ class CafeGetSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "schedules",
-            "additionals",
+            "alternatives",
             "address",
             "roasters",
             "tags",
             "drinks",
-            "image_file",
+            "image",
             "organization"
         )
 
-    def get_image_file(self, obj):
-        images = obj.image.all()
-        serializer = ImageCafeSerializer(
-            images, many=True, read_only=True
-        )
-        return serializer.data
+    # def get_image_file(self, obj):
+    #     images = obj.image.all()
+    #     serializer = ImageCafeSerializer(
+    #         images, many=True, read_only=True
+    #     )
+    #     return serializer.data
     
 
 class CafeCreateSerializer(serializers.ModelSerializer):
@@ -154,7 +154,7 @@ class CafeCreateSerializer(serializers.ModelSerializer):
     drinks = DrinkInCafeCreateSerializer(many=True)
     # address = AddressSerializer()
     # roasters = RoasterSerializer(many=True)
-    image = ImageCafeSerializer()
+    image = Base64ImageField()
 
     class Meta:
         model = Cafe
@@ -163,7 +163,7 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "schedules",
-            "additionals",
+            "alternatives",
             "address",
             "roasters",
             "tags",

@@ -4,9 +4,9 @@ from django.forms import CheckboxSelectMultiple
 
 from .models import (
     Address,
-    Additional,
+    Alternative,
     Cafe,
-    ImageCafe,
+    # ImageCafe,
     Schedule,
     ScheduleInCafe,
     Roaster,
@@ -26,16 +26,16 @@ class DrinkInCafeInline(admin.TabularInline):
     extra = 1
 
 
-class ImageCafeInline(admin.TabularInline):
-    model = ImageCafe
-    extra = 1
+# class ImageCafeInline(admin.TabularInline):
+#     model = ImageCafe
+#     extra = 1
 
 
 @admin.register(Cafe)
 class CafeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', 'address', 'organization',)
     search_fields = ('name', 'organization__username')
-    inlines = [ScheduleInCafeInline, DrinkInCafeInline, ImageCafeInline]
+    inlines = [ScheduleInCafeInline, DrinkInCafeInline]
     list_filter = ("name",)
     empty_value_display = "-пусто-"
     # autocomplete_fields = ["cities"]
@@ -79,11 +79,11 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class Address(admin.ModelAdmin):
-    list_display = ("id", "name", "lan", "lon")
+    list_display = ("id", "name", "lat", "lon")
 
 
-@admin.register(Additional)
-class Additional(admin.ModelAdmin):
+@admin.register(Alternative)
+class Alternative(admin.ModelAdmin):
     list_display = ("id", "name", "slug")
 
 
@@ -97,6 +97,6 @@ class DrinkInCafeAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe", "drink", "cost")
 
 
-@admin.register(ImageCafe)
-class ImageAdmin(admin.ModelAdmin):
-    list_display = ("id", "image_file", "image_url")
+# @admin.register(ImageCafe)
+# class ImageAdmin(admin.ModelAdmin):
+#     list_display = ("id", "image_file", "image_url")

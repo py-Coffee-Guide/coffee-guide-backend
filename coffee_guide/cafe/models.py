@@ -18,7 +18,7 @@ class Cafe(models.Model):
     name = models.CharField(
         verbose_name="Название кофейни",
         max_length=150,
-        unique=True,
+        unique=False,
     )
     description = models.TextField(
         verbose_name="Описание кофейни",
@@ -40,8 +40,8 @@ class Cafe(models.Model):
         max_length=100,
         related_name="cafes",
     )
-    additionals = models.ManyToManyField(
-        "Additional",
+    alternatives = models.ManyToManyField(
+        "Alternative",
         verbose_name="Дополнительные опции",
         max_length=100,
     )
@@ -65,18 +65,12 @@ class Cafe(models.Model):
         verbose_name="Организация",
         related_name="cafes",
     )
-    # image = models.ImageField(
-    #     blank=True,
-    #     null=True,
-    #     verbose_name="Фото кофейни",
-    #     upload_to="images"
-    # image = models.ForeignKey(
-    #     "ImageCafe",
-    #     on_delete=models.CASCADE,
-    #     null=True,
-    #     verbose_name="Фото кофейни",
-    #     related_name="image",
-    # )
+    image = models.ImageField(
+        blank=True,
+        null=True,
+        verbose_name="Фото кофейни",
+        upload_to="cafe/images"
+    )
 
     class Meta:
         ordering = ("name",)
@@ -98,7 +92,7 @@ class Address(models.Model):
         verbose_name="Адрес кофейни",
         max_length=150,
     )
-    lan = models.FloatField(
+    lat = models.FloatField(
         verbose_name="Широта",
         blank=True,
         null=True,
@@ -120,8 +114,11 @@ class Address(models.Model):
         verbose_name = "Адрес"
         verbose_name_plural = "Адреса"
 
+    def __str__(self):
+        return self.name
 
-class Additional(models.Model):
+
+class Alternative(models.Model):
     """Дополнение"""
 
     name = models.CharField(
@@ -182,6 +179,9 @@ class Drink(models.Model):
         ordering = ("name",)
         verbose_name = "Напиток"
         verbose_name_plural = "Напитки"
+
+    def __str__(self):
+        return self.name
 
 
 class DrinkInCafe(models.Model):
@@ -250,32 +250,32 @@ class ScheduleInCafe(models.Model):
         return f"{self.start} {self.end}"
 
 
-class ImageCafe(models.Model):
-    """Изображение заведения"""
+# class ImageCafe(models.Model):
+#     """Изображение заведения"""
 
-    cafe = models.ForeignKey(
-        "Cafe",
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="image",
-    )
-    image_file = models.ImageField(upload_to="images", blank=True)
-    image_url = models.CharField(max_length=300, blank=True, null=True,)
+#     cafe = models.ForeignKey(
+#         "Cafe",
+#         on_delete=models.CASCADE,
+#         null=True,
+#         related_name="image",
+#     )
+#     image_file = models.ImageField(upload_to="images", blank=True)
+#     image_url = models.CharField(max_length=300, blank=True, null=True,)
 
-    class Meta:
-        verbose_name = "Фото заведения"
-        verbose_name_plural = "Фото заведений"
+#     class Meta:
+#         verbose_name = "Фото заведения"
+#         verbose_name_plural = "Фото заведений"
 
-    def __str__(self):
-        return f'Фото кофейни {self.cafe.name}'
+#     def __str__(self):
+#         return f'Фото кофейни {self.cafe.name}'
 
-    def save(self, *args, **kwargs):
-        if self.image_url and not self.image_file:
-            response = requests.get(self.image_url, stream=True)
-            print(response.content)
-            img = Image.open(io.BytesIO(response.content))
-            img_name = f"{self.image_url.split('/')[-1]}"
-            img_path = os.path.join(MEDIA_ROOT, img_name)
-            img.save(img_path)
-            self.image_file = os.path.join(img_name)
-        super().save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         if self.image_url and not self.image_file:
+#             response = requests.get(self.image_url, stream=True)
+#             print(response.content)
+#             img = Image.open(io.BytesIO(response.content))
+#             img_name = f"{self.image_url.split('/')[-1]}"
+#             img_path = os.path.join(MEDIA_ROOT, img_name)
+#             img.save(img_path)
+#             self.image_file = os.path.join(img_name)
+#         super().save(*args, **kwargs)

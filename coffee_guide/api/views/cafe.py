@@ -27,19 +27,19 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.response import Response
 
 
-# @extend_schema(
-#     tags=["Кофейня"],
-#     methods=["GET"],
-#     description="Все пользователи",
-# )
-# @extend_schema_view(
-#     list=extend_schema(
-#         summary="Получить список заведений",
-#     ),
-#     retrieve=extend_schema(
-#         summary="Детальная информация о заведении",
-#     ),
-# )
+@extend_schema(
+    tags=["Кофейня"],
+    methods=["GET"],
+    description="Все пользователи",
+)
+@extend_schema_view(
+    list=extend_schema(
+        summary="Получить список заведений",
+    ),
+    retrieve=extend_schema(
+        summary="Детальная информация о заведении",
+    ),
+)
 class CafeViewSet(viewsets.ModelViewSet):
     """Вьюсет: Кофейня"""
     queryset = Cafe.objects.all()
@@ -51,9 +51,9 @@ class CafeViewSet(viewsets.ModelViewSet):
         if self.request.method in SAFE_METHODS:
             return CafeGetSerializer
         return CafeCreateSerializer
-    
-    # def perform_create(self, serializer):
-    #     serializer.save(organization=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(organization=self.request.user)
 
     def dispatch(self, request, *args, **kwargs):
         print(request)
@@ -63,30 +63,6 @@ class CafeViewSet(viewsets.ModelViewSet):
             print('>>>>', q['sql'])
         print(f'Количество запросов в БД: {len(connection.queries)}')
         return res
-
-
-    # @action(
-    #     detail=True,
-    #     methods=["POST", "DELETE"],
-    #     permission_classes=(IsAuthenticated,),
-    # )
-    # def favorite(self, request, pk) -> Response:
-    #     """Работа с избранным добавить/удалить"""
-    #     if request.method == "POST":
-    #         return add_to(self, Favorite, request.user, pk)
-    #     else:
-    #         return delete_from(self, Favorite, request.user, pk)
-
-    # queryset = Cafe.objects.filter(is_verified=True)
-    # # filterset_class = CafeFilter
-    # pagination_class = LargeResultsSetPagination
-    # permission_classes = (ReadOnly | IsAdminUser,)
-    # search_fields = (
-    #     "$name",
-    #     "$address",
-    # )
-    # serializer_class = CafeSerializer
-    # http_method_names = ["get"]
 
 
 # @extend_schema(

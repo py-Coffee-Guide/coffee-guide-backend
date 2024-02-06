@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.core.files.base import ContentFile
 
 
-from cafe.models import Drink, DrinkInCafe, ImageCafe, Schedule, ScheduleInCafe
+from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
 
 # from rest_framework import status
 # from rest_framework.response import Response
@@ -77,7 +77,7 @@ def create_drinks(
         [
             DrinkInCafe(
                 cafe=instance,
-                drink = get_object_or_404(
+                drink=get_object_or_404(
                     Drink, id=drink_data["id"]
                 ),
                 cost=drink_data["cost"]
@@ -95,7 +95,7 @@ def create_schedules(
         [
             ScheduleInCafe(
                 cafe=instance,
-                schedules = get_object_or_404(
+                schedules=get_object_or_404(
                     Schedule, id=schedules_data["schedules"].id
                 ),
                 start=schedules_data["start"],
@@ -106,9 +106,9 @@ def create_schedules(
     )
 
 
-def create_image(
-        image,
-        instance,
-):
-    print(image)
-    ImageCafe.objects.create(cafe=instance, image_file=image["image_file"])
+# def create_image(
+#         image,
+#         instance,
+# ):
+#     print(image)
+#     ImageCafe.objects.create(cafe=instance, image_file=image["image_file"])
