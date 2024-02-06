@@ -1,3 +1,15 @@
+import random
+
+from api.serializers.cafe import CafeUserSerializer
+from dadata import Dadata
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
+from users.models import CustomUser
+
+from coffee_guide.settings import CHARS, SECRET, TOKEN
 # from api.serializers.cafe import CafeUserSerializer
 # from django.core.exceptions import ObjectDoesNotExist
 # import base64
@@ -41,6 +53,24 @@
 #         cafe = get_object_or_404(model, id=pk)
 #     except ObjectDoesNotExist:
 #         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+def check_inn(organization_inn):
+    """Проверка ИНН с помощью сервиса DaData."""
+    dadata = Dadata(TOKEN, SECRET)
+    result = dadata.find_by_id(name="party", query=organization_inn)
+    if not result:
+        raise ValidationError("ИНН не существует.")
+
+
+def password_generation():
+    """Генерация пароля."""
+
+    password = ""
+    for i in range(9):
+        password += random.choice(CHARS)
+
+    return password
 
 #     try:
 #         created_object = model.objects.create(user=user, cafe=cafe)
