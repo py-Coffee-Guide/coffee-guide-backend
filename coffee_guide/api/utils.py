@@ -1,13 +1,13 @@
 # from api.serializers.cafe import CafeUserSerializer
 # from django.core.exceptions import ObjectDoesNotExist
-import base64
+# import base64
 
-from rest_framework import serializers
-from django.shortcuts import get_object_or_404
-from django.core.files.base import ContentFile
+# from rest_framework import serializers
+# from django.shortcuts import get_object_or_404
+# from django.core.files.base import ContentFile
 
 
-from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
+# from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
 
 # from rest_framework import status
 # from rest_framework.response import Response
@@ -60,50 +60,50 @@ from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
 #     return Response({"errors": "Заведение не найдено для удаления!"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Base64ImageField(serializers.ImageField):
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith("data:image"):
-            format, imgstr = data.split(";base64,")
-            ext = format.split("/")[-1]
-            data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
-        return super().to_internal_value(data)
+# class Base64ImageField(serializers.ImageField):
+#     def to_internal_value(self, data):
+#         if isinstance(data, str) and data.startswith("data:image"):
+#             format, imgstr = data.split(";base64,")
+#             ext = format.split("/")[-1]
+#             data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
+#         return super().to_internal_value(data)
 
 
-def create_drinks(
-        drinks,
-        instance,
-):
-    DrinkInCafe.objects.bulk_create(
-        [
-            DrinkInCafe(
-                cafe=instance,
-                drink=get_object_or_404(
-                    Drink, id=drink_data["id"]
-                ),
-                cost=drink_data["cost"]
-            )
-            for drink_data in drinks
-        ]
-    )
+# def create_drinks(
+#         drinks,
+#         instance,
+# ):
+#     DrinkInCafe.objects.bulk_create(
+#         [
+#             DrinkInCafe(
+#                 cafe=instance,
+#                 drink=get_object_or_404(
+#                     Drink, id=drink_data["id"]
+#                 ),
+#                 cost=drink_data["cost"]
+#             )
+#             for drink_data in drinks
+#         ]
+#     )
 
 
-def create_schedules(
-        schedules,
-        instance,
-):
-    ScheduleInCafe.objects.bulk_create(
-        [
-            ScheduleInCafe(
-                cafe=instance,
-                schedules=get_object_or_404(
-                    Schedule, id=schedules_data["schedules"].id
-                ),
-                start=schedules_data["start"],
-                end=schedules_data["end"]
-            )
-            for schedules_data in schedules
-        ]
-    )
+# def create_schedules(
+#         schedules,
+#         instance,
+# ):
+#     ScheduleInCafe.objects.bulk_create(
+#         [
+#             ScheduleInCafe(
+#                 cafe=instance,
+#                 schedules=get_object_or_404(
+#                     Schedule, id=schedules_data["schedules"].id
+#                 ),
+#                 start=schedules_data["start"],
+#                 end=schedules_data["end"]
+#             )
+#             for schedules_data in schedules
+#         ]
+#     )
 
 
 # def create_image(

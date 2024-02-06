@@ -1,12 +1,10 @@
 from django.contrib import admin
-from django.forms import CheckboxSelectMultiple
-
+# from django.forms import CheckboxSelectMultiple
 
 from .models import (
     Address,
-    Alternative,
+    # Additional,
     Cafe,
-    # ImageCafe,
     Schedule,
     ScheduleInCafe,
     Roaster,
@@ -26,18 +24,18 @@ class DrinkInCafeInline(admin.TabularInline):
     extra = 1
 
 
-# class ImageCafeInline(admin.TabularInline):
-#     model = ImageCafe
-#     extra = 1
-
-
 @admin.register(Cafe)
 class CafeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', 'address', 'organization',)
     search_fields = ('name', 'organization__username')
     inlines = [ScheduleInCafeInline, DrinkInCafeInline]
-    list_filter = ("name",)
-    empty_value_display = "-пусто-"
+        # (
+        #     "Контакты и адреса",
+        #     {"fields": (
+        #         "address")},
+        # ),
+    # list_filter = ("name",)
+    # empty_value_display = "-пусто-"
     # autocomplete_fields = ["cities"]
 
     # def preview(self, obj):
@@ -59,12 +57,12 @@ class CafeAdmin(admin.ModelAdmin):
 
 @admin.register(Roaster)
 class RoasterAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", )
+    list_display = ("name", )
 
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ("id", "name",)
+    list_display = ("name", )
 
 
 @admin.register(Drink)
@@ -79,17 +77,17 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class Address(admin.ModelAdmin):
-    list_display = ("id", "name", "lat", "lon")
+    list_display = ("id", "name", "lan", "lon")
 
 
-@admin.register(Alternative)
-class Alternative(admin.ModelAdmin):
-    list_display = ("id", "name", "slug")
+# @admin.register(Additional)
+# class Additional(admin.ModelAdmin):
+#     list_display = ("name", "slug")
 
 
 @admin.register(ScheduleInCafe)
 class ScheduleInCafeAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe", "schedules", "start", "end")
+    list_display = ("cafe", "schedules", "start", "end")
 
 
 @admin.register(DrinkInCafe)

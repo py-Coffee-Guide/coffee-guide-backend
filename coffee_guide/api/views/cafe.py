@@ -1,20 +1,26 @@
-from django.shortcuts import render
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 from api.filters import CafeFilter
-from api.serializers.cafe import CafeCreateSerializer, CafeGetSerializer
+from api.serializers.cafe import (
+    CafeCreateSerializer,
+    CafeGetSerializer,
+    DrinkSerializer,
+    ScheduleSerializer,
+    TagSerializer,
+    AddressSerializer,
+    # AdditionalSerializer,
+    RoasterSerializer,
+)
 # from api.utils import add_to, delete_from
 from cafe.models import (
     Cafe,
-    # City,
-    # Contact,
-    # District,
-    # Favorite,
-    # Metro,
-    # Point,
-    # Schedule,
-    # StopFactor,
+    Address,
+    # Additional,
+    Tag,
+    Roaster,
+    Drink,
+    Schedule,
 )
 from drf_spectacular.utils import (
     # OpenApiParameter,
@@ -23,46 +29,87 @@ from drf_spectacular.utils import (
 )
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-@extend_schema(
-    tags=["Кофейня"],
-    methods=["GET"],
-    description="Все пользователи",
-)
-@extend_schema_view(
-    list=extend_schema(
-        summary="Получить список заведений",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация о заведении",
-    ),
-)
+# @extend_schema(
+#     tags=["Кофейня"],
+#     methods=["GET"],
+#     description="Все пользователи",
+# )
+# @extend_schema_view(
+#     list=extend_schema(
+#         summary="Получить список заведений",
+#     ),
+#     retrieve=extend_schema(
+#         summary="Детальная информация о заведении",
+#     ),
+# )
 class CafeViewSet(viewsets.ModelViewSet):
     """Вьюсет: Кофейня"""
     queryset = Cafe.objects.all()
     # filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ['name', 'address']
+    # search_fields = ['name', 'address']
     # filterset_class = CafeFilter
-    
+    # /api/cafe/?ordering=district
+
     def get_serializer_class(self):
-        if self.request.method in SAFE_METHODS:
+        if self.action in ("list", "retrieve"):
             return CafeGetSerializer
         return CafeCreateSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(organization=self.request.user)
 
-    def dispatch(self, request, *args, **kwargs):
-        print(request)
-        res = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        for q in connection.queries:
-            print('>>>>', q['sql'])
-        print(f'Количество запросов в БД: {len(connection.queries)}')
-        return res
+class AddressViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+
+# class AdditionalViewSet(viewsets.ReadOnlyModelViewSet):
+#     queryset = Additional.objects.all()
+#     serializer_class = AdditionalSerializer
+
+
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+
+class RoasterViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Roaster.objects.all()
+    serializer_class = RoasterSerializer
+
+
+class DrinkViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Drink.objects.all()
+    serializer_class = DrinkSerializer
+
+
+class ScheduleViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+    # @action(
+    #     detail=True,
+    #     methods=["POST", "DELETE"],
+    #     permission_classes=(IsAuthenticated,),
+    # )
+    # def favorite(self, request, pk) -> Response:
+    #     """Работа с избранным добавить/удалить"""
+    #     if request.method == "POST":
+    #         return add_to(self, Favorite, request.user, pk)
+    #     else:
+    #         return delete_from(self, Favorite, request.user, pk)
+
+    # queryset = Cafe.objects.filter(is_verified=True)
+    # # filterset_class = CafeFilter
+    # pagination_class = LargeResultsSetPagination
+    # permission_classes = (ReadOnly | IsAdminUser,)
+    # search_fields = (
+    #     "$name",
+    #     "$address",
+    # )
+    # serializer_class = CafeSerializer
+    # http_method_names = ["get"]
 
 
 # @extend_schema(
@@ -219,12 +266,12 @@ class CafeViewSet(viewsets.ModelViewSet):
 
 #     serializer_class = EventSerializer
 #     http_method_names = ["get"]
-    
+
 #     def get_queryset(self):
 #         establishment_id = self.kwargs.get("establishment_id")
 #         establishment = get_object_or_404(Establishment, id=establishment_id)
 #         return establishment.event.all()
-    
+
 #     def perform_create(self, serializer):
 #         establishment_id = self.kwargs.get("establishment_id")
 #         establishment = get_object_or_404(Establishment, id=establishment_id)
