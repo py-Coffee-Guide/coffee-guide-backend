@@ -11,11 +11,11 @@ from users.models import CustomUser
 from coffee_guide.settings import CHARS, SECRET, TOKEN
 # from api.serializers.cafe import CafeUserSerializer
 # from django.core.exceptions import ObjectDoesNotExist
-# import base64
+import base64
 
-# from rest_framework import serializers
+from rest_framework import serializers
 # from django.shortcuts import get_object_or_404
-# from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile
 
 
 # from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
@@ -23,35 +23,6 @@ from coffee_guide.settings import CHARS, SECRET, TOKEN
 # from rest_framework import status
 # from rest_framework.response import Response
 
-
-# # def add_to(self, model, user, pk) -> Response:
-# #     """Добавить заведение."""
-# #     if model.objects.filter(user=user, cafe__id=pk).exists():
-# #         return Response(
-# #             {"errors": "Заведение уже добавлено!"},
-# #             status=status.HTTP_400_BAD_REQUEST,
-# #         )
-# #     try:
-# #
-# #         cafe = get_object_or_404(model, id=pk)
-# #     except ObjectDoesNotExist:
-# #         return Response(status=status.HTTP_400_BAD_REQUEST)
-# #
-# #
-# #     model.objects.create(user=user, cafe=cafe)
-# #     serializer = CafeUserSerializer(cafe)
-# #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-# def add_to(self, model, user, pk) -> Response:
-#     """Добавить заведение."""
-#     if model.objects.filter(user=user, cafe__id=pk).exists():
-#         return Response(
-#             {"errors": "Заведение уже добавлено!"},
-#             status=status.HTTP_400_BAD_REQUEST,
-#         )
-#     try:
-#         cafe = get_object_or_404(model, id=pk)
-#     except ObjectDoesNotExist:
-#         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 def check_inn(organization_inn):
@@ -71,31 +42,14 @@ def password_generation():
 
     return password
 
-#     try:
-#         created_object = model.objects.create(user=user, cafe=cafe)
-#         serializer = CafeUserSerializer(created_object)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     except Exception as e:
-#         return Response({"errors": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# def delete_from(self, model, user, pk) -> Response:
-#     """Удалить заведение."""
-#     cafe = get_object_or_404(model, id=pk)
-#     obj = model.objects.filter(user=user, cafe=cafe).first()
-#     if obj:
-#         obj.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-#     return Response({"errors": "Заведение не найдено для удаления!"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class Base64ImageField(serializers.ImageField):
-#     def to_internal_value(self, data):
-#         if isinstance(data, str) and data.startswith("data:image"):
-#             format, imgstr = data.split(";base64,")
-#             ext = format.split("/")[-1]
-#             data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
-#         return super().to_internal_value(data)
+class Base64ImageField(serializers.ImageField):
+    def to_internal_value(self, data):
+        if isinstance(data, str) and data.startswith("data:image"):
+            format, imgstr = data.split(";base64,")
+            ext = format.split("/")[-1]
+            data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
+        return super().to_internal_value(data)
 
 
 # def create_drinks(
@@ -135,9 +89,3 @@ def password_generation():
 #     )
 
 
-# def create_image(
-#         image,
-#         instance,
-# ):
-#     print(image)
-#     ImageCafe.objects.create(cafe=instance, image_file=image["image_file"])

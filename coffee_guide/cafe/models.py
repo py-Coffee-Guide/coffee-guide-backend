@@ -102,12 +102,6 @@ class Address(models.Model):
         blank=True,
         null=True,
     )
-    district = models.CharField(
-        verbose_name="Район",
-        blank=True,
-        null=True,
-        max_length=100,
-    )
 
     class Meta:
         ordering = ("name",)

@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404
+from api.utils import Base64ImageField
 
 from users.serializers import CustomUserSerializer
 
 from cafe.models import (
+    Alternative,
     Cafe,
     DrinkInCafe,
     Schedule,
@@ -11,7 +13,6 @@ from cafe.models import (
     Tag,
     Drink,
     Address,
-    # Additional
 )
 from rest_framework import serializers
 
@@ -48,11 +49,11 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# class AdditionalSerializer(serializers.ModelSerializer):
-#     """Сериализация данных: Доп.опции."""
-#     class Meta:
-#         model = Additional
-#         fields = "__all__"
+class AlternativeSerializer(serializers.ModelSerializer):
+    """Сериализация данных: Доп.опции."""
+    class Meta:
+        model = Alternative
+        fields = "__all__"
 
 
 class RoasterSerializer(serializers.ModelSerializer):
@@ -103,7 +104,7 @@ class ScheduleInCafeCreateSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = DrinkInCafe
+        model = ScheduleInCafe
         fields = ("id", "start", "end")
 
 # class ImageCafeSerializer(serializers.ModelSerializer):
@@ -117,13 +118,13 @@ class ScheduleInCafeCreateSerializer(serializers.ModelSerializer):
 class CafeGetSerializer(serializers.ModelSerializer):
     "Гет сериализатор кофеен"
     schedules = ScheduleInCafeGetSerializer(many=True, read_only=True, source="schedule_in_cafe")
-    # additionals = AdditionalSerializer(many=True, read_only=True)
+    alternatives = AlternativeSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     roasters = RoasterSerializer(many=True, read_only=True)
     drinks = DrinkInCafeGetSerializer(many=True, read_only=True, source="drink")
     organization = CustomUserSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
-    # image = serializers.SerializerMethodField()
+    image = Base64ImageField()
 
     class Meta:
         model = Cafe
@@ -132,7 +133,7 @@ class CafeGetSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "schedules",
-            "additionals",
+            "alternatives",
             "address",
             "roasters",
             "tags",
@@ -146,9 +147,9 @@ class CafeCreateSerializer(serializers.ModelSerializer):
     """Пост сериализатор кофеен"""
     schedules = ScheduleInCafeCreateSerializer(many=True)
     drinks = DrinkInCafeCreateSerializer(many=True)
-    address = AddressSerializer()
-    roasters = RoasterSerializer(many=True)
-    # image = serializers.SerializerMethodField()
+    # address = AddressSerializer()
+    roasters = RoasterSerializer(many=True, read_only=True)
+    image = Base64ImageField()
 
     class Meta:
         model = Cafe
@@ -157,7 +158,7 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "schedules",
-            "additionals",
+            "alternatives",
             "address",
             "roasters",
             "tags",
@@ -171,12 +172,13 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             drinks,
             instance,
     ):
+        print(drinks)
         DrinkInCafe.objects.bulk_create(
             [
                 DrinkInCafe(
                     cafe=instance,
                     drink=get_object_or_404(
-                        Drink, id=drink_data["id"]
+                        Drink, id=drink_data["drink"].id
                     ),
                     cost=drink_data["cost"]
                 )
@@ -193,8 +195,8 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             [
                 ScheduleInCafe(
                     cafe=instance,
-                    schedule=get_object_or_404(
-                        Schedule, id=schedules_data["id"]
+                    schedules=get_object_or_404(
+                        Schedule, id=schedules_data["shedules"].id
                     ),
                     start=schedules_data["start"],
                     end=schedules_data["end"]

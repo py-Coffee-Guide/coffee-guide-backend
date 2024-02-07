@@ -11,8 +11,32 @@ from coffee_guide.settings import EMAIL_HOST_USER
 # from .backends import get_cofirmation_code, get_inn_data
 from .models import CustomUser
 from .serializers import ResetPasswordSerializer
+from drf_spectacular.utils import (
+    # OpenApiParameter,
+    extend_schema,
+    extend_schema_view,
+)
 
 
+@extend_schema(
+    tags=["Организация"],
+    # methods=["GET", "POST", "DELETE"],
+    # description="Все пользователи",
+)
+@extend_schema_view(
+    list=extend_schema(
+        summary="Получить список организаций",
+    ),
+    retrieve=extend_schema(
+        summary="Детальная информация об организации",
+    ),
+    create=extend_schema(
+        summary="Создание организации",
+    ),
+    destroy=extend_schema(
+        summary="Удаление организации",
+    ),
+)
 class CustomUserViewSet(UserViewSet):
     """
     Вьюсет для:
@@ -21,6 +45,7 @@ class CustomUserViewSet(UserViewSet):
     - регистрации нового пользователя;
     """
 
+    @extend_schema(summary="Отправка пароля на почту при регистрации")
     def perform_create(self, serializer, *args, **kwargs):
         """Отправка пароля на почту при регистрации."""
         user = serializer.save()
@@ -37,6 +62,7 @@ class CustomUserViewSet(UserViewSet):
             fail_silently=False,
         )
 
+    @extend_schema(summary="Отправка пароля на почту при изменении пароля")
     @action(["post"], detail=False)
     def reset_password(self, request, *args, **kwargs):
         """Отправка пароля на почту при изменении пароля."""

@@ -310,7 +310,6 @@ class Command(BaseCommand):
                         
                         for drink in drinks:
                             id = drink['id']
-                            name = drink['name']
                             cost = drink['cost']
                             cafe.drink.create(
                                 cafe_id=cafe.id,

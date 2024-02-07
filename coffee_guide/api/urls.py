@@ -12,9 +12,9 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from api.views.cafe import (
+    AlternativeViewSet,
     CafeViewSet,
     AddressViewSet,
-    # AdditionalViewSet,
     TagViewSet,
     RoasterViewSet,
     DrinkViewSet,
@@ -27,7 +27,7 @@ router = DefaultRouter()
 
 router.register(r"cafe", CafeViewSet, basename="cafes")
 router.register(r"addresses", AddressViewSet, basename="addresses")
-# router.register(r"additionals", AdditionalViewSet, basename="additionals")
+router.register(r"additionals", AlternativeViewSet, basename="additionals")
 router.register(r"tags", TagViewSet, basename="tags")
 router.register(r"roasters", RoasterViewSet, basename="roasters")
 router.register(r"drinks", DrinkViewSet, basename="drinks")
