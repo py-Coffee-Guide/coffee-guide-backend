@@ -21,7 +21,6 @@ class CustomUserSerializer(UserSerializer):
             "name",
             "email",
             "organization_inn",
-            "password",
         )
 
 
@@ -41,7 +40,6 @@ class OnlyInnCreateUserSerializer(UserCreateSerializer):
             "name",
             "email",
             "organization_inn",
-            "password",
         )
 
     def validate(self, attrs):

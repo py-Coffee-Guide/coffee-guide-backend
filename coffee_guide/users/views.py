@@ -20,8 +20,8 @@ from drf_spectacular.utils import (
 
 @extend_schema(
     tags=["Организация"],
-    # methods=["GET", "POST", "DELETE"],
-    # description="Все пользователи",
+    methods=["GET", "POST", "DELETE"],
+    description="Все пользователи",
 )
 @extend_schema_view(
     list=extend_schema(
@@ -45,22 +45,22 @@ class CustomUserViewSet(UserViewSet):
     - регистрации нового пользователя;
     """
 
-    @extend_schema(summary="Отправка пароля на почту при регистрации")
-    def perform_create(self, serializer, *args, **kwargs):
-        """Отправка пароля на почту при регистрации."""
-        user = serializer.save()
+    # @extend_schema(summary="Отправка пароля на почту при регистрации")
+    # def perform_create(self, serializer, *args, **kwargs):
+    #     """Отправка пароля на почту при регистрации."""
+    #     user = serializer.save()
 
-        password = password_generation()
-        user.set_password(make_password(password))
-        user.save()
+    #     password = password_generation()
+    #     user.set_password(make_password(password))
+    #     user.save()
 
-        send_mail(
-            "Пароль",
-            f"Ваш пароль: {password}",
-            EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False,
-        )
+    #     send_mail(
+    #         "Пароль",
+    #         f"Ваш пароль: {password}",
+    #         EMAIL_HOST_USER,
+    #         [user.email],
+    #         fail_silently=False,
+    #     )
 
     @extend_schema(summary="Отправка пароля на почту при изменении пароля")
     @action(["post"], detail=False)

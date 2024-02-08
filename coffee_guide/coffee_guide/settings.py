@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "users.CustomUser"
 TOKEN_MODEL = "users.CustomUser"
-AUTHENTICATION_BACKENDS = ("users.backends.AuthBackend",)
+# AUTHENTICATION_BACKENDS = ("users.backends.AuthBackend",)
 
 # SOCIAL_AUTH_USER_MODEL = "users.CustomUser"
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
@@ -140,11 +140,11 @@ SPECTACULAR_SETTINGS = {
 }
 
 DJOSER = {
-    "SEND_ACTIVATION_EMAIL": True,
+    # "SEND_ACTIVATION_EMAIL": True,
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     # "TOKEN_MODEL": None,
-    "ACTIVATION_URL": "api/v1/users/activation/{uid}/{token}/",
+    # "ACTIVATION_URL": "api/v1/users/activation/{uid}/{token}/",
     "HIDE_USERS": False,
     "LOGIN_FIELD": "username",
     "SERIALIZERS": {
@@ -156,16 +156,17 @@ DJOSER = {
         "user": ["rest_framework.permissions.AllowAny"],
         "user_list": ["rest_framework.permissions.AllowAny"],
     },
-    "EMAIL": {
-        "activation": "users.views.ActivationEmail",
-        "password_reset": "users.views.PasswordResetEmail"
-    },
+    # "EMAIL": {
+    #     # "activation": "users.views.ActivationEmail",
+    #     "password_reset": "users.views.PasswordResetEmail"
+    # },
 }
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
     "social_core.backends.github.GithubOAuth2",
-    "django.contrib.auth.backends.ModelBackend",
+    # "django.contrib.auth.backends.ModelBackend",
+    'users.backends.AuthBackend'
 )
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = "51814626"

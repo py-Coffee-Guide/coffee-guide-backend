@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
-from users.models import CustomUser
+# from users.models import CustomUser
 
 from coffee_guide.settings import CHARS, SECRET, TOKEN
 # from api.serializers.cafe import CafeUserSerializer

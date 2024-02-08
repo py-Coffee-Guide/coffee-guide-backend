@@ -1,6 +1,9 @@
 from django.contrib.auth.models import BaseUserManager
+from api.utils import password_generation
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 
-from coffee_guide.settings import DEFAULT_USER_NAME
+from coffee_guide.settings import DEFAULT_USER_NAME, EMAIL_HOST_USER
 
 
 class CustomUserManager(BaseUserManager):
@@ -10,24 +13,35 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(
         self,
-        password,
         email,
         organization_inn,
-        username,
+        password=None,
+        username=None,
         name=DEFAULT_USER_NAME,
         **extra_fields,
     ):
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
         user = self.model(
-            username=username,
+            username=organization_inn,
             password=password,
             organization_inn=organization_inn,
             email=email,
             name=name,
         )
+        # user.set_password(password)
+        # user.save(using=self._db)
+        password = password_generation()
         user.set_password(password)
+        user.is_active = True
         user.save(using=self._db)
+        send_mail(
+            "Пароль",
+            f"Ваш пароль: {password}",
+            EMAIL_HOST_USER,
+            [user.email],
+            fail_silently=False,
+        )
         return user
 
     def create_superuser(
@@ -54,5 +68,6 @@ class CustomUserManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
+        user.is_active = True
         user.save(using=self._db)
         return user
