@@ -8,7 +8,6 @@ from rest_framework.response import Response
 
 from coffee_guide.settings import EMAIL_HOST_USER
 
-# from .backends import get_cofirmation_code, get_inn_data
 from .models import CustomUser
 from .serializers import ResetPasswordSerializer
 from drf_spectacular.utils import (

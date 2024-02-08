@@ -1,28 +1,13 @@
 import random
-
-from dadata import Dadata
-from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import get_object_or_404
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.serializers import ValidationError
-# from users.models import CustomUser
-
-from coffee_guide.settings import CHARS, SECRET, TOKEN
-# from api.serializers.cafe import CafeUserSerializer
-# from django.core.exceptions import ObjectDoesNotExist
 import base64
 
+from dadata import Dadata
+from rest_framework.serializers import ValidationError
+
+from coffee_guide.settings import CHARS, SECRET, TOKEN
+
 from rest_framework import serializers
-# from django.shortcuts import get_object_or_404
 from django.core.files.base import ContentFile
-
-
-# from cafe.models import Drink, DrinkInCafe, Schedule, ScheduleInCafe
-
-# from rest_framework import status
-# from rest_framework.response import Response
-
 
 
 def check_inn(organization_inn):
@@ -50,42 +35,3 @@ class Base64ImageField(serializers.ImageField):
             ext = format.split("/")[-1]
             data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
         return super().to_internal_value(data)
-
-
-# def create_drinks(
-#         drinks,
-#         instance,
-# ):
-#     DrinkInCafe.objects.bulk_create(
-#         [
-#             DrinkInCafe(
-#                 cafe=instance,
-#                 drink=get_object_or_404(
-#                     Drink, id=drink_data["id"]
-#                 ),
-#                 cost=drink_data["cost"]
-#             )
-#             for drink_data in drinks
-#         ]
-#     )
-
-
-# def create_schedules(
-#         schedules,
-#         instance,
-# ):
-#     ScheduleInCafe.objects.bulk_create(
-#         [
-#             ScheduleInCafe(
-#                 cafe=instance,
-#                 schedules=get_object_or_404(
-#                     Schedule, id=schedules_data["schedules"].id
-#                 ),
-#                 start=schedules_data["start"],
-#                 end=schedules_data["end"]
-#             )
-#             for schedules_data in schedules
-#         ]
-#     )
-
-
