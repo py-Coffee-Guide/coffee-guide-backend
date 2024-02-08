@@ -2,7 +2,6 @@ from api.utils import check_inn
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from djoser.serializers import (
-    PasswordResetConfirmRetypeSerializer,
     UserCreateSerializer,
     UserSerializer,
 )

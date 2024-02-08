@@ -2,9 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
 from django.db import models
 
-# from coffee_guide.settings import DEFAULT_USER_NAME
-
-# from cafe.models import Cafe
 from .user_managers import CustomUserManager
 
 
@@ -69,28 +66,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"Почта организации {self.email}, ИНН {self.organization_inn}"
-
-
-# class Favorite(models.Model):
-#     """Избранное"""
-
-#     user = models.ForeignKey(
-#         CustomUser,
-#         related_name="favorite",
-#         on_delete=models.CASCADE,
-#     )
-#     cafe = models.ForeignKey(
-#         Cafe,
-#         related_name="favorite",
-#         on_delete=models.CASCADE,
-#     )
-
-#     class Meta:
-#         verbose_name = "Избранное"
-#         verbose_name_plural = "Избранное"
-#         ordering = ["id"]
-#         constraints = [
-#             models.UniqueConstraint(
-#                 fields=["user", "cafe"], name="uniquefavorite"
-#             ),
-#         ]
