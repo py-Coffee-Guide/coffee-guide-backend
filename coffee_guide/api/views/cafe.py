@@ -1,5 +1,6 @@
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from django.views.decorators.cache import cache_page
 
 from api.filters import CafeFilter
 from api.serializers.cafe import (
@@ -61,10 +62,18 @@ from rest_framework.response import Response
 class CafeViewSet(viewsets.ModelViewSet):
     """Вьюсет: Кофейня"""
     queryset = Cafe.objects.all()
-    # filter_backends = [SearchFilter, DjangoFilterBackend]
-    # search_fields = ['name', 'address']
-    # filterset_class = CafeFilter
-    # /api/cafe/?ordering=district
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'address']
+    filterset_class = CafeFilter
+
+    def get_queryset(self):
+        return Cafe.objects.prefetch_related(
+            "drink_in_cafe__drink",
+            "schedule_in_cafe__schedules",
+            "tags",
+            "alternatives",
+            "roasters",
+        ).all()
 
     def get_serializer_class(self):
         if self.action in ("list", "retrieve"):
@@ -73,6 +82,14 @@ class CafeViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         return serializer.save(organization=self.request.user)
+
+    def dispatch(self, request, *args, **kwargs):
+        res = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        for q in connection.queries:
+            print('>>>>', q['sql'])
+        print(f'Количество запросов в БД: {len(connection.queries)}')
+        return res
 
 
 @extend_schema(

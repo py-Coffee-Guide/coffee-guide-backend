@@ -25,7 +25,7 @@ from users.views import CustomUserViewSet
 
 router = DefaultRouter()
 
-router.register(r"cafe", CafeViewSet, basename="cafes")
+router.register(r"cafes", CafeViewSet, basename="cafes")
 router.register(r"addresses", AddressViewSet, basename="addresses")
 router.register(r"additionals", AlternativeViewSet, basename="additionals")
 router.register(r"tags", TagViewSet, basename="tags")

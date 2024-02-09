@@ -164,7 +164,7 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             "tags",
             "drinks",
             "image",
-            "organization"
+            # "organization"
         )
 
     def create_drinks(
@@ -172,7 +172,6 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             drinks,
             instance,
     ):
-        print(drinks)
         DrinkInCafe.objects.bulk_create(
             [
                 DrinkInCafe(
