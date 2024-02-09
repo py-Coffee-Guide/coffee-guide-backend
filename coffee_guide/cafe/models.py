@@ -1,11 +1,4 @@
-import io
-import os
-
-# from pathlib import Path
-
-import requests
 from django.db import models
-from PIL import Image
 
 from coffee_guide.settings import BASE_DIR, MEDIA_ROOT
 
@@ -242,34 +235,3 @@ class ScheduleInCafe(models.Model):
 
     def __str__(self) -> str:
         return f"{self.start} {self.end}"
-
-
-# class ImageCafe(models.Model):
-#     """Изображение заведения"""
-
-#     cafe = models.ForeignKey(
-#         "Cafe",
-#         on_delete=models.CASCADE,
-#         null=True,
-#         related_name="image",
-#     )
-#     image_file = models.ImageField(upload_to="images", blank=True)
-#     image_url = models.CharField(max_length=300, blank=True, null=True,)
-
-#     class Meta:
-#         verbose_name = "Фото заведения"
-#         verbose_name_plural = "Фото заведений"
-
-#     def __str__(self):
-#         return f'Фото кофейни {self.cafe.name}'
-
-#     def save(self, *args, **kwargs):
-#         if self.image_url and not self.image_file:
-#             response = requests.get(self.image_url, stream=True)
-#             print(response.content)
-#             img = Image.open(io.BytesIO(response.content))
-#             img_name = f"{self.image_url.split('/')[-1]}"
-#             img_path = os.path.join(MEDIA_ROOT, img_name)
-#             img.save(img_path)
-#             self.image_file = os.path.join(img_name)
-#         super().save(*args, **kwargs)

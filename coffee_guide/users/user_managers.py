@@ -1,8 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
-from api.utils import password_generation
-from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 
+from api.utils import password_generation
 from coffee_guide.settings import DEFAULT_USER_NAME, EMAIL_HOST_USER
 
 
@@ -29,8 +28,6 @@ class CustomUserManager(BaseUserManager):
             email=email,
             name=name,
         )
-        # user.set_password(password)
-        # user.save(using=self._db)
         password = password_generation()
         user.set_password(password)
         user.is_active = True
