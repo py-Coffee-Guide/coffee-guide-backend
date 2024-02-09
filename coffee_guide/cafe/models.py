@@ -178,13 +178,13 @@ class DrinkInCafe(models.Model):
         "Cafe",
         on_delete=models.CASCADE,
         null=True,
-        related_name="drink",
+        related_name="drink_in_cafe",
     )
     drink = models.ForeignKey(
         "Drink",
         on_delete=models.CASCADE,
         null=True,
-        related_name="drink",
+        related_name="drink_in_cafe",
     )
     cost = models.IntegerField(verbose_name="Стоимость", blank=True, null=True)
 
