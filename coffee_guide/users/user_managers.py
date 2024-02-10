@@ -21,14 +21,18 @@ class CustomUserManager(BaseUserManager):
     ):
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
+        if username is None:
+            username = organization_inn
+
         user = self.model(
-            username=organization_inn,
+            username=username,
             password=password,
             organization_inn=organization_inn,
             email=email,
             name=name,
         )
-        password = password_generation()
+        if password is None:
+            password = password_generation()
         user.set_password(password)
         user.is_active = True
         user.save(using=self._db)
@@ -45,7 +49,7 @@ class CustomUserManager(BaseUserManager):
         self, username, password, organization_inn=None, **extra_fields
     ):
         if organization_inn is None:
-            organization_inn = "root"
+            organization_inn = password_generation()
 
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_staff", True)
