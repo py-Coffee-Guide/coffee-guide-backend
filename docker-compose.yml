@@ -15,8 +15,6 @@ services:
       - .env
     volumes:
       - pg_data:/var/lib/postgresql/data/
-    networks:
-      - mynetwork
 
 
   backend:
@@ -32,8 +30,8 @@ services:
       - media_data:/app/media
     depends_on:
       - db
-    networks:
-      - mynetwork
+    # networks:
+    #   - mynetwork
 
 
   nginx:
@@ -54,8 +52,8 @@ services:
     depends_on:
       # - frontend     
       - backend
-    networks:
-      - mynetwork
+#     networks:
+#       - mynetwork
 
-networks:
-  mynetwork:
+# networks:
+#   mynetwork:
