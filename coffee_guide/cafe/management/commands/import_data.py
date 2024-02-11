@@ -23,7 +23,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
                 id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "name", None
@@ -61,7 +60,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
                 id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "name", None
@@ -99,7 +97,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
                 id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "name", None
@@ -137,7 +134,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
                 id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "name", None
@@ -175,7 +171,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
                 id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "name", None
@@ -213,8 +208,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
-                # id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "address", None
                 )
@@ -228,7 +221,6 @@ class Command(BaseCommand):
                 try:
                     address, created = (
                         Address.objects.get_or_create(
-                            # id=id,
                             name=name,
                             lat=lat,
                             lon=lon
@@ -255,8 +247,6 @@ class Command(BaseCommand):
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
-                # print(data_object)
-                # id: int = data_object.get("id", None)
                 name: str = data_object.get(
                     "name", None
                 )
@@ -286,7 +276,6 @@ class Command(BaseCommand):
                 try:
                     cafe, created = (
                         Cafe.objects.get_or_create(
-                            # id=id,
                             name=name,
                             description=description,
                             address=Address.objects.get(name=address_name),
@@ -307,17 +296,16 @@ class Command(BaseCommand):
                                 start=start,
                                 end=end
                             )
-                        
+
                         for drink in drinks:
                             id = drink['id']
                             cost = drink['cost']
-                            cafe.drink.create(
+                            cafe.drink_in_cafe.create(
                                 cafe_id=cafe.id,
                                 drink_id=id,
                                 cost=cost
                             )
-                            
-                        # cafe.save()
+
                         display_format = (
                             "\n cafe, {}, has been saved."
                         )
@@ -340,7 +328,6 @@ class Command(BaseCommand):
             print("суперпользователь создан")
         except Exception:
             print("суперпользователь уже существует")
-
 
     def handle(self, *args, **options) -> None:
         """
