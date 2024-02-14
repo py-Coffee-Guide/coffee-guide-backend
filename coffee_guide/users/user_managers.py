@@ -1,8 +1,11 @@
 from django.contrib.auth.models import BaseUserManager
-from django.core.mail import send_mail
 
+from .gmail_utils import send_email
 from api.utils import password_generation
 from coffee_guide.settings import DEFAULT_USER_NAME, EMAIL_HOST_USER
+
+
+text = "Ваш пароль: {password}.\n\n Никому не передавайте свой пароль в целях безопасности!"
 
 
 class CustomUserManager(BaseUserManager):
@@ -36,12 +39,13 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.is_active = True
         user.save(using=self._db)
-        send_mail(
-            "Пароль",
-            f"Ваш пароль: {password}",
-            EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False,
+        send_email(
+            subject="Пароль",
+            message=f"Ваш пароль: {password}.\n\n",
+            # "Никому не передавайте свой пароль в целях безопасности!",
+            sender=EMAIL_HOST_USER,
+            to=[user.email],
+            # fail_silently=False,
         )
         return user
 

@@ -321,9 +321,9 @@ class Command(BaseCommand):
     def create_admin(self, *args, **kwargs) -> None:
         try:
             CustomUser.objects.create_superuser(
-                username="admin",
-                password="admin",
-                email="admin@ya.ru"
+                username="admin_coffee_gid",
+                password="coffee_git_project2024",
+                email="coffeegyd@gmail.com"
             )
             print("суперпользователь создан")
         except Exception:
