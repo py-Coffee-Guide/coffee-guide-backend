@@ -121,7 +121,7 @@ class CafeGetSerializer(serializers.ModelSerializer):
     alternatives = AlternativeSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     roasters = RoasterSerializer(many=True, read_only=True)
-    drinks = DrinkInCafeGetSerializer(many=True, read_only=True, source="drink")
+    drinks = DrinkInCafeGetSerializer(many=True, read_only=True, source="drink_in_cafe")
     organization = CustomUserSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
     image = Base64ImageField()
