@@ -58,9 +58,12 @@ from rest_framework import viewsets
 )
 class CafeViewSet(viewsets.ModelViewSet):
     """Вьюсет: Кофейня"""
+
     queryset = Cafe.objects.all()
-    filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ['name', 'address']
+    filter_backends = [
+        SearchFilter, DjangoFilterBackend
+    ]
+    search_fields = ["name", "address"]
     filterset_class = CafeFilter
     pagination_class = CafePagination
     # /api/cafe/?ordering=district
@@ -82,13 +85,13 @@ class CafeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         return serializer.save(organization=self.request.user)
 
-    def dispatch(self, request, *args, **kwargs):
-        res = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        for q in connection.queries:
-            print('>>>>', q['sql'])
-        print(f'Количество запросов в БД: {len(connection.queries)}')
-        return res
+    # def dispatch(self, request, *args, **kwargs):
+    #     res = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for q in connection.queries:
+    #         print('>>>>', q['sql'])
+    #     print(f'Количество запросов в БД: {len(connection.queries)}')
+    #     return res
 
 
 @extend_schema(
