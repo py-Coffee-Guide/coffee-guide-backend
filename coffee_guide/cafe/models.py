@@ -38,8 +38,14 @@ class Cafe(models.Model):
         verbose_name="Дополнительные опции",
         max_length=100,
     )
-    tags = models.ManyToManyField(
-        "Tag", verbose_name="Доступные опции", max_length=100
+    is_alternatives = models.BooleanField(
+        verbose_name="Дополнение", default=False
+    )
+    additionals = models.ManyToManyField(
+        "Additionals", verbose_name="Дополнительные опции", max_length=100
+    )
+    availables = models.ManyToManyField(
+        "Available", verbose_name="Доступные опции", max_length=100
     )
     roasters = models.ManyToManyField(
         "Roaster", verbose_name="Обжарщик кофе", max_length=100
@@ -62,7 +68,7 @@ class Cafe(models.Model):
         blank=True,
         null=True,
         verbose_name="Фото кофейни",
-        upload_to="cafe/images"
+        upload_to="cafe/images",
     )
 
     class Meta:
@@ -124,16 +130,18 @@ class Alternative(models.Model):
         return self.name
 
 
-class Tag(models.Model):
-    """Тэг"""
+class Additionals(models.Model):
+    """Дополнительные опции"""
 
-    name = models.CharField(verbose_name="Тэг", max_length=100, unique=True)
+    name = models.CharField(
+        verbose_name="Дополнительные опции", max_length=100, unique=True
+    )
     slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
 
     class Meta:
         ordering = ("name",)
-        verbose_name = "Тэг"
-        verbose_name_plural = "Тэги"
+        verbose_name = "Дополнительные опции"
+        verbose_name_plural = "Дополнительные опции"
 
     def __str__(self):
         return self.name
@@ -143,7 +151,7 @@ class Roaster(models.Model):
     """Обжарщик кофе"""
 
     name = models.CharField(
-        verbose_name="Обэарщик кофе", max_length=100, unique=True
+        verbose_name="Обжарщик кофе", max_length=100, unique=True
     )
     slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
 
@@ -151,6 +159,23 @@ class Roaster(models.Model):
         ordering = ("name",)
         verbose_name = "Обжарщик кофе"
         verbose_name_plural = "Обжарщики Кофе"
+
+    def __str__(self):
+        return self.name
+
+
+class Available(models.Model):
+    """Доступные опции"""
+
+    name = models.CharField(
+        verbose_name="Доступные опции", max_length=100, unique=True
+    )
+    slug = models.SlugField(unique=True, max_length=50, verbose_name="slug")
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "Доступные опции"
+        verbose_name_plural = "Доступные опции"
 
     def __str__(self):
         return self.name

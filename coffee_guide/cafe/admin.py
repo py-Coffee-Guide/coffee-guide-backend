@@ -8,7 +8,7 @@ from .models import (
     Schedule,
     ScheduleInCafe,
     Roaster,
-    Tag,
+    Additionals,
     Drink,
     DrinkInCafe,
 )
@@ -60,7 +60,7 @@ class RoasterAdmin(admin.ModelAdmin):
     list_display = ("name", )
 
 
-@admin.register(Tag)
+@admin.register(Additionals)
 class TagAdmin(admin.ModelAdmin):
     list_display = ("name", )
 

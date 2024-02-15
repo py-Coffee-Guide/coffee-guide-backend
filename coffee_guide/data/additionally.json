@@ -13,16 +13,5 @@
         "id": "3",
         "name": "Можно с животными",
         "slug": "dog_friendly"
-    },
-    {
-        "id": "4",
-        "name": "Безлактозное молоко",
-        "slug": "lactose-free"
-    },
-    {
-        "id": "5",
-        "name": "La Marzocco",
-        "slug": "La_Marzocco"
     }
-
 ]

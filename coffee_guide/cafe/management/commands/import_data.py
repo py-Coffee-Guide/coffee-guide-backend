@@ -9,17 +9,18 @@ from cafe.models import (
     Schedule,
     Roaster,
     Alternative,
-    Tag,
+    Additionals,
     Drink,
+    Available
 )
 from users.models import CustomUser
 
 
 class Command(BaseCommand):
-    def import_tags_from_file(self) -> None:
+    def import_additinals_from_file(self) -> None:
         data_folder: str = os.path.join(BASE_DIR, "data")
         with open(
-            os.path.join(data_folder, 'tag.json'), encoding="utf-8"
+            os.path.join(data_folder, 'additionally.json'), encoding="utf-8"
         ) as data_file:
             data: json = json.loads(data_file.read())
             for data_object in data:
@@ -32,23 +33,23 @@ class Command(BaseCommand):
                 )
 
                 try:
-                    tag, created = (
-                        Tag.objects.get_or_create(
+                    additinals, created = (
+                        Additionals.objects.get_or_create(
                             id=id,
                             name=name,
                             slug=slug,
                         )
                     )
                     if created:
-                        tag.save()
+                        additinals.save()
                         display_format = (
-                            "\ntag, {}, has been saved."
+                            "\n additinals, {}, has been saved."
                         )
-                        print(display_format.format(tag))
+                        print(display_format.format(additinals))
                 except Exception as ex:
                     print(str(ex))
                     msg: str = (
-                        "\n\nSomething went wrong saving this tag:"
+                        "\n\nSomething went wrong saving this additinals:"
                         " {}\n{}".format(name, str(ex))
                     )
                     print(msg)
@@ -164,6 +165,43 @@ class Command(BaseCommand):
                     )
                     print(msg)
 
+    def import_availables_from_file(self) -> None:
+        data_folder: str = os.path.join(BASE_DIR, "data")
+        with open(
+            os.path.join(data_folder, 'available.json'), encoding="utf-8"
+        ) as data_file:
+            data: json = json.loads(data_file.read())
+            for data_object in data:
+                id: int = data_object.get("id", None)
+                name: str = data_object.get(
+                    "name", None
+                )
+                slug: str = data_object.get(
+                    "slug", None
+                )
+
+                try:
+                    available, created = (
+                        Available.objects.get_or_create(
+                            id=id,
+                            name=name,
+                            slug=slug,
+                        )
+                    )
+                    if created:
+                        available.save()
+                        display_format = (
+                            "\n available, {}, has been saved."
+                        )
+                        print(display_format.format(available))
+                except Exception as ex:
+                    print(str(ex))
+                    msg: str = (
+                        "\n\nSomething went wrong saving this available:"
+                        " {}\n{}".format(name, str(ex))
+                    )
+                    print(msg)
+
     def import_schedules_from_file(self) -> None:
         data_folder: str = os.path.join(BASE_DIR, "data")
         with open(
@@ -257,19 +295,25 @@ class Command(BaseCommand):
                     "address", None
                 )
                 schedules = data_object.get(
-                    "schedule", None
+                    "schedules", None
                 )
                 alternative = data_object.get(
-                    "alternative", None
+                    "alternatives", None
                 )
                 roaster = data_object.get(
-                    "roaster", None
+                    "roasters", None
                 )
-                tag = data_object.get(
-                    "tag", None
+                additionals = data_object.get(
+                    "additionals", None
+                )
+                is_alternatives = data_object.get(
+                    "is_alternatives", False
+                )
+                availables = data_object.get(
+                    "availables", None
                 )
                 drinks = data_object.get(
-                    "drink", None
+                    "drinks", None
                 )
                 user = CustomUser.objects.get(id=1)
 
@@ -279,13 +323,17 @@ class Command(BaseCommand):
                             name=name,
                             description=description,
                             address=Address.objects.get(name=address_name),
-                            organization=user
+                            organization=user,
+                            is_alternatives=is_alternatives
                         )
                     )
                     if created:
-                        cafe.alternatives.set(alternative)
+                        if alternative:
+                            cafe.alternatives.set(alternative)
+                        if additionals:
+                            cafe.additionals.set(additionals)
                         cafe.roasters.set(roaster)
-                        cafe.tags.set(tag)
+                        cafe.availables.set(availables)
                         for schedule in schedules:
                             id = schedule['id']
                             start = schedule['start']
@@ -311,7 +359,13 @@ class Command(BaseCommand):
                         )
                         print(display_format.format(cafe))
                 except Exception as ex:
-                    print(str(ex))
+                    print(
+                        alternative,
+                        roaster,
+                        additionals,
+                        schedules,
+                        drinks
+                    )
                     msg: str = (
                         "\n\nSomething went wrong saving this cafe:"
                         " {}\n{}".format(name, str(ex))
@@ -333,10 +387,11 @@ class Command(BaseCommand):
         """
         Call the function to import data
         """
-        self.import_tags_from_file()
+        self.import_additinals_from_file()
         self.import_roasters_from_file()
         self.import_drinks_from_file()
         self.import_alternatives_from_file()
+        self.import_availables_from_file()
         self.import_schedules_from_file()
         self.import_addresses_from_file()
         self.create_admin()

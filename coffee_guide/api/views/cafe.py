@@ -2,7 +2,7 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.views.decorators.cache import cache_page
 
-from api.filters import CafeFilter
+from api.filters import CafeFilter, RoasterFilter
 from api.paginations import CafePagination
 from api.serializers.cafe import (
     AlternativeSerializer,
@@ -10,7 +10,7 @@ from api.serializers.cafe import (
     CafeGetSerializer,
     DrinkSerializer,
     ScheduleSerializer,
-    TagSerializer,
+    AdditionalSerializer,
     AddressSerializer,
     RoasterSerializer,
 )
@@ -18,7 +18,7 @@ from cafe.models import (
     Alternative,
     Cafe,
     Address,
-    Tag,
+    Additionals,
     Roaster,
     Drink,
     Schedule,
@@ -72,7 +72,7 @@ class CafeViewSet(viewsets.ModelViewSet):
         return Cafe.objects.prefetch_related(
             "drink_in_cafe__drink",
             "schedule_in_cafe__schedules",
-            "tags",
+            "additionals",
             "alternatives",
             "roasters",
         ).all()
@@ -143,9 +143,9 @@ class AlternativeViewSet(viewsets.ReadOnlyModelViewSet):
         summary="Детальная информация о тегах",
     ),
 )
-class TagViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+class AdditionalViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Additionals.objects.all()
+    serializer_class = AdditionalSerializer
 
 
 @extend_schema(
@@ -164,6 +164,11 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 class RoasterViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Roaster.objects.all()
     serializer_class = RoasterSerializer
+    filter_backends = [
+        SearchFilter, DjangoFilterBackend
+    ]
+    search_fields = ["name"]
+    filterset_class = RoasterFilter
 
 
 @extend_schema(

@@ -10,9 +10,10 @@ from cafe.models import (
     Schedule,
     Roaster,
     ScheduleInCafe,
-    Tag,
+    Additionals,
     Drink,
     Address,
+    Available
 )
 from rest_framework import serializers
 
@@ -33,11 +34,11 @@ class ScheduleSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TagSerializer(serializers.ModelSerializer):
+class AdditionalSerializer(serializers.ModelSerializer):
     """Сериализация данных: Тэгов."""
 
     class Meta:
-        model = Tag
+        model = Additionals
         fields = "__all__"
 
 
@@ -53,6 +54,13 @@ class AlternativeSerializer(serializers.ModelSerializer):
     """Сериализация данных: Доп.опции."""
     class Meta:
         model = Alternative
+        fields = "__all__"
+
+
+class AvailableSerializer(serializers.ModelSerializer):
+    """Сериализация данных: Доп.опции."""
+    class Meta:
+        model = Available
         fields = "__all__"
 
 
@@ -119,7 +127,9 @@ class CafeGetSerializer(serializers.ModelSerializer):
     "Гет сериализатор кофеен"
     schedules = ScheduleInCafeGetSerializer(many=True, read_only=True, source="schedule_in_cafe")
     alternatives = AlternativeSerializer(many=True, read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
+    is_alternatives = serializers.BooleanField(read_only=True)
+    additionals = AdditionalSerializer(many=True, read_only=True)
+    availables = AvailableSerializer(many=True, read_only=True)
     roasters = RoasterSerializer(many=True, read_only=True)
     drinks = DrinkInCafeGetSerializer(many=True, read_only=True, source="drink_in_cafe")
     organization = CustomUserSerializer(read_only=True)
@@ -136,7 +146,9 @@ class CafeGetSerializer(serializers.ModelSerializer):
             "alternatives",
             "address",
             "roasters",
-            "tags",
+            "additionals",
+            "availables",
+            "is_alternatives",
             "drinks",
             "image",
             "organization"
@@ -161,10 +173,11 @@ class CafeCreateSerializer(serializers.ModelSerializer):
             "alternatives",
             "address",
             "roasters",
-            "tags",
+            "additionals",
+            "availables",
+            "is_alternatives",
             "drinks",
             "image",
-            # "organization"
         )
 
     def create_drinks(
