@@ -23,6 +23,11 @@ $base-color: #171614;
 	height: 214px;
 	object-fit: cover;
 	border-radius: 12px;
+	cursor: pointer;
+}
+
+.photo_null {
+	object-fit: fill;
 }
 
 .favourite {
@@ -35,14 +40,14 @@ $base-color: #171614;
 	margin-right: 12px;
 	margin-top: 12px;
 
-	border-radius: 50%;
-	background-color: #fff;
-	width: 44px;
-	height: 44px;
-	background-image: url('../../assets/images/favourites.svg');
-	background-repeat: no-repeat;
-	background-position: center;
-	cursor: pointer;
+	// border-radius: 50%;
+	// background-color: #fff;
+	// width: 44px;
+	// height: 44px;
+	// background-image: url('../../assets/images/favourites.svg');
+	// background-repeat: no-repeat;
+	// background-position: center;
+	// cursor: pointer;
 
 	// &:hover {
 	// 	opacity: 0.8;
@@ -91,4 +96,23 @@ $base-color: #171614;
 	font-size: 14px;
 	letter-spacing: 0.14px;
 	color: $base-color;
+}
+
+.schedules {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+}
+
+.schedules_item {
+	display: flex;
+	flex-direction: row;
+	p {
+		margin: 0 8px 0 0;
+		font-family: $font-base;
+		font-size: 14px;
+		letter-spacing: 0.14px;
+		color: $base-color;
+	}
 }

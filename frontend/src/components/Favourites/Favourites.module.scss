@@ -1,0 +1,38 @@
+.container {
+	margin: 0 auto;
+	max-width: 1132px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.back_button {
+	align-self: flex-start;
+}
+
+.cardlist {
+	width: 556px;
+	height: 704px;
+	margin-bottom: 61px;
+	border-radius: 16px;
+	overflow-y: scroll;
+	ul {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		padding: 0;
+		margin: 0;
+		li {
+			width: 268px;
+			list-style: none;
+			margin-bottom: 12px;
+			&:nth-last-child(-n + 2) {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+.cardlist::-webkit-scrollbar {
+	display: none;
+}

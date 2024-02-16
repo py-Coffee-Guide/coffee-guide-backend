@@ -48,14 +48,23 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    "http://coffee-gid.ddns.net",
-    "https://coffee-gid.ddns.net",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
+# CORS_ORIGIN_WHITELIST = [
+#     "http://coffee-gid.ddns.net",
+#     "https://coffee-gid.ddns.net",
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "http://localhost:8000/api/v1",
+#     "http://127.0.0.1:8000/api/v1/cafes?page=1"
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_URLS_REGEX = r"^/api/v1/.*$"
 
 
 ROOT_URLCONF = "coffee_guide.urls"

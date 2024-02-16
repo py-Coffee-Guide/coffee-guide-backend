@@ -2,6 +2,14 @@ $text-font: 'SourceSansPro-Regular';
 $header-font: 'Lora-Bold';
 $color: var(--text-color);
 
+@mixin base-icon {
+	width: 16px;
+	height: 20px;
+	margin-right: 8px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
 .container {
 	margin: 36px auto 76px;
 	max-width: 1132px;
@@ -91,26 +99,38 @@ $color: var(--text-color);
 }
 
 .info {
-	display: grid;
-	grid-template-columns: 16px 1fr;
-	grid-template-rows: auto auto;
-	gap: 25px 8px;
-	align-content: flex-start;
+	display: flex;
+	flex-direction: column;
 	p {
-		margin: 0;
+		margin: 0 8px 0 0;
+		padding: 0;
 	}
 }
 
+.info_container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
 .point_icon {
-	width: 16px;
-	height: 20px;
+	@include base-icon();
 	background-image: url(../../assets/images/point.svg);
 }
 
 .schedule_icon {
-	width: 16px;
-	height: 16px;
+	@include base-icon();
 	background-image: url(../../assets/images/clock.svg);
+}
+
+.schedules {
+	padding: 0;
+	list-style: none;
+}
+
+.schedules_item {
+	display: flex;
+	flex-direction: row;
 }
 
 .desription {
@@ -128,6 +148,10 @@ $color: var(--text-color);
 	height: 480px;
 	border-radius: 12px;
 	object-fit: cover;
+}
+
+.img_null {
+	object-fit: fill;
 }
 
 .favourites {

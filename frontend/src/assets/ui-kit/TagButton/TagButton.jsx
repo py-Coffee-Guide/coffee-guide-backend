@@ -8,14 +8,14 @@ import { TAG_ICONS } from './TagIcons';
 
 function TagButton({ text, type, tag, theme, active }) {
 	const [isActive, setIsActive] = useState(active);
-	const { light, dark } = TAG_ICONS[tag].icon;
+	const { light, dark } = TAG_ICONS[tag];
 
-	const btnClassName = cn(styles.button);
-	const textClassName = cn(styles.text, [isActive && styles.text_active]);
+	const btnClassName = cn(styles.button, { [styles.checked]: isActive });
+	const textClassName = cn(styles.text);
 
 	return (
 		<button type={type} className={btnClassName} onClick={() => setIsActive(!isActive)}>
-			<img src={isActive ? light.active : light.base} className={styles.icon} alt="icon" />
+			<img src={light.toString()} className={styles.icon} alt="icon" />
 			<p className={textClassName}>{text}</p>
 		</button>
 	);

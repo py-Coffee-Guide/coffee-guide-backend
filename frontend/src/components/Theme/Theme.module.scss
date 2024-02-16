@@ -3,7 +3,7 @@
 	display: inline-block;
 	width: 48px;
 	height: 32px;
-	border: 2px solid #91e0c8;
+	border: 1.5px solid var(--decoration-color-inversed);
 	border-radius: 16px;
 }
 
@@ -20,7 +20,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #ffffff;
+	background-color: transparent;
 	border-radius: 14px;
 	-webkit-transition: 0.4s;
 	transition: 0.4s all ease;

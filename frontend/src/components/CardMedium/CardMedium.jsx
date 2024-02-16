@@ -1,26 +1,48 @@
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+
 import cn from 'classnames';
 import styles from './CardMedium.module.scss';
-// import Button from '../../assets/ui-kit/Button/Button';
 
-import photo from '../../assets/images/photo/66be5a14bddf717c1205b56a1ed80d15.jpg';
+import BackButton from '../../assets/ui-kit/BackButton/BackButton';
+import FavouritesButton from '../../assets/ui-kit/FavouritesButton/FavouritesButton';
+import nullImage from '../../assets/images/logo.svg';
 
-function CardSmall({ card, onSave, onDelete }) {
-	const navigate = useNavigate();
+import { useGetCardByIdQuery } from '../../slices/apiSlice/apiSlice';
+
+function CardMedium() {
+	const location = useLocation();
+	const theme = useSelector(state => state.theme);
+	const { data = {}, isLoading } = useGetCardByIdQuery(location.state.key);
+
+	if (isLoading) {
+		return <p>LOADING....</p>;
+	}
+
+	const {
+		address,
+		alternatives,
+		description,
+		id,
+		image,
+		name,
+		roasters,
+		schedules,
+		additionals,
+		drinks,
+	} = data;
+	const imgClassName = cn(styles.img, { [styles.img_null]: !image });
+
+	console.log(data);
 
 	return (
 		<section className={styles.container}>
-			<button className={styles.back} onClick={() => navigate(-1)}>
-				<div className={styles.back_icon} />
-				Назад
-			</button>
+			<BackButton type="button" theme={theme} text="Назад" />
+
 			<div className={styles.heading}>
 				<div className={styles.title}>
-					<h1>Adept x Common Coffee</h1>
-					<p>
-						У нас всегда есть свежеобжаренный кофе, который оценят любители этого напитка. В
-						ассортименте вы найдёте разные сорта и смеси со всех концов света.
-					</p>
+					<h1>{name}</h1>
+					<p>{description}</p>
 				</div>
 				<div className={styles.map}>
 					<div className={styles.map_mini} />
@@ -29,22 +51,30 @@ function CardSmall({ card, onSave, onDelete }) {
 					</button>
 				</div>
 				<div className={styles.info}>
-					<div className={styles.point_icon} />
-					<p>Бережсковская набережная, 20с13</p>
-					<div className={styles.schedule_icon} />
-					<div>
-						{' '}
-						<p>Пн—Пт 9:00—19:00</p>
-						<p>Сб—Вс Выходной</p>
+					<div className={styles.info_container}>
+						<div className={styles.point_icon} />
+						<p>{address.name}</p>
+					</div>
+					<div className={styles.info_container}>
+						<div className={styles.schedule_icon} />
+						<ul className={styles.schedules}>
+							{schedules.map(item => (
+								<li key={item.id} className={styles.schedules_item}>
+									<p> {item.name}</p>
+									<p> {item.start.slice(0, -3)}</p>
+									<p> {item.end.slice(0, -3)}</p>
+								</li>
+							))}
+						</ul>
 					</div>
 				</div>
 			</div>
 			<div className={styles.desription}>
 				<div className={styles.photo}>
-					<img className={styles.img} src={photo} alt="" />
+					<img className={imgClassName} src={!image ? nullImage : image} alt="фото кофейни" />
 					<div className={styles.favourites}>
 						{' '}
-						<button type="button" className={styles.save} aria-label="добавить в избранное" />
+						<FavouritesButton type="button" card={data} />
 					</div>
 				</div>
 				<div className={styles.features}>
@@ -58,37 +88,35 @@ function CardSmall({ card, onSave, onDelete }) {
 					<h3 className={cn(styles.tag2, styles.tag)}>Напитки</h3>
 					<div className={cn(styles.list2)}>
 						<ul className={cn(styles.list)}>
-							<li>Эспрессо: 200 ₽ </li>
-							<li>Капучино: 300 ₽ </li>
-							<li>Американо: 300 ₽ </li>
-						</ul>
-						<ul className={cn(styles.list)}>
-							<li>Латте: 200 ₽ </li>
-							<li>Флэт-уайт: 400 ₽ </li>
-							<li>Фильтр-кофе: 400 ₽ </li>
+							{drinks.map(item => (
+								<li key={item.id}>{`${item.name} ${item.cost} ₽`} </li>
+							))}
 						</ul>
 					</div>
 
 					<h3 className={cn(styles.tag3, styles.tag)}>Обжарщик</h3>
 					<ul className={cn(styles.list3, styles.list)}>
-						<li>Adept x Common Coffee</li>
+						{roasters.map(item => (
+							<li key={item.id}>
+								<p>{item.name}</p>
+							</li>
+						))}
 					</ul>
 					<h3 className={cn(styles.tag4, styles.tag)}>Альтернатива</h3>
 					<div className={cn(styles.list4, styles.list)}>
-						<ul className={cn(styles.list)}>
-							<li>V60</li>
-							<li>Кемекс</li>
-						</ul>
-						<ul className={cn(styles.list)}>
-							<li>Френч-пресс</li>
-							<li>Аэропресс</li>
-						</ul>
+						{alternatives.map(item => (
+							<li key={item.id}>
+								<p>{item.name}</p>
+							</li>
+						))}
 					</div>
 					<h3 className={cn(styles.tag5, styles.tag)}>Дополнительно</h3>
 					<ul className={cn(styles.list5, styles.list)}>
-						<li>Можно с животными</li>
-						<li>Продажа зерна </li>
-						<li>Декаф </li>
+						{additionals.map(item => (
+							<li key={item.id}>
+								<p>{item.name}</p>
+							</li>
+						))}
 					</ul>
 				</div>
 			</div>
@@ -96,4 +124,4 @@ function CardSmall({ card, onSave, onDelete }) {
 	);
 }
 
-export default CardSmall;
+export default CardMedium;

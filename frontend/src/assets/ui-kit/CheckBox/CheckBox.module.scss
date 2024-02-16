@@ -1,0 +1,17 @@
+.default {
+	width: 24px;
+	height: 24px;
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	background-image: url(../../images/ui-kit-icons/checkbox-default.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 24px 24px;
+	transition: 0.3s opacity;
+}
+
+.active {
+	background-image: url(../../images/ui-kit-icons/checkbox-active.svg);
+}
