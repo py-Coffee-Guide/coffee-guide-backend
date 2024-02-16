@@ -1,0 +1,49 @@
+@use '../../assets/fonts/fonts_list.scss' as *;
+$base-color: #0b109e;
+
+.container {
+	max-width: 563px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.input_container {
+	width: 440px;
+	height: 52px;
+	border: 1px solid rgba(23, 22, 20, 0.2);
+	border-radius: 152px;
+	margin-right: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: transparent;
+	box-sizing: border-box;
+	&:focus-within {
+		border-color: #3da083;
+	}
+}
+
+.input {
+	margin-left: 26px;
+	width: 440px;
+	height: 20px;
+	padding-left: 38px;
+	color: $base-color;
+	@include font($sans, 18px, 20px, 0.18px);
+	color: black;
+	border: 0;
+	background-color: transparent;
+	background-image: url('../../assets/images/search-icon.svg');
+	background-repeat: no-repeat;
+	background-size: 22px 22px;
+	&::placeholder {
+		@include font($sans, 18px, 20px, 0.18px);
+		color: rgba(23, 22, 20, 0.2);
+		text-transform: none;
+	}
+	&:focus {
+		outline: none;
+		background-image: url('../../assets/images/search-icon-active.svg');
+	}
+}

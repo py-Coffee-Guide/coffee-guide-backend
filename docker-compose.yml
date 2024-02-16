@@ -3,7 +3,7 @@ version: '3'
 volumes:
   pg_data:
   static_data:
-  frontend:
+  frontend_static:
   media_data:
   redoc:
 
@@ -36,26 +36,30 @@ services:
     #   - mynetwork
 
 
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+      - static_data:/frontend_static
+    depends_on:
+      - backend 
+
   nginx:
-    # image: nginx:1.19.3
-    # build: ./infra/
     build:
       context: ./nginx/
       dockerfile: Dockerfile
     ports:
       - "80:80"
     volumes:
-      # - frontend:/usr/share/nginx/html/
+      - frontend_static:/usr/share/nginx/html/
       - redoc:/usr/share/nginx/html/api/docs/
       - static_data:/var/html/static
       - media_data:/var/html/media
       # - media_data:/media
       # - static_data:/staticfiles/
     depends_on:
-      # - frontend     
+      - frontend     
       - backend
-#     networks:
-#       - mynetwork
 
-# networks:
-#   mynetwork:

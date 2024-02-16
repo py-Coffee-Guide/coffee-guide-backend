@@ -1,0 +1,25 @@
+.container {
+	width: 556px;
+	height: 612px;
+	border-radius: 16px;
+	overflow-y: scroll;
+	ul {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		padding: 0;
+		margin: 0;
+		li {
+			width: 268px;
+			list-style: none;
+			margin-bottom: 12px;
+			&:nth-last-child(-n + 2) {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+.container::-webkit-scrollbar {
+	display: none;
+}
