@@ -35,7 +35,7 @@ class OnlyInnCreateUserSerializer(UserCreateSerializer):
         model = CustomUser
         fields = (
             "id",
-            "username",
+            # "username",
             "name",
             "email",
             "organization_inn",

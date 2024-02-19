@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+# DEBUG = os.getenv('DEBUG', 'True') == 'True'
 DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split(" ")
@@ -90,39 +90,39 @@ TEMPLATES = [
 WSGI_APPLICATION = "coffee_guide.wsgi.application"
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.getenv(
-            "DB_ENGINE", default="django.db.backends.postgresql"
-        ),
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": os.getenv(
+#             "DB_ENGINE", default="django.db.backends.postgresql"
+#         ),
+#         "NAME": os.getenv("POSTGRES_DB"),
+#         "USER": os.getenv("POSTGRES_USER"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+#         "HOST": os.getenv("DB_HOST"),
+#         "PORT": os.getenv("DB_PORT"),
+#     }
+# }
 
-# if DEBUG:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": BASE_DIR / "db.sqlite3",
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": os.getenv(
-#                 "DB_ENGINE", default="django.db.backends.postgresql"
-#             ),
-#             "NAME": os.getenv("POSTGRES_DB"),
-#             "USER": os.getenv("POSTGRES_USER"),
-#             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-#             "HOST": os.getenv("DB_HOST"),
-#             "PORT": os.getenv("DB_PORT"),
-#         }
-#     }
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.getenv(
+                "DB_ENGINE", default="django.db.backends.postgresql"
+            ),
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT"),
+        }
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -258,3 +258,7 @@ SECRET = os.getenv("DADATA_SECRET_KEY")
 
 
 CHARS = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@mail.ru")

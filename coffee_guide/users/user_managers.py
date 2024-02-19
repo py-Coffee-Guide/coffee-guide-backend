@@ -41,7 +41,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         send_email(
             subject="Пароль",
-            message=f"Ваш пароль: {password}.\n\n",
+            message=f"Ваш пароль: {password}\n\n",
             # "Никому не передавайте свой пароль в целях безопасности!",
             sender=EMAIL_HOST_USER,
             to=[user.email],
