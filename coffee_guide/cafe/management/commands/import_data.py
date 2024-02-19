@@ -1,7 +1,12 @@
 import json
 import os
+import io
+from PIL import Image
+from django.core.files import File
+from pathlib import Path
 
 from django.core.management.base import BaseCommand
+import requests
 from coffee_guide.settings import BASE_DIR, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME
 from cafe.models import (
     Cafe,
@@ -315,6 +320,9 @@ class Command(BaseCommand):
                 drinks = data_object.get(
                     "drinks", None
                 )
+                image = data_object.get(
+                    "image", None
+                )
                 user = CustomUser.objects.get(id=1)
 
                 try:
@@ -324,7 +332,7 @@ class Command(BaseCommand):
                             description=description,
                             address=Address.objects.get(name=address_name),
                             organization=user,
-                            is_alternatives=is_alternatives
+                            is_alternatives=is_alternatives,
                         )
                     )
                     if created:
@@ -332,6 +340,14 @@ class Command(BaseCommand):
                             cafe.alternatives.set(alternative)
                         if additionals:
                             cafe.additionals.set(additionals)
+                        if image:
+                            image_path = os.path.join(BASE_DIR, f"data/images/{image}")
+                            with open(image_path, 'rb') as img_file:
+                                # Создаем объект File
+                                img = File(img_file, name=Path(image_path).name)
+                                # Сохраняем изображение в модели Cafe
+                                cafe.image.save(img.name, img, save=True)
+
                         cafe.roasters.set(roaster)
                         cafe.availables.set(availables)
                         for schedule in schedules:
@@ -376,7 +392,7 @@ class Command(BaseCommand):
         try:
             CustomUser.objects.create_superuser(
                 username=ADMIN_USERNAME,
-                password=None,
+                password=ADMIN_PASSWORD,
                 email=ADMIN_EMAIL
             )
             print("суперпользователь создан")
