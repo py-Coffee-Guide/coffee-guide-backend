@@ -1,6 +1,0 @@
-node_modules
-public
-dist
-!.storybook
-vite.config.js
-.eslintrc.cjs
