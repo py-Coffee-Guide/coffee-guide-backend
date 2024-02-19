@@ -16,7 +16,7 @@ from googleapiclient.discovery import build
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.compose"]
 
-SERVICE_ACCOUNT_FILE = f"{BASE_DIR}/../credentials_copy.json"
+SERVICE_ACCOUNT_FILE = f"{BASE_DIR}/users/credentials_copy.json"
 TOKEN = f"{BASE_DIR}/../token.json"
 
 

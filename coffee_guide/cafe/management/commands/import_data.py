@@ -2,7 +2,7 @@ import json
 import os
 
 from django.core.management.base import BaseCommand
-from coffee_guide.settings import BASE_DIR
+from coffee_guide.settings import BASE_DIR, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME
 from cafe.models import (
     Cafe,
     Address,
@@ -375,9 +375,9 @@ class Command(BaseCommand):
     def create_admin(self, *args, **kwargs) -> None:
         try:
             CustomUser.objects.create_superuser(
-                username="admin_coffee_gid",
-                password="coffee_git_project2024",
-                email="coffeegyd@gmail.com"
+                username=ADMIN_USERNAME,
+                password=ADMIN_PASSWORD,
+                email=ADMIN_EMAIL
             )
             print("суперпользователь создан")
         except Exception:

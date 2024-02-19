@@ -13,8 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
-# DEBUG = False
+# DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split(" ")
 
@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     "social_django",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    'django_filters'
+    'django_filters',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -46,7 +47,24 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+# CORS_ORIGIN_WHITELIST = [
+#     "http://coffee-gid.ddns.net",
+#     "https://coffee-gid.ddns.net",
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "http://localhost:8000/api/v1",
+#     "http://127.0.0.1:8000/api/v1/cafes?page=1"
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_URLS_REGEX = r"^/api/v1/.*$/.*$"
 
 
 ROOT_URLCONF = "coffee_guide.urls"
@@ -71,6 +89,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "coffee_guide.wsgi.application"
 
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": os.getenv(
+#             "DB_ENGINE", default="django.db.backends.postgresql"
+#         ),
+#         "NAME": os.getenv("POSTGRES_DB"),
+#         "USER": os.getenv("POSTGRES_USER"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+#         "HOST": os.getenv("DB_HOST"),
+#         "PORT": os.getenv("DB_PORT"),
+#     }
+# }
 
 if DEBUG:
     DATABASES = {
@@ -227,3 +258,7 @@ SECRET = os.getenv("DADATA_SECRET_KEY")
 
 
 CHARS = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@mail.ru")
