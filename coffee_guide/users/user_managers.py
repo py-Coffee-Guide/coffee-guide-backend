@@ -36,17 +36,17 @@ class CustomUserManager(BaseUserManager):
         )
         if password is None:
             password = password_generation()
+            send_email(
+                subject="Пароль",
+                message=f"Ваш пароль: {password}\n\n",
+                # "Никому не передавайте свой пароль в целях безопасности!",
+                sender=EMAIL_HOST_USER,
+                to=[user.email],
+                # fail_silently=False,
+            )
         user.set_password(password)
         user.is_active = True
         user.save(using=self._db)
-        send_email(
-            subject="Пароль",
-            message=f"Ваш пароль: {password}\n\n",
-            # "Никому не передавайте свой пароль в целях безопасности!",
-            sender=EMAIL_HOST_USER,
-            to=[user.email],
-            # fail_silently=False,
-        )
         return user
 
     def create_superuser(

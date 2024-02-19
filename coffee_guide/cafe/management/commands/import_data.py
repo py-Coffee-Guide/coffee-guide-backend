@@ -376,7 +376,7 @@ class Command(BaseCommand):
         try:
             CustomUser.objects.create_superuser(
                 username=ADMIN_USERNAME,
-                password=ADMIN_PASSWORD,
+                password=None,
                 email=ADMIN_EMAIL
             )
             print("суперпользователь создан")
