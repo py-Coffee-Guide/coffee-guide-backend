@@ -7,21 +7,28 @@ export const BASE_TAGS = [
 	{
 		id: '2',
 		text: 'Без лактозы',
-		tag: 'milk',
+		tag: 'lactose_free_milk',
 	},
 	{
 		id: '3',
 		text: 'Submarine',
-		tag: 'roaster',
+		tag: 'submarine',
 	},
 	{
 		id: '4',
 		text: 'La Marzocco',
-		tag: 'coffeemachine',
+		tag: 'la_marzocco',
 	},
 	{
 		id: '5',
 		text: 'Сварщица',
-		tag: 'roaster',
+		tag: 'sweater',
 	},
 ];
+
+export const SPECIAL_EXTRAS = [
+	{ id: 1, text: 'Можно с животными' },
+	{ id: 2, text: 'Продажа зерна' },
+	{ id: 3, text: 'Декаф' },
+];
+export const ADD_INPUT = [];

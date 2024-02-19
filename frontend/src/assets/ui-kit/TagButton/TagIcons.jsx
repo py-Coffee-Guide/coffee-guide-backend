@@ -8,16 +8,20 @@ export const TAG_ICONS = {
 		light: alternativeLight,
 		// dark: 'src/assets/images/tags/alternative-dark.svg',
 	},
-	milk: {
+	lactose_free_milk: {
 		light: milkLight,
 		// dark: 'src/assets/images/tags/milk-dark.svg',
 	},
-	roaster: {
+	submarine: {
 		light: roasterLight,
 		// dark: 'src/assets/images/tags/coffee-bag-dark.svg',
 	},
-	coffeemachine: {
+	la_marzocco: {
 		light: coffeeMachineLight,
 		// dark: 'src/assets/images/tags/coffee-machine-dark.svg',
+	},
+	sweater: {
+		light: roasterLight,
+		// dark: 'src/assets/images/tags/coffee-bag-dark.svg',
 	},
 };

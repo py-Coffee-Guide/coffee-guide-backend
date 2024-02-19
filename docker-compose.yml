@@ -46,7 +46,8 @@ services:
       context: ./nginx/
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      # - "8000:80"
+      - ${NGINX_PORT}:${HOST_PORT}
     volumes:
       - frontend:/usr/share/nginx/html/
       - redoc:/usr/share/nginx/html/api/docs/
@@ -55,5 +56,5 @@ services:
       # - media_data:/media
       # - static_data:/staticfiles/
     depends_on:
-      - frontend     
+      - frontend
       - backend

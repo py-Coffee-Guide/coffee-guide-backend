@@ -6,7 +6,7 @@ import styles from './Favourites.module.scss';
 
 function Favourites() {
 	const theme = useSelector(state => state.theme);
-	const saved = useSelector(state => state.favourites.favourites);
+	const saved = useSelector(state => state.cards.favourites);
 
 	return (
 		<section className={styles.container}>

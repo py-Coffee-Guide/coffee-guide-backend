@@ -6,7 +6,7 @@ import styles from './SearchResult.module.scss';
 import CardMedium from '../CardMedium/CardMedium';
 
 function SearchResult({ isVisible }) {
-	const filteredCards = useSelector(state => state.filteredCards);
+	const filteredCards = useSelector(state => state.cards.filtered);
 
 	const resultClassName = cn(
 		styles.result_container,

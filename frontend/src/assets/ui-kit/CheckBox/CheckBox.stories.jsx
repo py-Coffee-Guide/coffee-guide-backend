@@ -11,7 +11,7 @@ export default {
 export const DefaultCheckBox = {
 	args: {
 		theme: 'light',
-		type: 'button',
+		type: 'checkbox',
 		active: false,
 	},
 };
@@ -19,7 +19,7 @@ export const DefaultCheckBox = {
 export const DefaultCheckBoxActive = {
 	args: {
 		theme: 'light',
-		type: 'button',
+		type: 'checkbox',
 		active: true,
 	},
 };

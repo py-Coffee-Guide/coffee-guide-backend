@@ -8,8 +8,6 @@ import { useGetCardsQuery } from '../../slices/apiSlice/apiSlice';
 import BalloonModal from '../BalloonModal/BalloonModal';
 import CardSmall from '../CardSmall/CardSmall';
 
-import { cardsArray } from '../../utils/cardsArray';
-
 import styles from './MapComponent.module.scss';
 import location from '../../assets/images/location-pin.svg';
 
@@ -17,17 +15,7 @@ function MapComponent() {
 	const [isActive, setIsActive] = useState(false);
 	const [isCard, setIsCard] = useState({});
 	const [place, setPlace] = useState({});
-	const offsetCounter = useSelector(state => state.offset);
-	const mapContainerClassName = cn(styles.container);
-
-	const { cards } = useGetCardsQuery(
-		{ page: offsetCounter },
-		{
-			selectFromResult: ({ data }) => ({
-				cards: data?.results,
-			}),
-		},
-	);
+	const card = useSelector(state => state.cards.cards);
 
 	const handleOpenBalloon = () => {
 		setIsActive(true);
@@ -39,7 +27,7 @@ function MapComponent() {
 	};
 
 	return (
-		<div className={mapContainerClassName}>
+		<div className={styles.container}>
 			<Map
 				defaultState={{ center: [55.75, 37.57], zoom: 11 }}
 				width="inherit"
@@ -49,7 +37,7 @@ function MapComponent() {
 				instanceRef={setPlace}
 				onClick={handleCloseBalloon}
 			>
-				{cards?.map(card => (
+				{card?.map(card => (
 					<Placemark
 						key={card.id}
 						geometry={[card.address.lat, card.address.lon]}

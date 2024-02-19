@@ -11,7 +11,7 @@ import store from './store';
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<BrowserRouter>
 		<Provider store={store}>
-			<YMaps query={{ apikey: 'a0303f06-4ef8-4bd2-bef5-7e2e5e6b3ff6', lang: 'ru_RU' }}>
+			<YMaps query={{ lang: 'ru_RU' }}>
 				<App />
 			</YMaps>
 		</Provider>

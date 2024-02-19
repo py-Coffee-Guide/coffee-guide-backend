@@ -1,9 +1,4 @@
-// import { useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
-import { api } from '../../utils/Api';
 
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -20,24 +15,6 @@ import { card } from '../../utils/card';
 import styles from './App.module.scss';
 
 function App() {
-	const location = useLocation();
-	const theme = useSelector(state => state.theme);
-
-	// const [cards, setCards] = useState([]);
-
-	// useEffect(() => {
-	// 	Promise.all([api.getOrganizations()])
-	// 		.then(([card]) => {
-	// 			setCards(card.results);
-	// 		})
-	// 		.catch(err => {
-	// 			console.log(err);
-	// 		});
-	// }, []);
-
-	// a0303f06-4ef8-4bd2-bef5-7e2e5e6b3ff6
-	// const { user } = useSelector(state => state);
-	// card={cards.find(item => item.id === location.pathname.replace('/card/', ''))}
 	return (
 		<div className={styles.root}>
 			<Header />

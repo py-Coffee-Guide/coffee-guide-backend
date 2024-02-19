@@ -2,21 +2,19 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const api = createApi({
 	reducerPath: 'api',
-	baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api/v1/' }),
+	baseQuery: fetchBaseQuery({ baseUrl: 'http://coffee-gid.ddns.net/api/v1' }),
 	tagTypes: ['Cards'],
 	endpoints: build => ({
 		getCards: build.query({
 			query: args => {
-				const { page, roasters, tags, alternatives, limit, offset } = args;
+				const { page, limit, offset, availables } = args;
 				return {
 					url: 'cafes',
 					params: {
 						limit,
 						offset,
 						page,
-						roasters,
-						tags,
-						alternatives,
+						availables,
 					},
 				};
 			},

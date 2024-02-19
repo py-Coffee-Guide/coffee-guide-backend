@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCards } from '../../slices/cardsSlice/cardsSlice';
 import { useGetCardsQuery } from '../../slices/apiSlice/apiSlice';
 
-import { addToFavourite } from '../../slices/favouritesSlice/favouritesSlice';
 import { increment } from '../../slices/offsetSlice/offsetSlice';
 
 import CardSmall from '../CardSmall/CardSmall';
@@ -12,11 +11,9 @@ import styles from './Cards.module.scss';
 
 function Cards() {
 	const dispatch = useDispatch();
-	const saved = useSelector(state => state.favourites.favourites);
-
+	const card = useSelector(state => state.cards.cards);
 	const offsetCounter = useSelector(state => state.offset);
-
-	const { cards, isLoading } = useGetCardsQuery(
+	const { cards, isFetching, isLoading, isSuccess, isError } = useGetCardsQuery(
 		{ page: offsetCounter },
 		{
 			selectFromResult: ({ data }) => ({
@@ -25,18 +22,25 @@ function Cards() {
 		},
 	);
 
+	const handleClick = () => {
+		dispatch(increment());
+		dispatch(setCards(cards));
+	};
+
 	return (
 		<div className={styles.container}>
 			<ul>
-				{cards?.map(card => (
+				{card?.map(card => (
 					<li key={card.id}>
 						<CardSmall card={card} />
 					</li>
 				))}
 			</ul>
-			<button type="button" className={styles.more} onClick={() => dispatch(increment())}>
-				Показать больше кофеен
-			</button>
+			{!isError && (
+				<button type="button" className={styles.more} onClick={handleClick}>
+					Показать больше кофеен
+				</button>
+			)}
 		</div>
 	);
 }

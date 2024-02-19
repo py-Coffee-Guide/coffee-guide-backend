@@ -1,8 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset } from '../../slices/cardsSlice/cardsSlice';
-
-import { api } from '../../slices/apiSlice/apiSlice';
+import { clear, clearFiltered } from '../../slices/cardsSlice/cardsSlice';
 
 import logoPath from '../../assets/images/logo.svg';
 import iconPath from '../../assets/images/profile-icon.svg';
@@ -32,7 +30,7 @@ function Header() {
 		<header className={styles.header}>
 			<div className={styles.container}>
 				<Link to="/">
-					<button type="button" onClick={() => dispatch(reset())} className={styles.logo}>
+					<button type="button" onClick={() => dispatch(clearFiltered())} className={styles.logo}>
 						<img className={styles.logo} src={logoPath} alt="Лого" />{' '}
 					</button>
 				</Link>

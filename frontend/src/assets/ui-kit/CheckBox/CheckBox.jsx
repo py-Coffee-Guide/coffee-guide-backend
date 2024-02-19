@@ -4,30 +4,25 @@ import cn from 'classnames';
 import PropTypes from 'prop-types';
 import styles from './CheckBox.module.scss';
 
-function CheckBox({ type, theme, active }) {
+function CheckBox({ type, theme, active, text }) {
 	const [isActive, setIsActive] = useState(active);
 
-	const buttonClassName = cn(styles.default);
-	const buttonActiveClassName = cn(styles.default, styles.active);
-
 	return (
-		<button
-			type={type}
-			className={isActive ? buttonActiveClassName : buttonClassName}
-			onClick={() => setIsActive(!isActive)}
-			aria-label="CheckBox"
-		/>
+		<label className={styles.label}>
+			<input type={type} className={styles.checkbox} aria-label="CheckBox" />
+			<p className={styles.text}>{text}</p>
+		</label>
 	);
 }
 
 CheckBox.propTypes = {
-	type: PropTypes.oneOf(['submit', 'button']),
+	type: PropTypes.oneOf(['checkbox']),
 	theme: PropTypes.oneOf(['light', 'dark']),
 	active: PropTypes.bool,
 };
 
 CheckBox.defaultProps = {
-	type: 'button',
+	type: 'checkbox',
 	theme: 'light',
 	active: false,
 };

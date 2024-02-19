@@ -5,10 +5,10 @@ import cn from 'classnames';
 import PropTypes from 'prop-types';
 import styles from './FavouritesButton.module.scss';
 
-import { addToFavourite } from '../../../slices/favouritesSlice/favouritesSlice';
+import { addToFavourite } from '../../../slices/cardsSlice/cardsSlice';
 
 function FavouritesButton({ type, theme, active, onClick, card }) {
-	const savedCard = useSelector(state => state.favourites.favourites);
+	const savedCard = useSelector(state => state.cards.favourites);
 	const isLiked = savedCard.some(i => i.id === card.id);
 
 	const buttonClassName = cn(styles.default, { [styles.active]: isLiked });
