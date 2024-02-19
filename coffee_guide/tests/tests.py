@@ -14,7 +14,6 @@ class CafeTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.url = reverse('cafes-list')
-        # Создание тестовых данных для кофеен
         cls.address = Address.objects.create(name='Test Address', lat=0, lon=0)
         cls.alternative1 = Alternative.objects.create(name='TestAlternative1', slug="a1")
         cls.alternative2 = Alternative.objects.create(name='AnotherAlternative', slug="a2")
