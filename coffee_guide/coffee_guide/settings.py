@@ -64,7 +64,7 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_URLS_REGEX = r"^/api/v1/.*$/.*$"
+CORS_URLS_REGEX = r"^/api/v1/.*$"
 
 
 ROOT_URLCONF = "coffee_guide.urls"
