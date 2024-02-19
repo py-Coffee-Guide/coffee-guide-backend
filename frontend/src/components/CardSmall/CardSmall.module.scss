@@ -1,13 +1,12 @@
 $font-base: 'SourceSansPro-Regular';
 $font-title: 'Lora-Bold';
-$base-color: #171614;
 
 .card {
 	width: 268px;
 	height: 342px;
 	border-radius: 12px;
 	border: 0.5px solid var(--1111, rgba(23, 22, 20, 0.2));
-	background: #fff;
+	background: var(--card-color);
 	&:hover {
 		box-shadow: 1px 1px 4px 0px rgba(70, 119, 104, 0.4);
 	}
@@ -39,19 +38,6 @@ $base-color: #171614;
 	border: 0;
 	margin-right: 12px;
 	margin-top: 12px;
-
-	// border-radius: 50%;
-	// background-color: #fff;
-	// width: 44px;
-	// height: 44px;
-	// background-image: url('../../assets/images/favourites.svg');
-	// background-repeat: no-repeat;
-	// background-position: center;
-	// cursor: pointer;
-
-	// &:hover {
-	// 	opacity: 0.8;
-	// }
 }
 
 .close {
@@ -87,7 +73,7 @@ $base-color: #171614;
 	font-family: $font-title;
 	font-size: 18px;
 	letter-spacing: 0.18px;
-	color: $base-color;
+	color: var(--text-color);
 }
 
 .text {
@@ -95,7 +81,7 @@ $base-color: #171614;
 	font-family: $font-base;
 	font-size: 14px;
 	letter-spacing: 0.14px;
-	color: $base-color;
+	color: var(--text-color);
 }
 
 .schedules {
@@ -113,6 +99,6 @@ $base-color: #171614;
 		font-family: $font-base;
 		font-size: 14px;
 		letter-spacing: 0.14px;
-		color: $base-color;
+		color: var(--text-color);
 	}
 }

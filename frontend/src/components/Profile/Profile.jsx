@@ -28,7 +28,8 @@ function Profile() {
 					))}
 				</ul> */}
 				<p className={styles.text}>
-					В случае если у вас возникли вопросы, напишите нам admin@gmail.com
+					Добро пожаловать в COFFEE GUIDE! У вас пока нет добавленных кофеен. Если ваша кофейня уже
+					есть на сайте свяжитесь с нами admin@gmail.com
 				</p>
 			</div>
 		</section>

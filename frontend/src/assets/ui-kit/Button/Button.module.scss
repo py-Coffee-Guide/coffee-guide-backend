@@ -5,9 +5,9 @@
 	border-radius: 89px;
 	margin: 0;
 	padding: 0;
-	border: 1px solid #3da083;
-	text-transform: uppercase;
+	border: 0.3px solid var(--decoration-color);
 	background-color: #91e0c8;
+	box-shadow: var(--box-shadow);
 	height: 52px;
 	cursor: pointer;
 	&:hover {

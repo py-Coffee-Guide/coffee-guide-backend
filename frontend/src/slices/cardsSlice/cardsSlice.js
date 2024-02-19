@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { cardsArray } from '../../utils/cardsArray';
 
 const cardsSlice = createSlice({
 	name: 'cards',
@@ -7,13 +6,28 @@ const cardsSlice = createSlice({
 		cards: [],
 		favourites: JSON.parse(localStorage.getItem('favourites')) || [],
 		filtered: [],
+		filters: [],
+		query: '',
 	},
 	reducers: {
 		setCards: (state, action) => {
-			state.cards = [...state.cards, ...action.payload];
+			state.cards.push(...action.payload);
+		},
+		setQuery: (state, action) => {
+			state.query = action.payload;
+		},
+		clearCards: state => {
+			state.cards = [];
 		},
 		setFiltered: (state, action) => {
 			state.filtered = [...state.filtered, ...action.payload];
+		},
+		setFilter: (state, action) => {
+			if (!state.filters.some(i => i === action.payload)) {
+				state.filters.push(action.payload);
+			} else {
+				state.filters = state.filters.filter(i => i !== action.payload);
+			}
 		},
 		addToFavourite: (state, action) => {
 			if (!state.favourites.some(i => i.id === action.payload.id)) {
@@ -30,6 +44,16 @@ const cardsSlice = createSlice({
 	},
 });
 
-export const { setCards, setFavourites, setFiltered, clearFiltered, addToFavourite, clear, reset } =
-	cardsSlice.actions;
+export const {
+	setCards,
+	clearCards,
+	setFavourites,
+	setFiltered,
+	clearFiltered,
+	addToFavourite,
+	setFilter,
+	setQuery,
+	clear,
+	reset,
+} = cardsSlice.actions;
 export default cardsSlice.reducer;

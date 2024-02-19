@@ -6,8 +6,11 @@ const offsetSlice = createSlice({
 	initialState: 1,
 	reducers: {
 		increment: state => state + 1,
+		reset: state => {
+			state = 1;
+		},
 	},
 });
 
-export const { increment } = offsetSlice.actions;
+export const { increment, reset } = offsetSlice.actions;
 export default offsetSlice.reducer;

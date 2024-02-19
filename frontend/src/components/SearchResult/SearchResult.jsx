@@ -3,10 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from './SearchResult.module.scss';
-import CardMedium from '../CardMedium/CardMedium';
 
 function SearchResult({ isVisible }) {
-	const filteredCards = useSelector(state => state.cards.filtered);
+	const navigate = useNavigate();
+	const cards = useSelector(state => state.cards.filtered);
+
+	const handleClick = card => {
+		navigate(`/card/${card.id}`, { state: { key: card.id } });
+	};
 
 	const resultClassName = cn(
 		styles.result_container,
@@ -16,12 +20,10 @@ function SearchResult({ isVisible }) {
 	return (
 		<div className={resultClassName}>
 			<ul className={styles.result}>
-				{filteredCards.slice(0, 4).map(item => (
-					<li className={styles.item} key={item.id}>
-						<Link to={`/card/${item.id}`} className={styles.link}>
-							<p className={styles.title}>{item.name}</p>
-							<address className={styles.address}>{item.address}</address>
-						</Link>
+				{cards?.slice(0, 4).map(item => (
+					<li onClick={() => handleClick(item)} className={styles.item} key={item.id}>
+						<p className={styles.title}>{item.name}</p>
+						<address className={styles.address}>{item.address.name}</address>
 					</li>
 				))}
 			</ul>

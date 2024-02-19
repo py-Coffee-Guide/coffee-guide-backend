@@ -26,7 +26,7 @@ services:
       - .env 
     volumes:
       - static_data:/app/backend_static/
-      - redoc:/app/docs
+      - redoc:/app/docs/
       - media_data:/app/media
     depends_on:
       - db
@@ -51,9 +51,10 @@ services:
     volumes:
       - frontend:/usr/share/nginx/html/
       # - redoc:/app/docs
-      - redoc:/usr/share/nginx/html/api/docs/
+      # - redoc:/usr/share/nginx/html/api/docs/
       - static_data:/var/html/static
       - media_data:/var/html/media
+      - redoc:/usr/share/nginx/html/api/docs/
       # - media_data:/media
       # - static_data:/staticfiles/
     depends_on:

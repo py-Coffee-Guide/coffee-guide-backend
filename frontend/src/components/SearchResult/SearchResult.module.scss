@@ -57,11 +57,8 @@
 	color: var(--decoration-color);
 }
 
-.link {
-	text-decoration: none;
-}
-
 .item:hover {
 	background-color: var(--hover);
 	border-radius: 10px;
+	cursor: pointer;
 }

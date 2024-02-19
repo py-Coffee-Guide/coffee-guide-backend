@@ -13,6 +13,13 @@ function Favourites() {
 			<div className={styles.back_button}>
 				<BackButton type="button" theme={theme} text="Назад" />
 			</div>
+			{saved.length === 0 && (
+				<div className={styles.no_favourites}>
+					<p className={styles.text}>В избранном пока ничего нет.</p>
+					<div className={theme === 'light' ? styles.coffee_cup : styles.coffee_cup_dark} />
+				</div>
+			)}
+
 			<div className={styles.cardlist}>
 				<ul>
 					{saved.map(item => (
@@ -22,7 +29,6 @@ function Favourites() {
 					))}
 				</ul>
 			</div>
-			{/* <Cards /> */}
 		</section>
 	);
 }

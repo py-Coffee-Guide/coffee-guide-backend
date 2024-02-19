@@ -38,23 +38,13 @@ function NewCoffeeshop({ onClose }) {
 						<label htmlFor="cafe_name" className={styles.input_label}>
 							Название кофейни
 						</label>
-						<input
-							type="text"
-							id="cafe_name"
-							className={styles.input_item}
-							placeholder="Название"
-						/>
+						<input type="text" id="cafe_name" className={styles.input_item} placeholder="" />
 					</li>
 					<li className={styles.input_container}>
 						<label htmlFor="cafe_name" className={styles.input_label}>
 							Адрес
 						</label>
-						<input
-							type="text"
-							id="cafe_name"
-							className={styles.input_item}
-							placeholder="Введите адрес"
-						/>
+						<input type="text" id="cafe_name" className={styles.input_item} placeholder="" />
 					</li>
 					<li className={styles.input_container}>
 						<div className={styles.input_aligner_row}>
@@ -66,13 +56,13 @@ function NewCoffeeshop({ onClose }) {
 									type="text"
 									id="cafe_schedule"
 									className={inputTimeClassName}
-									placeholder="С"
+									placeholder="00:00"
 								/>
 								<input
 									type="text"
 									id="cafe_schedule"
 									className={inputTimeClassName}
-									placeholder="До"
+									placeholder="00:00"
 								/>
 							</div>
 						</div>
@@ -88,13 +78,13 @@ function NewCoffeeshop({ onClose }) {
 										type="text"
 										id="cafe_schedule"
 										className={inputTimeClassName}
-										placeholder="С"
+										placeholder="00:00"
 									/>
 									<input
 										type="text"
 										id="cafe_schedule"
 										className={inputTimeClassName}
-										placeholder="До"
+										placeholder="00:00"
 									/>
 								</div>
 								<CheckBox text="Как в будни" />
@@ -102,28 +92,23 @@ function NewCoffeeshop({ onClose }) {
 							</div>
 						</div>
 					</li>
-					<li className={styles.input_container}>
+					<li className={styles.input_container} style={{ flexDirection: 'column' }}>
 						<div className={styles.input_aligner_row} style={{ justifyContent: 'flex-start' }}>
 							<label htmlFor="cafe_drink" className={styles.input_label}>
 								Напитки
 							</label>
 							<div className={styles.input_aligner} style={{ flexDirection: 'row' }}>
-								<input
-									type="text"
-									id="cafe_drink"
-									className={inputTimeClassName}
-									placeholder="Напиток"
-								/>
+								<input type="text" id="cafe_drink" className={inputTimeClassName} placeholder="" />
 								<input
 									type="text"
 									id="cafe_drink"
 									className={inputTimeClassName}
 									style={{ width: '76px' }}
-									placeholder="&#8381;"
+									placeholder=""
 								/>
 							</div>
 						</div>
-						<p>+ добавить</p>
+						<p className={styles.input_add}>+ добавить напиток</p>
 					</li>
 					<li className={styles.input_container}>
 						<div className={styles.input_aligner_row} style={{ justifyContent: 'flex-start' }}>
@@ -144,7 +129,10 @@ function NewCoffeeshop({ onClose }) {
 						<label htmlFor="cafe_roasters" className={styles.input_label}>
 							Обжарщики
 						</label>
-						<input type="text" id="cafe_roasters" className={styles.input_item} />
+						<div>
+							<input type="text" id="cafe_roasters" className={styles.input_item} />
+							<p className={styles.input_add}>+ добавить обжарщика</p>
+						</div>
 					</li>
 
 					<li className={styles.input_container}>
@@ -182,7 +170,12 @@ function NewCoffeeshop({ onClose }) {
 							type="text"
 							id="cafe_image"
 							className={styles.input_item}
-							style={{ height: '128px' }}
+							style={{
+								height: '128px',
+								background: 'rgba(145, 224, 200, 0.2)',
+								boxShadow: 'var(--box-shadow)',
+							}}
+							placeholder="Выберите файл или перетащите его сюда"
 						/>
 					</li>
 				</ul>

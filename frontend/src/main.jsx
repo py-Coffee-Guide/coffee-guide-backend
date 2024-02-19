@@ -11,7 +11,7 @@ import store from './store';
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<BrowserRouter>
 		<Provider store={store}>
-			<YMaps query={{ lang: 'ru_RU' }}>
+			<YMaps query={{ apikey: import.meta.env.VITE_MAP_API, lang: 'ru_RU' }}>
 				<App />
 			</YMaps>
 		</Provider>

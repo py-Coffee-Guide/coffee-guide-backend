@@ -45,5 +45,6 @@ module.exports = {
 		'jsx-a11y/click-events-have-key-events': 'off',
 		'no-param-reassign': 'off',
 		'jsx-a11y/label-has-associated-control': 'off',
+		'arrow-body-style': 'off',
 	},
 };
