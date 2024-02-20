@@ -4,8 +4,8 @@ import queryString from 'query-string';
 export const api = createApi({
 	reducerPath: 'api',
 	baseQuery: fetchBaseQuery({
-		// baseUrl: 'http://coffee-gid.ddns.net/api/v1/',
-		baseUrl: 'http://localhost:8000/api/v1/',
+		baseUrl: 'http://coffee-gid.ddns.net/api/v1/',
+		// baseUrl: 'http://localhost:8000/api/v1/',
 		prepareHeaders: headers => {
 			headers.set('Content-type', 'application/json');
 			return headers;
