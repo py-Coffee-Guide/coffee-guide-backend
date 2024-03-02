@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
@@ -7,19 +8,18 @@ import styles from './CardSmall.module.scss';
 import FavouritesButton from '../../assets/ui-kit/FavouritesButton/FavouritesButton';
 import CloseButton from '../../assets/ui-kit/CloseButton/CloseButton'; // Добавил иконку удаления
 
-function CardSmall({ card, onSave, onDelete, onClick }) {
-	const { address, name, schedules, image } = card;
-
+function CardSmall({ card }) {
 	const navigate = useNavigate();
-
+	const active = useSelector(state => state.cards.active);
+	const { address, name, schedules, image } = card;
+	const photoClassName = cn(styles.photo, { [styles.photo_null]: !image });
+	const cardClassName = cn(styles.card, { [styles.card_active]: active.id === card.id });
 	const handleClick = card => {
 		navigate(`/card/${card.id}`, { state: { key: card.id } });
 	};
 
-	const photoClassName = cn(styles.photo, { [styles.photo_null]: !image });
-
 	return (
-		<div className={styles.card}>
+		<div className={cardClassName} id={`card/${card.id}`}>
 			<div className={styles.photo_container}>
 				<img
 					className={photoClassName}

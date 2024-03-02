@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 
+const initialState = 1;
+
 const offsetSlice = createSlice({
 	name: 'offset',
-	initialState: 1,
+	initialState,
 	reducers: {
 		increment: state => state + 1,
-		reset: state => {
-			state = 1;
-		},
+		reset: () => initialState,
 	},
 });
 

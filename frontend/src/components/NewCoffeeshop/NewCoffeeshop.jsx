@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 
 import cn from 'classnames';
 import styles from './NewCoffeeshop.module.scss';
@@ -10,6 +10,21 @@ import CloseButton from '../../assets/ui-kit/CloseButton/CloseButton';
 import { BASE_TAGS, SPECIAL_EXTRAS } from '../../utils/constants';
 
 function NewCoffeeshop({ onClose }) {
+	const {
+		register,
+		watch,
+		handleSubmit,
+		reset,
+		control,
+		formState: { errors },
+	} = useForm({
+		defaultValues: { address: { name: '' }, schedules: [{ start: '', end: '', name: '' }] },
+		mode: 'onChange',
+	});
+	const { fields } = useFieldArray({
+		name: 'schedules',
+		control,
+	});
 	const [showPopupCoffeeTypes, setShowPopupCoffeeTypes] = useState(false);
 	const [showPopupAlternatives, setShowPopupAlternatives] = useState(false);
 	const [textHidden, setTextHidden] = useState(true);
@@ -27,66 +42,95 @@ function NewCoffeeshop({ onClose }) {
 		setShowPopupAlternatives(!showPopupAlternatives);
 	};
 
+	const onSubmit = data => {
+		console.log(data);
+	};
+
 	return (
 		<section className={styles.container}>
 			<div className={styles.close}>
 				<CloseButton onClick={onClose} size="default" />
 			</div>
-			<form className={styles.container_main}>
+			<form className={styles.container_main} onSubmit={handleSubmit(onSubmit)}>
 				<ul className={styles.input_list}>
 					<li className={styles.input_container}>
-						<label htmlFor="cafe_name" className={styles.input_label}>
+						<label htmlFor="name" className={styles.input_label}>
 							Название кофейни
 						</label>
-						<input type="text" id="cafe_name" className={styles.input_item} placeholder="" />
+						<input
+							{...register('name')}
+							type="text"
+							id="name"
+							className={styles.input_item}
+							placeholder=""
+						/>
 					</li>
 					<li className={styles.input_container}>
-						<label htmlFor="cafe_name" className={styles.input_label}>
+						<label htmlFor="address" className={styles.input_label}>
 							Адрес
 						</label>
-						<input type="text" id="cafe_name" className={styles.input_item} placeholder="" />
+						<input
+							{...register('address.name')}
+							type="text"
+							id="address"
+							className={styles.input_item}
+							placeholder=""
+						/>
 					</li>
+
 					<li className={styles.input_container}>
 						<div className={styles.input_aligner_row}>
 							<label htmlFor="cafe_schedule" className={styles.input_label}>
 								Пн- Пт
 							</label>
-							<div>
-								<input
-									type="text"
-									id="cafe_schedule"
-									className={inputTimeClassName}
-									placeholder="00:00"
-								/>
-								<input
-									type="text"
-									id="cafe_schedule"
-									className={inputTimeClassName}
-									placeholder="00:00"
-								/>
-							</div>
+							{fields.map((field, index) => {
+								return (
+									<div key={index}>
+										<input
+											{...register(`schedules.${index}.start`)}
+											type="text"
+											id="cafe_schedule"
+											className={inputTimeClassName}
+											placeholder="00:00"
+										/>
+										<input
+											{...register(`schedules.${index}.end`)}
+											type="text"
+											id="cafe_schedule"
+											className={inputTimeClassName}
+											placeholder="00:00"
+										/>
+									</div>
+								);
+							})}
 						</div>
 					</li>
 					<li className={styles.input_container}>
 						<div className={styles.input_aligner_row}>
-							<label htmlFor="cafe_schedule" className={styles.input_label}>
+							<label htmlFor="schedules" className={styles.input_label}>
 								Сб - Вс
 							</label>
 							<div className={styles.input_aligner}>
-								<div style={{ marginBottom: '18px' }}>
-									<input
-										type="text"
-										id="cafe_schedule"
-										className={inputTimeClassName}
-										placeholder="00:00"
-									/>
-									<input
-										type="text"
-										id="cafe_schedule"
-										className={inputTimeClassName}
-										placeholder="00:00"
-									/>
-								</div>
+								{fields.map((field, index) => {
+									return (
+										<div key={index} style={{ marginBottom: '18px' }}>
+											<input
+												{...register(`schedules.${index}.start`)}
+												type="text"
+												id="cafe_schedule"
+												className={inputTimeClassName}
+												placeholder="00:00"
+											/>
+											<input
+												{...register(`schedules.${index}.end`)}
+												type="text"
+												id="cafe_schedule"
+												className={inputTimeClassName}
+												placeholder="00:00"
+											/>
+										</div>
+									);
+								})}
 								<CheckBox text="Как в будни" />
 								<CheckBox text="Круглосуточно" />
 							</div>

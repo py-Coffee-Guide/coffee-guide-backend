@@ -30,6 +30,7 @@
 	width: 440px;
 	height: 20px;
 	padding-left: 38px;
+	position: relative;
 
 	@include font($sans, 18px, 20px, 0.18px);
 	color: var(--text-color);

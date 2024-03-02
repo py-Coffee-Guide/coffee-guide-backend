@@ -22,7 +22,6 @@
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		column-gap: 20px;
 		padding: 0;
 		margin: 0;
@@ -36,6 +35,7 @@
 		}
 	}
 }
+
 .cardlist::-webkit-scrollbar {
 	display: none;
 }

@@ -6,46 +6,34 @@ import styles from './Register.module.scss';
 
 import { useAddUserMutation, useGetUsersQuery } from '../../slices/apiSlice/apiSlice';
 
-import * as testApi from '../../utils/testApi';
-
 import Button from '../../assets/ui-kit/Button/Button';
 
 function Register() {
 	const navigate = useNavigate();
-	// const [inputValues, setInputValues] = useState([]);
-
-	const inputValues = {
-		name: 'user3',
-		email: 'user3@email.com',
-		organization_inn: '7723517121',
-	};
-	console.log('inputValues ==>', inputValues);
 
 	const { data = [], isLoading } = useGetUsersQuery();
-	// console.log('users ==>', data);
-
 	const [addUser, { isError }] = useAddUserMutation();
 
 	const {
 		register,
-		getValues,
+		watch,
 		handleSubmit,
 		reset,
 		formState: { errors },
 	} = useForm({ defaultValues: { email: '', organization_inn: '', name: '' }, mode: 'onChange' });
 
+	const watchInputs = watch();
+
 	const handleAddUser = async () => {
-		if (inputValues) {
-			await addUser(inputValues).unwrap();
-			// setInputValues(getValues());
-			// setInputValues({});
+		if (watchInputs) {
+			await addUser(watchInputs)
+				.unwrap()
+				.then(data => console.log('data reg:', data))
+				.catch(rejected => console.error(rejected));
 		}
 	};
 
 	const onSubmit = userData => {
-		// метод из апи POST user
-
-		console.log(userData);
 		navigate('/signin', { replace: true });
 		reset();
 	};
@@ -103,7 +91,6 @@ function Register() {
 						{errors.name && <span className={styles.error}>{errors.name?.message}</span>}
 					</div>
 					<Button
-						// onClick={() => handleReg()}
 						onClick={() => handleAddUser()}
 						type="submit"
 						size="large"

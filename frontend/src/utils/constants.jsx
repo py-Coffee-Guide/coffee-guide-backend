@@ -6,7 +6,7 @@ export const BASE_TAGS = [
 	},
 	{
 		id: '2',
-		text: 'Без лактозы',
+		text: 'Безлактозное молоко',
 		tag: 'lactose_free_milk',
 	},
 	{

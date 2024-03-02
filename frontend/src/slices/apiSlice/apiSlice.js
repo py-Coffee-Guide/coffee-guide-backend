@@ -4,7 +4,7 @@ import queryString from 'query-string';
 export const api = createApi({
 	reducerPath: 'api',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://coffee-gid.ddns.net/api/v1/',
+		baseUrl: 'https://www.coffee-guide.ru/api/v1/',
 		// baseUrl: 'http://localhost:8000/api/v1/',
 		prepareHeaders: headers => {
 			headers.set('Content-type', 'application/json');
@@ -19,7 +19,7 @@ export const api = createApi({
 				return {
 					url: `cafes?${availables}`,
 					params: {
-						page,
+						...(page && !name && !address && { page }),
 						...(name && { name }),
 						...(address && { address }),
 					},
@@ -32,8 +32,16 @@ export const api = createApi({
 			query: id => `cafes/${id}`,
 		}),
 
-		getFilteredCards: build.query({
-			query: value => `cafes/?name=${value}`,
+		addCard: build.mutation({
+			query: body => ({
+				url: 'cafes',
+				method: 'POST',
+				body,
+			}),
+			providesTags: result =>
+				result
+					? [...result.map(({ id }) => ({ type: 'Cards', id })), { type: 'Cards', id: 'LIST' }]
+					: [{ type: 'Cards', id: 'LIST' }],
 		}),
 
 		// USER REDUCERS
@@ -47,7 +55,7 @@ export const api = createApi({
 
 		addUser: build.mutation({
 			query: body => ({
-				url: 'users',
+				url: 'users/',
 				method: 'POST',
 				body,
 			}),

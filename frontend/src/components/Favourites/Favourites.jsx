@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import cn from 'classnames';
+import { clearCards } from '../../slices/cardsSlice/cardsSlice';
 import BackButton from '../../assets/ui-kit/BackButton/BackButton';
 import CardSmall from '../CardSmall/CardSmall';
 import styles from './Favourites.module.scss';
 
 function Favourites() {
+	const dispatch = useDispatch();
 	const theme = useSelector(state => state.theme);
 	const saved = useSelector(state => state.cards.favourites);
+	const cardlistClassName = cn(styles.cardlist, styles.cardlist_favourite);
+
+	// useEffect(() => {
+	// 	dispatch(clearCards());
+	// }, []);
 
 	return (
 		<section className={styles.container}>
@@ -20,7 +29,7 @@ function Favourites() {
 				</div>
 			)}
 
-			<div className={styles.cardlist}>
+			<div className={cardlistClassName}>
 				<ul>
 					{saved.map(item => (
 						<li key={item.id}>

@@ -1,6 +1,12 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCards, clearFiltered } from '../../slices/cardsSlice/cardsSlice';
+import {
+	clearCards,
+	clearFiltered,
+	clearQuery,
+	clearFilters,
+} from '../../slices/cardsSlice/cardsSlice';
+import { reset } from '../../slices/offsetSlice/offsetSlice';
 
 import logo from '../../assets/images/logo.svg';
 import logoDark from '../../assets/images/logo-dark.svg';
@@ -31,40 +37,54 @@ const FullRenderedSection = () => {
 function Header() {
 	const location = useLocation();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const theme = useSelector(state => state.theme);
+	const offset = useSelector(state => state.offset);
+
+	const handleClick = () => {
+		if (location.pathname !== '/') {
+			navigate('/', { replace: true });
+		}
+		dispatch(clearFiltered());
+		dispatch(clearQuery());
+		dispatch(clearCards());
+		dispatch(reset());
+		navigate(0);
+	};
 
 	return (
 		<header className={styles.header}>
 			<div className={styles.container}>
-				<Link to="/">
-					<button
-						type="button"
-						onClick={() => {
-							dispatch(clearFiltered());
-						}}
-						className={styles.logo}
-					>
+				<div>
+					<button type="button" onClick={handleClick} className={styles.logo}>
 						{theme === 'light' ? (
 							<img className={styles.logo} src={logo} alt="Лого" />
 						) : (
 							<img className={styles.logo} src={logoDark} alt="Лого" />
 						)}
 					</button>
-				</Link>
+				</div>
 
 				{!['/signin', '/signup', '/profile'].some(path => location.pathname.match(path)) ? (
 					<FullRenderedSection />
 				) : (
 					<nav className={styles.align_container}>
 						{location.pathname.match('/profile') && (
-							<div className={styles.profile}>
-								<img
-									src={theme === 'light' ? icon : iconDark}
-									className={styles.profile_icon}
-									alt="profile"
-								/>
-								<p className={styles.text}>pochta@email.ru</p>
-							</div>
+							<>
+								<div className={styles.profile}>
+									<img
+										src={theme === 'light' ? icon : iconDark}
+										className={styles.profile_icon}
+										alt="profile"
+									/>
+									<p className={styles.text}>pochta@email.ru</p>
+								</div>
+								<div className={styles.button_container}>
+									<button type="button" className={styles.button_quit} onClick={handleClick}>
+										Выйти
+									</button>
+								</div>
+							</>
 						)}
 						<Theme />
 					</nav>

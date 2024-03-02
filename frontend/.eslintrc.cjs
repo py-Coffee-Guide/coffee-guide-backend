@@ -46,5 +46,6 @@ module.exports = {
 		'no-param-reassign': 'off',
 		'jsx-a11y/label-has-associated-control': 'off',
 		'arrow-body-style': 'off',
+		'react/no-array-index-key': 'off',
 	},
 };

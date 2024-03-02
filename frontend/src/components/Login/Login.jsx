@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
@@ -11,44 +11,41 @@ import Button from '../../assets/ui-kit/Button/Button';
 function Login() {
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		if (localStorage.token) {
+			navigate('/profile', { replace: true });
+		}
+	}, [navigate]);
+
 	const {
 		register,
 		watch,
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm({ defaultValues: { email: '', password: '' }, mode: 'onChange' });
-
-	const watchInputs = {
-		password: 'coffee_git_project2024',
-		username: 'admin_coffee_gid',
-	};
+	} = useForm({ defaultValues: { username: '', password: '' }, mode: 'onChange' });
 
 	const [login, { isError }] = useLoginMutation();
-	// const watchInputs = watch();
-	console.log('watchInputs:', watchInputs);
+	const watchInputs = watch();
 
 	const handleLogin = async () => {
 		if (watchInputs) {
 			await login(watchInputs)
-				// возвращает объект с ответом сервера
 				.unwrap()
 				.then(data => {
 					if (data.auth_token) {
 						localStorage.setItem('token', data.auth_token);
+						navigate('/profile', { replace: true });
 					}
-					// console.log('token:', data.auth_token);
 				})
 				.catch(rejected => console.error(rejected));
-			// setUser(inputValues);
 		}
 	};
 
 	const onSubmit = data => {
-		console.log(data);
-		// navigate('/profile', { replace: true });
 		reset();
 	};
+
 	const inputItemClassName = type => cn(styles.input, [errors[type] && styles.input_error]);
 
 	return (
@@ -57,7 +54,13 @@ function Login() {
 				<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 					<div className={styles.input_container}>
 						<input
-							{...register('email', { required: 'Необходимо ввести почту или ИНН' })}
+							{...register('username', {
+								required: 'Необходимо ввести почту или ИНН',
+								pattern: {
+									value: /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g,
+									message: 'Введите корректный email',
+								},
+							})}
 							className={inputItemClassName('email')}
 							placeholder="Почта / ИНН"
 						/>

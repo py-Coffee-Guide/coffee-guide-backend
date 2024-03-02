@@ -1,7 +1,7 @@
 version: '3'
 
 volumes:
-  pg_data:
+  coffee_data:
   static_data:
   frontend:
   media_data:
@@ -14,7 +14,7 @@ services:
     env_file:
       - .env
     volumes:
-      - pg_data:/var/lib/postgresql/data/
+      - coffee_data:/var/lib/postgresql/data/
 
   backend:
     image: danilkas234/coffee_backend
@@ -22,28 +22,31 @@ services:
       - .env 
     volumes:
       - static_data:/app/backend_static/
-      - redoc:/app/docs
+      # - redoc:/app/../docs
+      - redoc:/app/docs/
       - media_data:/app/media
     depends_on:
       - db
 
-  # frontend:
-  #   image: danilkas234/coffee_frontend
-  #   volumes:
-  #     - frontend:/app/build/
-  #   depends_on:
-  #     - backend 
+  frontend:
+    image: danilkas234/coffee_frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    volumes:
+      - frontend:/app/result_build/dist
 
   nginx:
     image: danilkas234/coffee_nginx
     ports:
-      - "8000:80"
+      - ${NGINX_PORT}:${HOST_PORT}
+      # - "8000:80"
     volumes:
       - frontend:/usr/share/nginx/html/
-      - redoc:/usr/share/nginx/html/api/docs/
       - static_data:/var/html/static
       - media_data:/var/html/media
+      - redoc:/usr/share/nginx/html/api/docs/
     depends_on:
-      # - frontend     
+      - frontend     
       - backend
     restart: always

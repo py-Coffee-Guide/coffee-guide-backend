@@ -6,6 +6,7 @@ import cn from 'classnames';
 import styles from './CardMedium.module.scss';
 
 import BackButton from '../../assets/ui-kit/BackButton/BackButton';
+import NotFound from '../NotFound/NotFound';
 import FavouritesButton from '../../assets/ui-kit/FavouritesButton/FavouritesButton';
 import nullImage from '../../assets/images/logo.svg';
 
@@ -15,8 +16,13 @@ import locationImg from '../../assets/images/location-pin.svg';
 
 function CardMedium() {
 	const location = useLocation();
+	const getLocationId = location.pathname.replace('/card/', '');
+
 	const theme = useSelector(state => state.theme);
-	const { data, isLoading } = useGetCardByIdQuery(location.state.key);
+	const { data, isLoading, isError } = useGetCardByIdQuery(getLocationId);
+	if (isError) {
+		return <NotFound />;
+	}
 
 	if (isLoading) {
 		return <p>LOADING....</p>;
@@ -69,9 +75,11 @@ function CardMedium() {
 							/>
 						</Map>
 					</div>
-					<button className={styles.button} type="button">
-						Построить маршрут
-					</button>
+					<a href={`https://yandex.ru/maps/?pt=${address.lon},${address.lat}&z=15`}>
+						<button className={styles.button} type="button">
+							Построить маршрут
+						</button>
+					</a>
 				</div>
 				<div className={styles.info}>
 					<div className={styles.info_container}>
