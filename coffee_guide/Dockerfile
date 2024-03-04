@@ -1,5 +1,9 @@
 FROM python:3.11
+
 WORKDIR /app
+
+# COPY credentials_copy.json /app/token_credentials/
+# COPY token.json /app/token_credentials/
 
 # Установка зависимостей Poetry
 RUN pip install poetry

@@ -6,6 +6,7 @@ volumes:
   frontend:
   media_data:
   redoc:
+  token_credentials:
 
 services:
 
@@ -28,6 +29,7 @@ services:
       - static_data:/app/backend_static/
       - redoc:/app/docs/
       - media_data:/app/media
+      - token_credentials:/app/token_credentials
     depends_on:
       - db
 
@@ -55,6 +57,7 @@ services:
       - static_data:/var/html/static
       - media_data:/var/html/media
       - redoc:/usr/share/nginx/html/api/docs/
+      - token_credentials:/app/token_credentials
       # - media_data:/media
       # - static_data:/staticfiles/
     depends_on:

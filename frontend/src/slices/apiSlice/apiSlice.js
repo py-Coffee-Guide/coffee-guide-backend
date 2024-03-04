@@ -4,7 +4,7 @@ import queryString from 'query-string';
 export const api = createApi({
 	reducerPath: 'api',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'https://www.coffee-guide.ru/api/v1/',
+		baseUrl: 'http://www.coffee-guide.ru/api/v1/',
 		// baseUrl: 'http://localhost:8000/api/v1/',
 		prepareHeaders: headers => {
 			headers.set('Content-type', 'application/json');

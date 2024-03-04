@@ -16,15 +16,21 @@ from googleapiclient.discovery import build
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.compose"]
 
-SERVICE_ACCOUNT_FILE = f"{BASE_DIR}/users/credentials_copy.json"
-TOKEN = f"{BASE_DIR}/../token.json"
+# Пути к токенам для теста локально:
+SERVICE_ACCOUNT_FILE = f"{BASE_DIR}/users/core/credentials_copy.json"
+TOKEN = f"{BASE_DIR}/users/core/"
+
+# Для к токенам для работы на сервере:
+# SERVICE_ACCOUNT_FILE = "/app/token_credentials/credentials_copy.json"
+# TOKEN = "/app/token_credentials/"
 
 
 def send_email(sender, to, subject, message):
     email_message = create_message(sender, to, subject, message)
     creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    token_path = os.path.join(TOKEN, "token.json")
+    if os.path.exists(token_path):
+        creds = Credentials.from_authorized_user_file(f"{TOKEN}/token.json", SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -33,16 +39,16 @@ def send_email(sender, to, subject, message):
                 SERVICE_ACCOUNT_FILE, SCOPES
             )
             creds = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
+        with open(token_path, "w") as token:
             token.write(creds.to_json())
-    print(creds, "creds")
+    # print(creds, "creds")
     service = build("gmail", "v1", credentials=creds)
-    print(service, "service")
+    # print(service, "service")
     send_message(service, "me", email_message)
 
 
 def create_message(sender, to, subject, message_text):
-    print(message_text, "message_text", *to, "to", sender, "sender")
+    # print(message_text, "message_text", *to, "to", sender, "sender")
     message = EmailMessage()
     message.set_content(message_text)
     message["to"] = to
