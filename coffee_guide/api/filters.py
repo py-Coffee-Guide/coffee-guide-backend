@@ -1,6 +1,7 @@
 import django_filters
 
 from cafe.models import Cafe, Alternative, Roaster, Address, Additionals
+from django.db.models import Q
 
 
 class CafeFilter(django_filters.FilterSet):
@@ -27,6 +28,7 @@ class CafeFilter(django_filters.FilterSet):
         field_name="availables__slug",
         lookup_expr="icontains",
     )
+    both = django_filters.CharFilter(method="filter_both")
 
     class Meta:
         model = Cafe
@@ -37,11 +39,19 @@ class CafeFilter(django_filters.FilterSet):
             "availables",
         ]
 
+    def filter_both(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(
+            Q(name__icontains=value) | Q(address__name__icontains=value)
+        )
+
 
 class RoasterFilter(django_filters.FilterSet):
     """
     /api/v1/roasters/?name=your_roaster_name
     """
+
     name = django_filters.CharFilter(
         field_name="name",
         lookup_expr="icontains",
