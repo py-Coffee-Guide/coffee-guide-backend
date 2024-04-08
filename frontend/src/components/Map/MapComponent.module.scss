@@ -1,0 +1,24 @@
+.container {
+	display: flex;
+	width: 556px;
+	height: 704px;
+	border-radius: 16px;
+	background-color: gray;
+	border: 0;
+	overflow: hidden;
+	position: relative;
+	z-index: 0;
+}
+
+.map {
+	width: 500px;
+}
+
+.map_hint {
+	width: 275px;
+	height: 350px;
+}
+
+[class*='copyrights-pane'] {
+	display: none !important;
+}
